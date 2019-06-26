@@ -2,7 +2,7 @@ package com.songyuankun.wechat.util;
 
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.StringUtils;
 
 import javax.net.ssl.*;
 import java.io.*;
