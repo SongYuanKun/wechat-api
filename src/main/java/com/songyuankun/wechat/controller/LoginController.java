@@ -8,9 +8,8 @@ import com.songyuankun.wechat.util.HttpsUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.crypto.BadPaddingException;
@@ -88,8 +87,7 @@ public class LoginController {
         return JSONObject.parseObject(HttpsUtil.sendGet(requestUrl, requestUrlParam));
     }
 
-    @ResponseBody
-    @RequestMapping("/login")
+    @GetMapping("/login")
     public Map<String, Object> doLogin(@RequestParam(value = "code", required = false) String code,
                                        @RequestParam(value = "rawData", required = false) String rawData,
                                        @RequestParam(value = "signature", required = false) String signature,
