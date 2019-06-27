@@ -5,13 +5,13 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Proxy;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * 用户表
+ *
  * @author songyuankun
  */
 @Proxy(lazy = false)
@@ -22,15 +22,22 @@ import java.util.Date;
 @Setter
 public class User implements Serializable {
     @Id
+    @GeneratedValue
+    private Integer id;
     private String uid;
+    @Column(name = "create_time")
     private Date createTime;
+    @Column(name = "session_key")
     private String sessionKey;
-    private int balance;
+    private Integer balance;
+    @Column(name = "uuid_key")
     private String uuidKey;
     private String address;
     private String avatar;
-    private int gender;
+    private Integer gender;
+    @Column(name = "user_name")
     private String userName;
+    @Column(name = "update_time")
     private Date updateTime;
 
 
