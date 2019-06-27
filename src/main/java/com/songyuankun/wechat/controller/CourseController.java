@@ -4,6 +4,7 @@ import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.dao.Course;
 import com.songyuankun.wechat.repository.CourseRepository;
 import com.songyuankun.wechat.request.CourseForm;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import java.util.List;
 /**
  * @author songyuankun
  */
+@Api
 @RestController
 @RequestMapping("course")
 @Slf4j
