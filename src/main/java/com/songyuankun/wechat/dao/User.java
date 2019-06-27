@@ -26,11 +26,11 @@ public class User implements Serializable {
     private Date createTime;
     private String sessionKey;
     private int balance;
-    private String key;
+    private String uuidKey;
     private String address;
     private String avatar;
     private int gender;
-    private String name;
+    private String userName;
     private Date updateTime;
 
 

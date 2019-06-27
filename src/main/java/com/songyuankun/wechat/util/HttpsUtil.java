@@ -1,16 +1,11 @@
 package com.songyuankun.wechat.util;
 
-import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
-import javax.net.ssl.*;
 import java.io.*;
-import java.net.ConnectException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.Map;
 
 
@@ -27,29 +22,9 @@ public class HttpsUtil {
         if (!StringUtils.isEmpty(url)) {
             BufferedReader in = null;
             PrintWriter out = null;
-            StringBuilder sb = new StringBuilder();
-            String params = "";
             try {
                 // 编码请求参数
-                if (parameters.size() > 0) {
-                    if (parameters.size() == 1) {
-                        for (Map.Entry entry : parameters.entrySet()) {
-                            sb.append(entry.getKey()).append("=").append(
-                                    java.net.URLEncoder.encode(String.valueOf(entry.getValue()),
-                                            DEFAULT_CHARSET));
-                        }
-                        params = sb.toString();
-                    } else {
-                        for (Map.Entry entry : parameters.entrySet()) {
-                            sb.append(entry.getKey()).append("=").append(
-                                    java.net.URLEncoder.encode(String.valueOf(entry.getValue()),
-                                            DEFAULT_CHARSET))
-                                    .append("&");
-                        }
-                        String tempParams = sb.toString();
-                        params = tempParams.substring(0, tempParams.length() - 1);
-                    }
-                }
+                String params = getParams(parameters);
                 // 创建URL对象
                 java.net.URL connUrl = new java.net.URL(url);
                 // 打开URL连接
@@ -80,8 +55,7 @@ public class HttpsUtil {
                     result.append(line);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-                throw new RuntimeException(e);
+                log.error(e.getLocalizedMessage());
             } finally {
                 try {
                     if (out != null) {
@@ -91,11 +65,36 @@ public class HttpsUtil {
                         in.close();
                     }
                 } catch (IOException ex) {
-                    ex.printStackTrace();
+                    log.error(ex.getLocalizedMessage());
                 }
             }
         }
         return result.toString();
+    }
+
+    private static String getParams(Map<String, String> parameters) throws UnsupportedEncodingException {
+        StringBuilder sb = new StringBuilder();
+        String params = "";
+        if (parameters.size() > 0) {
+            if (parameters.size() == 1) {
+                for (Map.Entry entry : parameters.entrySet()) {
+                    sb.append(entry.getKey()).append("=").append(
+                            java.net.URLEncoder.encode(String.valueOf(entry.getValue()),
+                                    DEFAULT_CHARSET));
+                }
+                params = sb.toString();
+            } else {
+                for (Map.Entry entry : parameters.entrySet()) {
+                    sb.append(entry.getKey()).append("=").append(
+                            java.net.URLEncoder.encode(String.valueOf(entry.getValue()),
+                                    DEFAULT_CHARSET))
+                            .append("&");
+                }
+                String tempParams = sb.toString();
+                params = tempParams.substring(0, tempParams.length() - 1);
+            }
+        }
+        return params;
     }
 
     /**
@@ -146,74 +145,21 @@ public class HttpsUtil {
     }
 
     /**
-     * 发送https请求
+     * 向指定URL发送GET方法的请求
      *
-     * @param requestUrl    请求地址
-     * @param requestMethod 请求方式（GET、POST）
-     * @param outputStr     提交的数据
-     * @return JSONObject(通过JSONObject.get ( key)的方式获取json对象的属性值)
+     * @param url        发送请求的URL
+     * @param parameters 请求参数，请求参数应该是 name1=value1&name2=value2 的形式。
+     * @return URL 所代表远程资源的响应结果
      */
-    public static JSONObject httpsRequest(String requestUrl, String requestMethod, String outputStr) {
-
-        JSONObject jsonObject = null;
+    public static String sendGet(String url, Map<String, String> parameters) {
+        String params = "";
         try {
-            // 创建SSLContext对象，并使用我们指定的信任管理器初始化
-            TrustManager[] tm = {new X509TrustManager() {
-                @Override
-                public void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
-
-                }
-
-                @Override
-                public void checkServerTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
-
-                }
-
-                @Override
-                public X509Certificate[] getAcceptedIssuers() {
-                    return new X509Certificate[0];
-                }
-            }};
-            SSLContext sslContext = SSLContext.getInstance("SSL", "SunJSSE");
-            sslContext.init(null, tm, new java.security.SecureRandom());
-            // 从上述SSLContext对象中得到SSLSocketFactory对象
-            SSLSocketFactory ssf = sslContext.getSocketFactory();
-            URL url = new URL(requestUrl);
-            HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-            conn.setSSLSocketFactory(ssf);
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
-            conn.setUseCaches(false);
-            // 设置请求方式（GET/POST）
-            conn.setRequestMethod(requestMethod);
-            // 当outputStr不为null时向输出流写数据
-            if (null != outputStr) {
-                OutputStream outputStream = conn.getOutputStream();
-                // 注意编码格式
-                outputStream.write(outputStr.getBytes(DEFAULT_CHARSET));
-                outputStream.close();
-            }
-            // 从输入流读取返回内容
-            InputStream inputStream = conn.getInputStream();
-            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, DEFAULT_CHARSET);
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-            String str = null;
-            StringBuffer buffer = new StringBuffer();
-            while ((str = bufferedReader.readLine()) != null) {
-                buffer.append(str);
-            }
-            // 释放资源
-            bufferedReader.close();
-            inputStreamReader.close();
-            inputStream.close();
-            inputStream = null;
-            conn.disconnect();
-            jsonObject = JSONObject.parseObject(buffer.toString());
-        } catch (ConnectException ce) {
-            log.error("连接超时：{}", ce);
+            params = getParams(parameters);
         } catch (Exception e) {
-            log.error("https请求异常：{}", e);
+            log.error(e.getLocalizedMessage());
         }
-        return jsonObject;
+        return sendGet(url, params);
+
     }
+
 }
