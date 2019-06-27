@@ -1,11 +1,20 @@
 package com.songyuankun.wechat.request;
 
-import com.songyuankun.wechat.dao.Course;
 import io.swagger.annotations.ApiModel;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+import java.io.Serializable;
 
 /**
  * @author songyuankun
  */
 @ApiModel
-public class CourseForm extends Course {
+@Getter
+@Setter
+@ToString
+public class CourseForm implements Serializable {
+    private String name;
+    private String description;
 }

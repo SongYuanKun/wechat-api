@@ -25,7 +25,7 @@ public class Course implements Serializable {
     @GeneratedValue
     private Integer id;
     @Column(name = "name")
-    private Integer name;
+    private String name;
     @Column(name = "description")
     private String description;
     @Column(name = "status")

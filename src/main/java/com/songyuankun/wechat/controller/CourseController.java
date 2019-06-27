@@ -6,6 +6,7 @@ import com.songyuankun.wechat.repository.CourseRepository;
 import com.songyuankun.wechat.request.CourseForm;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,8 +28,10 @@ public class CourseController {
     }
 
     @PostMapping("save")
-    public Response<Course> save(CourseForm course) {
+    public Response<Course> save(CourseForm courseForm) {
         Response<Course> response = new Response<>();
+        Course course = new Course();
+        BeanUtils.copyProperties(courseForm, course);
         courseRepository.save(course);
         response.setData(course);
         return response;
