@@ -6,3 +6,13 @@ spring:
     username: root
     password: Kun3.1415926
     driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+
+my:
+  wechat:
+    appid: wx535bf80f60239064
+    secret: 93c631b2be9d60689dad05af5c30cf7d

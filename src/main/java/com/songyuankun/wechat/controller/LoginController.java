@@ -7,6 +7,7 @@ import com.songyuankun.wechat.repository.UserRepository;
 import com.songyuankun.wechat.util.HttpsUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,22 +31,13 @@ import java.util.*;
 @Slf4j
 public class LoginController {
     private final UserRepository userRepository;
+    @Value("${my.wechat.appid}")
+    private String appId;
+    @Value("${my.wechat.secret}")
+    private String secret;
 
     public LoginController(UserRepository userRepository) {
         this.userRepository = userRepository;
-    }
-
-    private static JSONObject getSessionKeyOrOpenId(String code) {
-        //微信端登录code
-        String requestUrl = "https://api.weixin.qq.com/sns/jscode2session";
-        Map<String, String> requestUrlParam = new HashMap<>(16);
-        requestUrlParam.put("appid", "wx535bf80f60239064");
-        requestUrlParam.put("secret", "93c631b2be9d60689dad05af5c30cf7d");
-        requestUrlParam.put("js_code", code);
-        requestUrlParam.put("grant_type", "authorization_code");
-
-        //发送post请求读取调用微信接口获取openid用户唯一标识
-        return JSONObject.parseObject(HttpsUtil.sendPost(requestUrlParam, requestUrl));
     }
 
     private static JSONObject getUserInfo(String encryptedData, String sessionKey, String iv) {
@@ -83,12 +75,25 @@ public class LoginController {
         return null;
     }
 
+    private JSONObject getSessionKeyOrOpenId(String code) {
+        //微信端登录code
+        String requestUrl = "https://api.weixin.qq.com/sns/jscode2session";
+        Map<String, String> requestUrlParam = new HashMap<>(16);
+        requestUrlParam.put("appid", appId);
+        requestUrlParam.put("secret", secret);
+        requestUrlParam.put("js_code", code);
+        requestUrlParam.put("grant_type", "authorization_code");
+
+        //发送post请求读取调用微信接口获取openid用户唯一标识
+        return JSONObject.parseObject(HttpsUtil.sendGet(requestUrl, requestUrlParam));
+    }
+
     @ResponseBody
     @RequestMapping("/login")
     public Map<String, Object> doLogin(@RequestParam(value = "code", required = false) String code,
                                        @RequestParam(value = "rawData", required = false) String rawData,
                                        @RequestParam(value = "signature", required = false) String signature,
-                                       @RequestParam(value = "encrypteData", required = false) String encrypteData,
+                                       @RequestParam(value = "encryptedData", required = false) String encryptedData,
                                        @RequestParam(value = "iv", required = false) String iv) {
         log.info("Start get SessionKey");
 
@@ -125,11 +130,11 @@ public class LoginController {
             user.setCreateTime(new Date());
             user.setSessionKey(sessionKey);
             user.setBalance(0);
-            user.setKey(key);
+            user.setUuidKey(key);
             user.setAddress(country + " " + province + " " + city);
             user.setAvatar(avatarUrl);
             user.setGender(Integer.parseInt(gender));
-            user.setName(nickName);
+            user.setUserName(nickName);
             user.setUpdateTime(new Date());
 
             userRepository.save(user);
@@ -142,7 +147,7 @@ public class LoginController {
         map.put("result", "0");
 
 
-        JSONObject userInfo = getUserInfo(encrypteData, sessionKey, iv);
+        JSONObject userInfo = getUserInfo(encryptedData, sessionKey, iv);
         if (userInfo != null) {
             log.info("根据解密算法获取的userInfo=" + userInfo);
             userInfo.put("balance", user.getBalance());
