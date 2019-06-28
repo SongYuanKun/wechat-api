@@ -15,6 +15,8 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
 
     User findByUid(String uid);
 
+    User findByUuidKey(String uuidKey);
+
     /**
      * 更新uuidKey
      *
