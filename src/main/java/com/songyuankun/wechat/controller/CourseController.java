@@ -9,6 +9,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,6 +45,8 @@ public class CourseController {
 
     @PostMapping("page")
     public Page<Course> page(@RequestParam(required = false, defaultValue = "0") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        log.debug(authentication.getName());
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return courseRepository.findAll(pageable);
     }

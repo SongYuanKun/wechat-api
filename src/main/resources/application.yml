@@ -11,6 +11,13 @@ spring:
     hibernate:
       ddl-auto: update
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+  redis:
+    database: 0
+    host: songyuankun.top
+    port: 6379
+    password: 123456
+  cache:
+    type: redis
 
 my:
   wechat:

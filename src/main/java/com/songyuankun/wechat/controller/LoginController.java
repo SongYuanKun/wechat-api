@@ -4,10 +4,15 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.songyuankun.wechat.dao.User;
 import com.songyuankun.wechat.repository.UserRepository;
+import com.songyuankun.wechat.secutity.DbUserDetailsServiceImpl;
 import com.songyuankun.wechat.util.HttpsUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,13 +35,17 @@ import java.util.*;
 @Slf4j
 public class LoginController {
     private final UserRepository userRepository;
+    private final AuthenticationManager authenticationManager;
+    private final DbUserDetailsServiceImpl dbUserDetailsService;
     @Value("${my.wechat.appid}")
     private String appId;
     @Value("${my.wechat.secret}")
     private String secret;
 
-    public LoginController(UserRepository userRepository) {
+    public LoginController(UserRepository userRepository, AuthenticationManager authenticationManager, DbUserDetailsServiceImpl dbUserDetailsService) {
         this.userRepository = userRepository;
+        this.authenticationManager = authenticationManager;
+        this.dbUserDetailsService = dbUserDetailsService;
     }
 
     private static JSONObject getUserInfo(String encryptedData, String sessionKey, String iv) {
@@ -122,7 +131,6 @@ public class LoginController {
             String country = rawDataJson.getString("country");
             String province = rawDataJson.getString("province");
 
-
             user = new User();
             user.setUid(openid);
             user.setCreateTime(new Date());
@@ -142,6 +150,9 @@ public class LoginController {
                 log.info("key更新成功");
             }
         }
+        UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken(key,null);
+        final Authentication authentication = authenticationManager.authenticate(upToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         map.put("key", key);
         map.put("result", "0");
