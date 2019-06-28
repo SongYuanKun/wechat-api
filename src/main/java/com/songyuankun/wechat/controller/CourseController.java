@@ -1,6 +1,5 @@
 package com.songyuankun.wechat.controller;
 
-import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.dao.Course;
 import com.songyuankun.wechat.repository.CourseRepository;
 import com.songyuankun.wechat.request.CourseForm;
@@ -29,31 +28,23 @@ public class CourseController {
     }
 
     @PostMapping("save")
-    public Response<Course> save(@RequestBody CourseForm courseForm) {
-        Response<Course> response = new Response<>();
+    public Course save(@RequestBody CourseForm courseForm) {
         Course course = new Course();
         BeanUtils.copyProperties(courseForm, course);
         course.setStatus(0);
         courseRepository.save(course);
-        response.setData(course);
-        return response;
+        return course;
     }
 
     @PostMapping("all")
-    public Response<List<Course>> all() {
-        Response<List<Course>> response = new Response<>();
-        List<Course> all = courseRepository.findAll();
-        response.setData(all);
-        return response;
+    public List<Course> all() {
+        return courseRepository.findAll();
     }
 
     @PostMapping("page")
-    public Response<Page<Course>> page(@RequestParam(required = false, defaultValue = "0") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
-        Response<Page<Course>> response = new Response<>();
+    public Page<Course> page(@RequestParam(required = false, defaultValue = "0") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Page<Course> all = courseRepository.findAll(pageable);
-        response.setData(all);
-        return response;
+        return courseRepository.findAll(pageable);
     }
 
 }
