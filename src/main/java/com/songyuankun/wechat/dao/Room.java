@@ -23,11 +23,13 @@ public class Room implements Serializable {
     @Id
     @GeneratedValue
     private Integer id;
+    private String name;
     @Column(name = "admin_id")
     private String adminId;
     private Integer length;
     private Integer width;
     @Column(name = "status")
     private Integer status;
+    private String img;
 
 }

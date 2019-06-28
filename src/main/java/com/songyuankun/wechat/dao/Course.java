@@ -30,4 +30,5 @@ public class Course implements Serializable {
     private String description;
     @Column(name = "status")
     private Integer status;
+    private String img;
 }

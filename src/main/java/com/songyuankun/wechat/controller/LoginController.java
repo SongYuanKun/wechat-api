@@ -134,9 +134,10 @@ public class LoginController {
             user.setGender(Integer.parseInt(gender));
             user.setUserName(nickName);
             user.setUpdateTime(new Date());
-
             userRepository.save(user);
         } else {
+            // 重新设置会话key
+            this.userRepository.updateUuidKeyByUid(openid, key);
             //已存在
             log.info("用户openid已存在,不需要插入");
         }
