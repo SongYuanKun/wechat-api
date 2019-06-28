@@ -137,9 +137,10 @@ public class LoginController {
             userRepository.save(user);
         } else {
             // 重新设置会话key
-            this.userRepository.updateUuidKeyByUid(openid, key);
-            //已存在
-            log.info("用户openid已存在,不需要插入");
+            int i = this.userRepository.updateUuidKeyByUid(key, openid);
+            if (i > 0) {
+                log.info("key更新成功");
+            }
         }
 
         map.put("key", key);

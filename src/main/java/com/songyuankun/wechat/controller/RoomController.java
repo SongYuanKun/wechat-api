@@ -6,9 +6,11 @@ import com.songyuankun.wechat.repository.RoomRepository;
 import com.songyuankun.wechat.request.RoomForm;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,8 +29,11 @@ public class RoomController {
     }
 
     @PostMapping("save")
-    public Response<Room> save(RoomForm room) {
+    public Response<Room> save(@RequestBody RoomForm roomForm) {
         Response<Room> response = new Response<>();
+        Room room = new Room();
+        BeanUtils.copyProperties(roomForm, room);
+        room.setStatus(0);
         roomRepository.save(room);
         response.setData(room);
         return response;
@@ -42,4 +47,12 @@ public class RoomController {
         return response;
     }
 
+    @PostMapping("page")
+    public Response<Page<Room>> page(@RequestParam(defaultValue = "0") Integer pageNumber, @RequestParam(defaultValue = "10") Integer pageSize) {
+        Response<Page<Room>> response = new Response<>();
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<Room> all = roomRepository.findAll(pageable);
+        response.setData(all);
+        return response;
+    }
 }
