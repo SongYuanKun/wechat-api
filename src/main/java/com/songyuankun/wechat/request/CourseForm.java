@@ -17,4 +17,6 @@ import java.io.Serializable;
 public class CourseForm implements Serializable {
     private String name;
     private String description;
+    private String img;
+
 }

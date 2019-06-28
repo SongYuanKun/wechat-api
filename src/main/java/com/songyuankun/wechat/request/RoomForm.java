@@ -1,11 +1,22 @@
 package com.songyuankun.wechat.request;
 
-import com.songyuankun.wechat.dao.Room;
 import io.swagger.annotations.ApiModel;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+import java.io.Serializable;
 
 /**
  * @author songyuankun
  */
 @ApiModel
-public class RoomForm extends Room {
+@Getter
+@Setter
+@ToString
+public class RoomForm implements Serializable {
+    private String name;
+    private Integer length;
+    private Integer width;
+    private String img;
 }
