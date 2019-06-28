@@ -48,7 +48,7 @@ public class CourseController {
     }
 
     @PostMapping("page")
-    public Response<Page<Course>> page(@RequestParam(defaultValue = "0") Integer pageNumber, @RequestParam(defaultValue = "10") Integer pageSize) {
+    public Response<Page<Course>> page(@RequestParam(required = false, defaultValue = "0") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
         Response<Page<Course>> response = new Response<>();
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<Course> all = courseRepository.findAll(pageable);
