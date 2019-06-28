@@ -7,9 +7,10 @@ import com.songyuankun.wechat.request.CourseForm;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,10 +29,11 @@ public class CourseController {
     }
 
     @PostMapping("save")
-    public Response<Course> save(CourseForm courseForm) {
+    public Response<Course> save(@RequestBody CourseForm courseForm) {
         Response<Course> response = new Response<>();
         Course course = new Course();
         BeanUtils.copyProperties(courseForm, course);
+        course.setStatus(0);
         courseRepository.save(course);
         response.setData(course);
         return response;
@@ -41,6 +43,15 @@ public class CourseController {
     public Response<List<Course>> all() {
         Response<List<Course>> response = new Response<>();
         List<Course> all = courseRepository.findAll();
+        response.setData(all);
+        return response;
+    }
+
+    @PostMapping("page")
+    public Response<Page<Course>> page(@RequestParam(defaultValue = "0") Integer pageNumber, @RequestParam(defaultValue = "10") Integer pageSize) {
+        Response<Page<Course>> response = new Response<>();
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<Course> all = courseRepository.findAll(pageable);
         response.setData(all);
         return response;
     }
