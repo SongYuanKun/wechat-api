@@ -8,9 +8,12 @@ import com.songyuankun.wechat.util.HttpsUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.web.server.authorization.AuthorizationContext;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import sun.security.krb5.internal.AuthContext;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -35,8 +38,11 @@ public class LoginController {
     @Value("${my.wechat.secret}")
     private String secret;
 
-    public LoginController(UserRepository userRepository) {
+    private final AuthenticationManager authenticationManager;
+
+    public LoginController(UserRepository userRepository, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
+        this.authenticationManager = authenticationManager;
     }
 
     private static JSONObject getUserInfo(String encryptedData, String sessionKey, String iv) {
@@ -134,7 +140,6 @@ public class LoginController {
             user.setUpdateTime(new Date());
             userRepository.save(user);
         }
-
         map.put("key", key);
         map.put("result", "0");
 
