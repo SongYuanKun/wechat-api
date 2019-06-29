@@ -127,19 +127,12 @@ public class LoginController {
             user.setCreateTime(new Date());
             user.setSessionKey(sessionKey);
             user.setBalance(0);
-            user.setUuidKey(key);
             user.setAddress(country + " " + province + " " + city);
             user.setAvatar(avatarUrl);
             user.setGender(Integer.parseInt(gender));
             user.setUserName(nickName);
             user.setUpdateTime(new Date());
             userRepository.save(user);
-        } else {
-            // 重新设置会话key
-            int i = this.userRepository.updateUuidKeyByUid(key, openid);
-            if (i > 0) {
-                log.info("key更新成功");
-            }
         }
 
         map.put("key", key);

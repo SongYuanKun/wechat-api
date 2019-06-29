@@ -30,8 +30,6 @@ public class User implements Serializable {
     @Column(name = "session_key")
     private String sessionKey;
     private Integer balance;
-    @Column(name = "uuid_key")
-    private String uuidKey;
     private String address;
     private String avatar;
     private Integer gender;
