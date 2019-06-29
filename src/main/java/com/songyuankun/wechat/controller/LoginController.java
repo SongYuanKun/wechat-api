@@ -6,6 +6,7 @@ import com.songyuankun.wechat.dao.User;
 import com.songyuankun.wechat.repository.UserRepository;
 import com.songyuankun.wechat.secutity.DbUserDetailsServiceImpl;
 import com.songyuankun.wechat.util.HttpsUtil;
+import com.songyuankun.wechat.util.Md5;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.beans.factory.annotation.Value;
@@ -122,6 +123,7 @@ public class LoginController {
         User user = userRepository.findByUid(openid);
         //uuid生成唯一key
         String key = UUID.randomUUID().toString();
+        String password = Md5.encoderByMd5("123456");
         if (user == null) {
             //入库
             String nickName = rawDataJson.getString("nickName");
@@ -150,7 +152,8 @@ public class LoginController {
                 log.info("key更新成功");
             }
         }
-        UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken(key,null);
+
+        UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken(key, password);
         final Authentication authentication = authenticationManager.authenticate(upToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 

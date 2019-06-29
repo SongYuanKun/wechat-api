@@ -18,7 +18,12 @@ spring:
     password: 123456
   cache:
     type: redis
-
+jwt:
+  header: Authorization
+  secret: mySecret
+  #token有效期一天
+  expiration: 86400
+  tokenHead: "Bearer "
 my:
   wechat:
     appid: wx535bf80f60239064
