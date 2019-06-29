@@ -15,18 +15,4 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
 
     User findByUid(String uid);
 
-    User findByUuidKey(String uuidKey);
-
-    /**
-     * 更新uuidKey
-     *
-     * @param uid  open id
-     * @param uuid uuid
-     * @return 影响行数
-     */
-    @Transactional(rollbackOn = Exception.class)
-    @Modifying(clearAutomatically = true)
-    @Query("UPDATE User set uuid_key=?1 where uid=?2")
-    int updateUuidKeyByUid(String uuid, String uid);
-
 }
