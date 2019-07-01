@@ -26,11 +26,11 @@ import java.util.List;
  * @author songyuankun
  */
 @Slf4j
-public class CustomJSONLoginFilter extends AbstractAuthenticationProcessingFilter {
+public class CustomJsonLoginFilter extends AbstractAuthenticationProcessingFilter {
 
     private final UserRepository userService;
 
-    public CustomJSONLoginFilter(String defaultFilterProcessesUrl, UserRepository userService) {
+    public CustomJsonLoginFilter(String defaultFilterProcessesUrl, UserRepository userService) {
         super(new AntPathRequestMatcher(defaultFilterProcessesUrl, HttpMethod.POST.name()));
         this.userService = userService;
     }
@@ -42,7 +42,7 @@ public class CustomJSONLoginFilter extends AbstractAuthenticationProcessingFilte
         String password = "password";
         validateUsernameAndPassword(username);
         List<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
-        simpleGrantedAuthorities.add(new SimpleGrantedAuthority("USER"));
+        simpleGrantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
         return new UsernamePasswordAuthenticationToken(username, password, simpleGrantedAuthorities);
     }
 
