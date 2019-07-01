@@ -3,22 +3,32 @@ package com.songyuankun.wechat.config;
 import com.songyuankun.wechat.filter.CustomJsonLoginFilter;
 import com.songyuankun.wechat.repository.UserRepository;
 import com.songyuankun.wechat.secutity.DbUserDetailsServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * @author songyauankun
+ */
+@Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private DbUserDetailsServiceImpl dbUserDetailsService;
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final DbUserDetailsServiceImpl dbUserDetailsService;
+
+    public WebSecurityConfig(UserRepository userRepository, DbUserDetailsServiceImpl dbUserDetailsService) {
+        this.userRepository = userRepository;
+        this.dbUserDetailsService = dbUserDetailsService;
+    }
 
     @Bean
     public static PasswordEncoder passwordEncoder() {
@@ -28,11 +38,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public AuthenticationManager getAuthenticationManager() throws Exception {
         return super.authenticationManager();
-    }
-
-    @Autowired
-    public void setAnyUserDetailsService(DbUserDetailsServiceImpl dbUserDetailsService) {
-        this.dbUserDetailsService = dbUserDetailsService;
     }
 
     /**
@@ -45,13 +50,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
+                // 基于token，所以不需要session
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/course/**").hasAuthority("USER")
-                .and()
-                .formLogin().loginPage("/login").defaultSuccessUrl("/user")
-                .and()
-                .logout().logoutUrl("/logout").logoutSuccessUrl("/login");
+                .antMatchers("/course/**").hasAuthority("USER");
         http.addFilterAt(customJsonLoginFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
