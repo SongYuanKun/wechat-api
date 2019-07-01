@@ -1,6 +1,6 @@
 package com.songyuankun.wechat.config;
 
-import com.songyuankun.wechat.filter.CustomJSONLoginFilter;
+import com.songyuankun.wechat.filter.CustomJsonLoginFilter;
 import com.songyuankun.wechat.repository.UserRepository;
 import com.songyuankun.wechat.secutity.DbUserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,12 +47,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/user/**").hasAuthority("USER")
+                .antMatchers("/course/**").hasAuthority("USER")
                 .and()
                 .formLogin().loginPage("/login").defaultSuccessUrl("/user")
                 .and()
                 .logout().logoutUrl("/logout").logoutSuccessUrl("/login");
-        http.addFilterAt(customJSONLoginFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAt(customJsonLoginFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     /**
@@ -66,10 +66,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * 自定义认证过滤器
      */
-    private CustomJSONLoginFilter customJSONLoginFilter() {
-        CustomJSONLoginFilter customJSONLoginFilter = new CustomJSONLoginFilter("/login", userRepository);
-        customJSONLoginFilter.setAuthenticationFailureHandler(new CustomAuthenticationFailureHandler());
-        customJSONLoginFilter.setAuthenticationSuccessHandler(new CustomAuthenticationSuccessHandler());
-        return customJSONLoginFilter;
+    private CustomJsonLoginFilter customJsonLoginFilter() {
+        CustomJsonLoginFilter jsonLoginFilter = new CustomJsonLoginFilter("/login", userRepository);
+        jsonLoginFilter.setAuthenticationFailureHandler(new CustomAuthenticationFailureHandler());
+        jsonLoginFilter.setAuthenticationSuccessHandler(new CustomAuthenticationSuccessHandler());
+        return jsonLoginFilter;
     }
 }

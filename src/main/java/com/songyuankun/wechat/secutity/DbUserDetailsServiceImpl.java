@@ -31,7 +31,7 @@ public class DbUserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("用户不存在！");
         }
         List<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
-        simpleGrantedAuthorities.add(new SimpleGrantedAuthority("USER"));
+        simpleGrantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
         return new org.springframework.security.core.userdetails.User(byUuidKey.getUserName(), "123456", simpleGrantedAuthorities);
     }
 }
