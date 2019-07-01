@@ -23,6 +23,13 @@ spring:
   session:
     store-type: redis
 
+# JWT相关配置
+jwt:
+  header: Authorization
+  # 过期时间
+  expiration: 864000
+  # 注意有一个空格
+  tokenHead: Bearer
 my:
   wechat:
     appid: wx535bf80f60239064
