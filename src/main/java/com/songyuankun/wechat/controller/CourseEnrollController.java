@@ -29,8 +29,9 @@ public class CourseEnrollController {
 
 
     @PostMapping("save")
-    public CourseEnroll save(@RequestBody CourseEnrollForm courseEnrollForm) {
+    public CourseEnroll save(Authentication authentication, @RequestBody CourseEnrollForm courseEnrollForm) {
         CourseEnroll courseEnroll = new CourseEnroll();
+        log.info(authentication.getName());
         BeanUtils.copyProperties(courseEnrollForm, courseEnroll);
         courseEnroll.setStatus(0);
         courseEnrollRepository.save(courseEnroll);
