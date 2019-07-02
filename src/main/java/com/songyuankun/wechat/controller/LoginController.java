@@ -90,7 +90,7 @@ public class LoginController {
 
         List<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
         simpleGrantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getId(), "123456", simpleGrantedAuthorities));
+        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(openid, "123456", simpleGrantedAuthorities));
         String token = Jwts.builder()
                 .setSubject(((org.springframework.security.core.userdetails.User) authenticate.getPrincipal()).getUsername())
                 .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 24 * 1000))

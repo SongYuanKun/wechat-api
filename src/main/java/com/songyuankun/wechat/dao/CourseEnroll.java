@@ -27,6 +27,8 @@ public class CourseEnroll implements Serializable {
     private Integer id;
     @Column(name = "user_id")
     private Integer userId;
+    @Column(name = "user_name")
+    private Integer userName;
     @Column(name = "course_id")
     private Integer courseId;
     @Column(name = "create_time")

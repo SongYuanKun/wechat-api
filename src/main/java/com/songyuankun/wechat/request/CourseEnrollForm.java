@@ -17,6 +17,7 @@ import java.io.Serializable;
 public class CourseEnrollForm implements Serializable {
     private int courseId;
     private int userId;
+    private String userName;
     private String phone;
 
 }
