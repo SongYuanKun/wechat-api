@@ -39,12 +39,12 @@ public class CourseController {
         return course;
     }
 
-    @PostMapping("all")
+    @PostMapping("public/all")
     public List<Course> all() {
         return courseRepository.findAll();
     }
 
-    @PostMapping("page")
+    @PostMapping("public/page")
     public Page<Course> page(Authentication authentication, @RequestParam(required = false, defaultValue = "0") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
         String name = authentication.getName();
         log.info(name);
