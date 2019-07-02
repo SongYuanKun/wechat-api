@@ -1,6 +1,10 @@
 package com.songyuankun.wechat.secutity;
 
+import com.songyuankun.wechat.common.WeChatCommon;
+import com.songyuankun.wechat.repository.UserRepository;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -16,7 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private DbUserDetailsServiceImpl userDetailsService;
-
     private PasswordEncoder bCryptPasswordEncoder = NoOpPasswordEncoder.getInstance();
 
     public WebSecurityConfig(DbUserDetailsServiceImpl userDetailsService) {
@@ -26,10 +29,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
-                .antMatchers("login").permitAll()
+                .antMatchers("/login").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .addFilter(new JWTLoginFilter(authenticationManager(), weChatCommon, userRepository))
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()));
     }
 
@@ -38,5 +40,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
     }
 
+    @Override
+    @Bean
+    public AuthenticationManager authenticationManager() throws Exception {
+        return super.authenticationManager();
+    }
 
 }

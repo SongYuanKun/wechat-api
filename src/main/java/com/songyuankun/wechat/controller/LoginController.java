@@ -4,14 +4,19 @@ import com.alibaba.fastjson.JSONObject;
 import com.songyuankun.wechat.common.WeChatCommon;
 import com.songyuankun.wechat.dao.User;
 import com.songyuankun.wechat.repository.UserRepository;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author songyuankun
@@ -19,17 +24,19 @@ import java.util.Map;
 @RestController
 @Slf4j
 public class LoginController {
+    private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final WeChatCommon weChatCommon;
 
 
-    public LoginController(UserRepository userRepository, WeChatCommon weChatCommon) {
+    public LoginController(AuthenticationManager authenticationManager, UserRepository userRepository, WeChatCommon weChatCommon) {
+        this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.weChatCommon = weChatCommon;
     }
 
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public Map<String, Object> doLogin(@RequestParam(value = "code", required = false) String code,
                                        @RequestParam(value = "rawData", required = false) String rawData,
                                        @RequestParam(value = "signature", required = false) String signature,
@@ -81,6 +88,17 @@ public class LoginController {
             userInfo.put("balance", user.getBalance());
             map.put("userInfo", userInfo);
         }
+
+        List<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
+        simpleGrantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(openid, "123456", simpleGrantedAuthorities));
+        String token = Jwts.builder()
+                .setSubject(((org.springframework.security.core.userdetails.User) authenticate.getPrincipal()).getUsername())
+                .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 24 * 1000))
+                .signWith(SignatureAlgorithm.HS512, "MyJwtSecret")
+                .compact();
+        log.info("Bearer " + token);
+        map.put("token", "Bearer " + token);
         return map;
     }
 }
