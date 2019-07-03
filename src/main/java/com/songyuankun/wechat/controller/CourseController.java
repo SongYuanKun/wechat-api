@@ -38,6 +38,11 @@ public class CourseController {
         return course;
     }
 
+    @GetMapping("public/getById")
+    public Course getById(@RequestParam Integer id) {
+        return courseRepository.getOne(id);
+    }
+
     @PostMapping("public/all")
     public List<Course> all() {
         return courseRepository.findAll();
