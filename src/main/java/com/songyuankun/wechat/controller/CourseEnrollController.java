@@ -31,8 +31,9 @@ public class CourseEnrollController {
     @PostMapping("save")
     public CourseEnroll save(Authentication authentication, @RequestBody CourseEnrollForm courseEnrollForm) {
         CourseEnroll courseEnroll = new CourseEnroll();
-        log.info(authentication.getName());
         BeanUtils.copyProperties(courseEnrollForm, courseEnroll);
+        int userId = Integer.parseInt(authentication.getName());
+        courseEnroll.setUserId(userId);
         courseEnroll.setStatus(0);
         courseEnrollRepository.save(courseEnroll);
         return courseEnroll;
@@ -40,9 +41,9 @@ public class CourseEnrollController {
 
     @PostMapping("page")
     public Page<CourseEnroll> page(Authentication authentication, @RequestParam(required = false, defaultValue = "0") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
-        Integer name = Integer.valueOf(authentication.getName());
+        Integer userId = Integer.valueOf(authentication.getName());
         CourseEnroll courseEnroll = new CourseEnroll();
-        courseEnroll.setId(name);
+        courseEnroll.setId(userId);
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return courseEnrollRepository.findAll(Example.of(courseEnroll), pageable);
     }
