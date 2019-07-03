@@ -28,11 +28,12 @@ public class CourseEnroll implements Serializable {
     @Column(name = "user_id")
     private Integer userId;
     @Column(name = "user_name")
-    private Integer userName;
+    private String userName;
     @Column(name = "course_id")
     private Integer courseId;
     @Column(name = "create_time")
     private Date createTime;
     @Column(name = "status")
     private Integer status;
+    private String phone;
 }
