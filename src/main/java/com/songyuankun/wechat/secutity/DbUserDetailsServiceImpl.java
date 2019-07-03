@@ -3,7 +3,6 @@ package com.songyuankun.wechat.secutity;
 import com.songyuankun.wechat.dao.User;
 import com.songyuankun.wechat.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -33,6 +32,6 @@ public class DbUserDetailsServiceImpl implements UserDetailsService {
         }
         List<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
         simpleGrantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-        return new org.springframework.security.core.userdetails.User(byUuidKey.getUserName(), "123456", simpleGrantedAuthorities);
+        return new org.springframework.security.core.userdetails.User(byUuidKey.getId().toString(), "123456", simpleGrantedAuthorities);
     }
 }
