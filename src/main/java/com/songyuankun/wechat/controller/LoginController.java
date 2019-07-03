@@ -11,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -100,4 +101,18 @@ public class LoginController {
         map.put("token", "Bearer " + token);
         return map;
     }
+
+    @GetMapping("queryUser")
+    public User queryUser(Authentication authentication) {
+        int userId = Integer.parseInt(authentication.getName());
+        return userRepository.getOne(userId);
+    }
+
+    @GetMapping("check")
+    public User check(Authentication authentication) {
+        int userId = Integer.parseInt(authentication.getName());
+        return userRepository.getOne(userId);
+    }
+
+
 }
