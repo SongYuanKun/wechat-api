@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 /**
  * @author songyuankun
  */
@@ -44,6 +46,7 @@ public class CourseEnrollController {
         Integer userId = Integer.valueOf(authentication.getName());
         CourseEnroll courseEnroll = new CourseEnroll();
         courseEnroll.setId(userId);
+        courseEnroll.setCreateTime(new Date());
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return courseEnrollRepository.findAll(Example.of(courseEnroll), pageable);
     }
