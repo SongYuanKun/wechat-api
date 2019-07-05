@@ -38,5 +38,6 @@ public class User implements Serializable {
     @Column(name = "update_time")
     private Date updateTime;
 
+    private String phone;
 
 }

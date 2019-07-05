@@ -11,7 +11,7 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    database-platform: com.songyuankun.wechat.config.MysqlConfig
   redis:
     database: 0
     host: songyuankun.top

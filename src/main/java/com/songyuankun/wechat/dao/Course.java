@@ -32,11 +32,6 @@ public class Course implements Serializable {
     private String name;
 
     /**
-     * 课程简介
-     */
-    @Column(name = "description")
-    private String description;
-    /**
      * 课程状态
      */
     @Column(name = "status")
