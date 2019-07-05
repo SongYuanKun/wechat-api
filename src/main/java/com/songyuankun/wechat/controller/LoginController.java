@@ -86,7 +86,7 @@ public class LoginController {
         if (userInfo != null) {
             log.info("根据解密算法获取的userInfo=" + userInfo);
             userInfo.put("balance", user.getBalance());
-            map.put("userInfo", userInfo);
+            map.put("userInfo", user);
         }
 
         List<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
@@ -109,9 +109,10 @@ public class LoginController {
     }
 
     @GetMapping("check")
-    public User check(Authentication authentication) {
-        int userId = Integer.parseInt(authentication.getName());
-        return userRepository.getOne(userId);
+    public Map<String, Object> check() {
+        HashMap<String, Object> map = new HashMap<>(2);
+        map.put("status", true);
+        return map;
     }
 
 
