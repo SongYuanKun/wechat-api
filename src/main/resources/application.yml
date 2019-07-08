@@ -34,3 +34,9 @@ my:
   wechat:
     appid: wx535bf80f60239064
     secret: 93c631b2be9d60689dad05af5c30cf7d
+
+qiniu:
+  ak: Gd1mJsdRLIhf6fsZb8w8Tjp9Ppir84oTnIQJxluW
+  sk: -9rQBQePo6D71u5hppWnQfdqjjp2Q-99r3_-6PCY
+  bucket: songyuankun
+  cdn_host: http://pic-oss.songyuankun.top
