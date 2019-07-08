@@ -3,6 +3,8 @@ package com.songyuankun.wechat.dao;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
@@ -31,6 +33,10 @@ public class CourseEnroll implements Serializable {
     private String userName;
     @Column(name = "course_id")
     private Integer courseId;
+    @Transient
+    @JoinColumn(name = "course_id", updatable = false, insertable = false)
+    @NotFound(action = NotFoundAction.IGNORE)
+    private Course course;
     @Column(name = "create_time")
     private Date createTime;
     @Column(name = "status")
