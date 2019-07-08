@@ -46,7 +46,7 @@ public class CourseEnrollController {
         return courseEnroll;
     }
 
-    @PostMapping("page")
+    @PostMapping("my/enroll")
     public Page<CourseEnroll> page(Authentication authentication, @RequestParam(required = false, defaultValue = "0") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
         Integer userId = Integer.valueOf(authentication.getName());
         CourseEnroll courseEnroll = new CourseEnroll();
@@ -57,5 +57,7 @@ public class CourseEnrollController {
         content.forEach(c -> c.setCourse(courseRepository.getOne(c.getCourseId())));
         return courseEnrollPage;
     }
+
+
 
 }
