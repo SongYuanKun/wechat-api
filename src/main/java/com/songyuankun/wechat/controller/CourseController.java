@@ -7,9 +7,11 @@ import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,9 +32,12 @@ public class CourseController {
     }
 
     @PostMapping("save")
-    public Course save(@RequestBody CourseForm courseForm) {
+    public Course save(Authentication authentication, @RequestBody CourseForm courseForm) {
+        Integer userId = Integer.valueOf(authentication.getName());
         Course course = new Course();
         BeanUtils.copyProperties(courseForm, course);
+        course.setUserId(userId);
+
         course.setStatus(0);
         courseRepository.save(course);
         return course;
@@ -54,4 +59,12 @@ public class CourseController {
         return courseRepository.findAll(pageable);
     }
 
+    @PostMapping("my/create")
+    public Page<Course> page(Authentication authentication, @RequestParam(required = false, defaultValue = "0") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
+        Integer userId = Integer.valueOf(authentication.getName());
+        Course course = new Course();
+        course.setUserId(userId);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return courseRepository.findAll(Example.of(course), pageable);
+    }
 }

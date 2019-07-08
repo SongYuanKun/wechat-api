@@ -7,6 +7,7 @@ import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 课程表
@@ -26,10 +27,19 @@ public class Course implements Serializable {
     private Integer id;
 
     /**
+     * 创建用户
+     */
+    @Column(name = "user_id")
+    private Integer userId;
+
+    /**
      * 课程名称
      */
     @Column(name = "name")
     private String name;
+
+    @Column(name = "create_time")
+    private Date createTime;
 
     /**
      * 课程状态
