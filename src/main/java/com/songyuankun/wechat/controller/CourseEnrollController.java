@@ -2,6 +2,7 @@ package com.songyuankun.wechat.controller;
 
 import com.songyuankun.wechat.dao.CourseEnroll;
 import com.songyuankun.wechat.repository.CourseEnrollRepository;
+import com.songyuankun.wechat.repository.CourseRepository;
 import com.songyuankun.wechat.request.CourseEnrollForm;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author songyuankun
@@ -24,9 +26,11 @@ import java.util.Date;
 @Slf4j
 public class CourseEnrollController {
     private final CourseEnrollRepository courseEnrollRepository;
+    private final CourseRepository courseRepository;
 
-    public CourseEnrollController(CourseEnrollRepository courseEnrollRepository) {
+    public CourseEnrollController(CourseEnrollRepository courseEnrollRepository, CourseRepository courseRepository) {
         this.courseEnrollRepository = courseEnrollRepository;
+        this.courseRepository = courseRepository;
     }
 
 
@@ -37,6 +41,7 @@ public class CourseEnrollController {
         int userId = Integer.parseInt(authentication.getName());
         courseEnroll.setUserId(userId);
         courseEnroll.setStatus(0);
+        courseEnroll.setCreateTime(new Date());
         courseEnrollRepository.save(courseEnroll);
         return courseEnroll;
     }
@@ -45,10 +50,12 @@ public class CourseEnrollController {
     public Page<CourseEnroll> page(Authentication authentication, @RequestParam(required = false, defaultValue = "0") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
         Integer userId = Integer.valueOf(authentication.getName());
         CourseEnroll courseEnroll = new CourseEnroll();
-        courseEnroll.setId(userId);
-        courseEnroll.setCreateTime(new Date());
+        courseEnroll.setUserId(userId);
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        return courseEnrollRepository.findAll(Example.of(courseEnroll), pageable);
+        Page<CourseEnroll> courseEnrollPage = courseEnrollRepository.findAll(Example.of(courseEnroll), pageable);
+        List<CourseEnroll> content = courseEnrollPage.getContent();
+        content.forEach(c -> c.setCourse(courseRepository.getOne(c.getCourseId())));
+        return courseEnrollPage;
     }
 
 }
