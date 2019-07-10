@@ -3,6 +3,7 @@ package com.songyuankun.wechat.controller;
 import com.songyuankun.wechat.dao.Course;
 import com.songyuankun.wechat.repository.CourseRepository;
 import com.songyuankun.wechat.request.CourseForm;
+import com.songyuankun.wechat.request.update.CourseUpdateDetail;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -41,6 +43,14 @@ public class CourseController {
         course.setStatus(0);
         courseRepository.save(course);
         return course;
+    }
+
+    @PostMapping("update_detail")
+    @Transactional(rollbackOn = Exception.class)
+    public Integer updateDetail(@RequestBody CourseUpdateDetail courseUpdateDetail) {
+        Course course=new Course();
+        BeanUtils.copyProperties(courseUpdateDetail,course);
+        return courseRepository.updateDetail(course);
     }
 
     @GetMapping("public/getById")

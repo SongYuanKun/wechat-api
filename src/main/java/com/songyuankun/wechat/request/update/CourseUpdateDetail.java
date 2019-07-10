@@ -1,4 +1,4 @@
-package com.songyuankun.wechat.request;
+package com.songyuankun.wechat.request.update;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Getter;
@@ -14,9 +14,8 @@ import java.io.Serializable;
 @Getter
 @Setter
 @ToString
-public class CourseForm implements Serializable {
-    private String name;
-    private String img;
+public class CourseUpdateDetail implements Serializable {
+    private int id;
     private String teacherName;
     private String introduction;
 
