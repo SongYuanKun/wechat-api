@@ -3,7 +3,6 @@ package com.songyuankun.wechat.controller;
 import com.songyuankun.wechat.dao.CourseEnroll;
 import com.songyuankun.wechat.dao.User;
 import com.songyuankun.wechat.repository.CourseEnrollRepository;
-import com.songyuankun.wechat.repository.CourseRepository;
 import com.songyuankun.wechat.repository.UserRepository;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
