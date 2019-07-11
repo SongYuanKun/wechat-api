@@ -52,12 +52,19 @@ public class RoomAppointmentController {
         return roomAppointmentRepository.findAll(pageable);
     }
 
-    @GetMapping("getRoomAppointmentList")
-    public List<RoomAppointment> getRoomAppointmentList(@RequestParam(value = "roomId") Integer roomId) {
+    @GetMapping("listByRoomId")
+    public List<RoomAppointment> listByRoomId(@RequestParam(value = "roomId") Integer roomId) {
         RoomAppointment roomAppointment = new RoomAppointment();
         roomAppointment.setRoomId(roomId);
         return roomAppointmentRepository.findAll(Example.of(roomAppointment));
     }
 
+    @GetMapping("listByUserId")
+    public List<RoomAppointment> listByUserId(Authentication authentication) {
+        RoomAppointment roomAppointment = new RoomAppointment();
+        Integer userId = Integer.valueOf(authentication.getName());
+        roomAppointment.setUserId(userId);
+        return roomAppointmentRepository.findAll(Example.of(roomAppointment));
+    }
 
 }
