@@ -17,4 +17,6 @@ public interface RoomAppointmentRepository extends JpaRepository<RoomAppointment
 
     List<RoomAppointment> queryAllByEndTimeBetween(Date startTime1, Date startTime2);
 
+    List<RoomAppointment> queryAllByDay(String day);
+
 }

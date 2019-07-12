@@ -7,7 +7,6 @@ import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 房间被预订的时间点
@@ -32,6 +31,6 @@ public class AppointmentTimePoint implements Serializable {
     @Column(name = "time_point_id")
     private Integer timePointId;
 
-    private Date day;
+    private String day;
 
 }
