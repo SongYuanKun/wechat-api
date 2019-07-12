@@ -38,6 +38,7 @@ public class RoomAppointment {
     @JoinColumn(name = "room_id", updatable = false, insertable = false)
     @NotFound(action = NotFoundAction.IGNORE)
     private Room room;
+    private String day;
     @Column(name = "start_time")
     private Date startTime;
     @Column(name = "end_time")
