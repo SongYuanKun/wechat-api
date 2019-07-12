@@ -3,6 +3,7 @@ package com.songyuankun.wechat.controller;
 import com.songyuankun.wechat.dao.RoomAppointment;
 import com.songyuankun.wechat.repository.RoomAppointmentRepository;
 import com.songyuankun.wechat.request.RoomAppointmentForm;
+import com.songyuankun.wechat.util.DateUtil;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -13,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -65,6 +68,26 @@ public class RoomAppointmentController {
         Integer userId = Integer.valueOf(authentication.getName());
         roomAppointment.setUserId(userId);
         return roomAppointmentRepository.findAll(Example.of(roomAppointment));
+    }
+
+    @GetMapping("queryIsEmptyTime")
+    public boolean queryIsEmptyTime(String date, String startTime, String endTime) {
+        LocalDateTime startDateTime = LocalDateTime.parse(date + " " + startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        LocalDateTime endDateTime = LocalDateTime.parse(date + " " + endTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        log.info(startDateTime.toString() + "==" + endDateTime.toString());
+        List<RoomAppointment> startTimeBetween = roomAppointmentRepository.queryAllByStartTimeBetween(DateUtil.fromLocalDateTime(startDateTime), DateUtil.fromLocalDateTime(endDateTime));
+        List<RoomAppointment> endTimeBetween = roomAppointmentRepository.queryAllByEndTimeBetween(DateUtil.fromLocalDateTime(startDateTime), DateUtil.fromLocalDateTime(endDateTime));
+        return endTimeBetween.isEmpty() && startTimeBetween.isEmpty();
+    }
+
+    @GetMapping("queryEmptyTime")
+    public boolean queryEmptyTime(String date, String startTime, String endTime) {
+        LocalDateTime startDateTime = LocalDateTime.parse(date + " " + startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        LocalDateTime endDateTime = LocalDateTime.parse(date + " " + endTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        log.info(startDateTime.toString() + "==" + endDateTime.toString());
+        List<RoomAppointment> startTimeBetween = roomAppointmentRepository.queryAllByStartTimeBetween(DateUtil.fromLocalDateTime(startDateTime), DateUtil.fromLocalDateTime(endDateTime));
+        List<RoomAppointment> endTimeBetween = roomAppointmentRepository.queryAllByEndTimeBetween(DateUtil.fromLocalDateTime(startDateTime), DateUtil.fromLocalDateTime(endDateTime));
+        return endTimeBetween.isEmpty() && startTimeBetween.isEmpty();
     }
 
 }
