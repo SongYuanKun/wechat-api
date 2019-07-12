@@ -48,8 +48,8 @@ public class CourseController {
     @PostMapping("update_detail")
     @Transactional(rollbackOn = Exception.class)
     public Integer updateDetail(@RequestBody CourseUpdateDetail courseUpdateDetail) {
-        Course course=new Course();
-        BeanUtils.copyProperties(courseUpdateDetail,course);
+        Course course = new Course();
+        BeanUtils.copyProperties(courseUpdateDetail, course);
         return courseRepository.updateDetail(course);
     }
 
