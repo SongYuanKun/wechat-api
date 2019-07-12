@@ -5,9 +5,7 @@ import com.songyuankun.wechat.dao.RoomAppointment;
 import com.songyuankun.wechat.dao.TimePoint;
 import com.songyuankun.wechat.repository.AppointmentTimePointRepository;
 import com.songyuankun.wechat.repository.RoomAppointmentRepository;
-import com.songyuankun.wechat.repository.TimePointRepository;
 import com.songyuankun.wechat.request.RoomAppointmentForm;
-import com.songyuankun.wechat.util.DateUtil;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -18,8 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,12 +31,10 @@ public class RoomAppointmentController {
 
     private final RoomAppointmentRepository roomAppointmentRepository;
     private final AppointmentTimePointRepository appointmentTimePointRepository;
-    private final TimePointRepository timePointRepository;
 
-    public RoomAppointmentController(RoomAppointmentRepository roomAppointmentRepository, AppointmentTimePointRepository appointmentTimePointRepository, TimePointRepository timePointRepository) {
+    public RoomAppointmentController(RoomAppointmentRepository roomAppointmentRepository, AppointmentTimePointRepository appointmentTimePointRepository) {
         this.roomAppointmentRepository = roomAppointmentRepository;
         this.appointmentTimePointRepository = appointmentTimePointRepository;
-        this.timePointRepository = timePointRepository;
     }
 
     @PostMapping("save")
@@ -79,21 +74,28 @@ public class RoomAppointmentController {
         return roomAppointmentRepository.findAll(Example.of(roomAppointment));
     }
 
-    @GetMapping("queryIsEmptyTime")
-    public boolean queryIsEmptyTime(String date, String startTime, String endTime) {
-        LocalDateTime startDateTime = LocalDateTime.parse(date + " " + startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-        LocalDateTime endDateTime = LocalDateTime.parse(date + " " + endTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-        log.info(startDateTime.toString() + "==" + endDateTime.toString());
-        List<RoomAppointment> startTimeBetween = roomAppointmentRepository.queryAllByStartTimeBetween(DateUtil.fromLocalDateTime(startDateTime), DateUtil.fromLocalDateTime(endDateTime));
-        List<RoomAppointment> endTimeBetween = roomAppointmentRepository.queryAllByEndTimeBetween(DateUtil.fromLocalDateTime(startDateTime), DateUtil.fromLocalDateTime(endDateTime));
-        return endTimeBetween.isEmpty() && startTimeBetween.isEmpty();
+    @GetMapping("queryUsefulEndTime")
+    public List<TimePoint> queryUsefulEndTime(String date, Integer startTimePointId) {
+        List<AppointmentTimePoint> appointmentTimePoints = appointmentTimePointRepository.queryAllByDay(date);
+        List<TimePoint> result = new ArrayList<>();
+        List<TimePoint> all = new ArrayList<>();
+
+        for (TimePoint timePoint : all) {
+            int id = timePoint.getId();
+            if (!appointmentTimePoints.contains(id)) {
+                result.add(timePoint);
+            } else {
+                break;
+            }
+        }
+        return result;
     }
 
     @GetMapping("queryEmptyTime")
     public List<TimePoint> queryEmptyTime(String date) {
         List<AppointmentTimePoint> appointmentTimePoints = appointmentTimePointRepository.queryAllByDay(date);
         List<Integer> timePoints = appointmentTimePoints.stream().map(AppointmentTimePoint::getTimePointId).collect(Collectors.toList());
-        List<TimePoint> all = timePointRepository.findAll();
+        List<TimePoint> all = new ArrayList<>();
         return all.stream().filter(t -> !timePoints.contains(t.getId())).collect(Collectors.toList());
     }
 
