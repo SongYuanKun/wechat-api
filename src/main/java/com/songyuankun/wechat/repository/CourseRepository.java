@@ -1,7 +1,6 @@
 package com.songyuankun.wechat.repository;
 
 import com.songyuankun.wechat.dao.Course;
-import com.songyuankun.wechat.request.update.CourseUpdateDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
