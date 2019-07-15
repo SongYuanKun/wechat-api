@@ -16,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -74,29 +73,13 @@ public class RoomAppointmentController {
         return roomAppointmentRepository.findAll(Example.of(roomAppointment));
     }
 
-    @GetMapping("queryUsefulEndTime")
-    public List<TimePoint> queryUsefulEndTime(String date, Integer startTimePointId) {
-        List<AppointmentTimePoint> appointmentTimePoints = appointmentTimePointRepository.queryAllByDay(date);
-        List<TimePoint> result = new ArrayList<>();
-        List<TimePoint> all = new ArrayList<>();
-
-        for (TimePoint timePoint : all) {
-            int id = timePoint.getId();
-            if (!appointmentTimePoints.contains(id)) {
-                result.add(timePoint);
-            } else {
-                break;
-            }
-        }
-        return result;
-    }
-
-    @GetMapping("queryEmptyTime")
+    @GetMapping("queryAppointmentTime")
     public List<TimePoint> queryEmptyTime(String date) {
         List<AppointmentTimePoint> appointmentTimePoints = appointmentTimePointRepository.queryAllByDay(date);
         List<Integer> timePoints = appointmentTimePoints.stream().map(AppointmentTimePoint::getTimePointId).collect(Collectors.toList());
-        List<TimePoint> all = new ArrayList<>();
-        return all.stream().filter(t -> !timePoints.contains(t.getId())).collect(Collectors.toList());
+        List<TimePoint> all = TimePoint.getList();
+        all.forEach(t -> t.setStatus(timePoints.contains(t.getId()) ? 1 : 0));
+        return all;
     }
 
 }
