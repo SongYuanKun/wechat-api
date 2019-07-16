@@ -8,12 +8,12 @@ import com.songyuankun.wechat.repository.RoomAppointmentRepository;
 import com.songyuankun.wechat.request.RoomAppointmentForm;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,13 +37,14 @@ public class RoomAppointmentController {
     }
 
     @PostMapping("save")
-    public RoomAppointment save(Authentication authentication, @RequestBody RoomAppointmentForm roomAppointmentForm) {
+    public RoomAppointment save(Authentication authentication, @RequestBody @Validated RoomAppointmentForm roomAppointmentForm) {
         Integer userId = Integer.valueOf(authentication.getName());
         RoomAppointment roomAppointment = new RoomAppointment();
-        BeanUtils.copyProperties(roomAppointmentForm, roomAppointment);
-        roomAppointment.setUserId(userId);
-        roomAppointment.setStatus(0);
-        roomAppointmentRepository.save(roomAppointment);
+        for (Integer integer : roomAppointmentForm.getCurrentTime()) {
+            roomAppointment.setUserId(userId);
+            roomAppointment.setStatus(0);
+            roomAppointmentRepository.save(roomAppointment);
+        }
         return roomAppointment;
     }
 

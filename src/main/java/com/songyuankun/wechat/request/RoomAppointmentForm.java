@@ -5,8 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
-import java.util.Date;
+import java.util.List;
 
 /**
  * @author songyuankun
@@ -16,9 +17,10 @@ import java.util.Date;
 @Setter
 @ToString
 public class RoomAppointmentForm implements Serializable {
+    @NotEmpty
     private String userName;
+    @NotEmpty
     private String phone;
-    private Integer roomId;
-    private Date startTime;
-    private Date endTime;
+    @NotEmpty
+    private List<Integer> currentTime;
 }
