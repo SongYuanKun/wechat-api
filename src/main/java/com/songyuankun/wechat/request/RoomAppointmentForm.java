@@ -22,5 +22,7 @@ public class RoomAppointmentForm implements Serializable {
     @NotEmpty
     private String phone;
     @NotEmpty
+    private String day;
+    @NotEmpty
     private List<Integer> currentTime;
 }
