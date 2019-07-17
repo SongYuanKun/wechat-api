@@ -34,6 +34,10 @@ public class AppointmentTimePoint implements Serializable {
     @Column(name = "time_point_id")
     private Integer timePointId;
 
+    private Integer status;
+
+    private String statusZh;
+
     private String day;
 
 }
