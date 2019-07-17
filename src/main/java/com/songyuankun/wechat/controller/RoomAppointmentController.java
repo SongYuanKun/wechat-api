@@ -1,5 +1,7 @@
 package com.songyuankun.wechat.controller;
 
+import com.songyuankun.wechat.common.Response;
+import com.songyuankun.wechat.common.ResponseUtils;
 import com.songyuankun.wechat.dao.AppointmentTimePoint;
 import com.songyuankun.wechat.dao.RoomAppointment;
 import com.songyuankun.wechat.dao.TimePoint;
@@ -37,15 +39,16 @@ public class RoomAppointmentController {
     }
 
     @PostMapping("save")
-    public RoomAppointment save(Authentication authentication, @RequestBody @Validated RoomAppointmentForm roomAppointmentForm) {
+    public Response save(Authentication authentication, @RequestBody @Validated RoomAppointmentForm roomAppointmentForm) {
         Integer userId = Integer.valueOf(authentication.getName());
-        RoomAppointment roomAppointment = new RoomAppointment();
+        AppointmentTimePoint appointmentTimePoint = new AppointmentTimePoint();
         for (Integer integer : roomAppointmentForm.getCurrentTime()) {
-            roomAppointment.setUserId(userId);
-            roomAppointment.setStatus(0);
-            roomAppointmentRepository.save(roomAppointment);
+            appointmentTimePoint.setDay(roomAppointmentForm.getDay());
+            appointmentTimePoint.setUserId(userId);
+            appointmentTimePoint.setTimePointId(integer);
+            appointmentTimePointRepository.save(appointmentTimePoint);
         }
-        return roomAppointment;
+        return ResponseUtils.success("");
     }
 
     @GetMapping("public/getById")

@@ -28,6 +28,9 @@ public class AppointmentTimePoint implements Serializable {
     @Column(name = "room_id")
     private Integer roomId;
 
+    @Column(name = "user_id")
+    private Integer userId;
+
     @Column(name = "time_point_id")
     private Integer timePointId;
 
