@@ -5,7 +5,9 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 预约时间段表
@@ -20,10 +22,8 @@ public class TimePoint {
 
     private Integer id;
 
-    /**
-     * 页面显示值
-     */
-    private String value = "";
+    public static final Map<Integer, TimePoint> MAP = new HashMap<>(32);
+    public static final List<TimePoint> LIST = new ArrayList<>();
 
 
     /**
@@ -40,13 +40,18 @@ public class TimePoint {
         this.status = status;
     }
 
-    public static List<TimePoint> getList() {
-        List<TimePoint> timePointList = new ArrayList<>();
+    static {
         for (TimePointEnum timePointEnum : TimePointEnum.values()) {
-            timePointList.add(new TimePoint(timePointEnum.id, timePointEnum.value, timePointEnum.type,0));
+            TimePoint timePoint = new TimePoint(timePointEnum.id, timePointEnum.value, timePointEnum.type, 0);
+            LIST.add(timePoint);
+            MAP.put(timePointEnum.id, timePoint);
         }
-        return timePointList;
     }
+
+    /**
+     * 页面显示值
+     */
+    private String value;
 
 
     public enum TimePointEnum {
