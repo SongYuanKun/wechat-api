@@ -41,8 +41,8 @@ public class RoomAppointmentController {
     @PostMapping("save")
     public Response save(Authentication authentication, @RequestBody @Validated RoomAppointmentForm roomAppointmentForm) {
         Integer userId = Integer.valueOf(authentication.getName());
-        AppointmentTimePoint appointmentTimePoint = new AppointmentTimePoint();
         for (Integer integer : roomAppointmentForm.getCurrentTime()) {
+            AppointmentTimePoint appointmentTimePoint = new AppointmentTimePoint();
             appointmentTimePoint.setDay(roomAppointmentForm.getDay());
             appointmentTimePoint.setUserId(userId);
             appointmentTimePoint.setTimePointId(integer);
