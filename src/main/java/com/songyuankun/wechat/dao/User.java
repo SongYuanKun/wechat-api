@@ -27,6 +27,8 @@ public class User implements Serializable {
     private String uid;
     @Column(name = "create_time")
     private Date createTime;
+    @Column(name = "password")
+    private String password;
     @Column(name = "session_key")
     private String sessionKey;
     private Integer balance;
@@ -37,6 +39,8 @@ public class User implements Serializable {
     private String userName;
     @Column(name = "update_time")
     private Date updateTime;
+    @Column(name = "user_role")
+    private String userRole;
 
     private String phone;
 

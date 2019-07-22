@@ -1,9 +1,12 @@
 package com.songyuankun.wechat.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.songyuankun.wechat.common.Response;
+import com.songyuankun.wechat.common.ResponseUtils;
 import com.songyuankun.wechat.common.WeChatCommon;
 import com.songyuankun.wechat.dao.User;
 import com.songyuankun.wechat.repository.UserRepository;
+import com.songyuankun.wechat.util.Md5Util;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +38,35 @@ public class LoginController {
         this.weChatCommon = weChatCommon;
     }
 
+    @PostMapping("/loginByPassword")
+    public Response<String> loginByPassword(@RequestParam String phone, @RequestParam String password) {
+        String passwordMd5 = Md5Util.stringInMd5(password);
+        User user = userRepository.findByPhoneAndPassword(phone, passwordMd5);
+        if (user == null) {
+            return ResponseUtils.error("没有该用户");
+        }
+        if (!user.getUserRole().contains("ROLE_ADMIN")) {
+            return ResponseUtils.error("没有权限");
+        }
+        String openid = user.getUid();
+        List<String> roleList = Arrays.asList(user.getUserRole().split(","));
+        List<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
+        roleList.forEach(role -> simpleGrantedAuthorities.add(new SimpleGrantedAuthority(role)));
+
+        String token = getToken(openid, simpleGrantedAuthorities);
+        return ResponseUtils.success("Bearer " + token);
+    }
+
+    private String getToken(String openid, List<SimpleGrantedAuthority> simpleGrantedAuthorities) {
+        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(openid, "123456", simpleGrantedAuthorities));
+        String token = Jwts.builder()
+                .setSubject(((org.springframework.security.core.userdetails.User) authenticate.getPrincipal()).getUsername())
+                .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 24 * 1000))
+                .signWith(SignatureAlgorithm.HS512, "MyJwtSecret")
+                .compact();
+        log.info("Bearer " + token);
+        return token;
+    }
 
     @PostMapping("/login")
     public Map<String, Object> doLogin(@RequestParam(value = "code", required = false) String code,
@@ -91,13 +123,7 @@ public class LoginController {
 
         List<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
         simpleGrantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(openid, "123456", simpleGrantedAuthorities));
-        String token = Jwts.builder()
-                .setSubject(((org.springframework.security.core.userdetails.User) authenticate.getPrincipal()).getUsername())
-                .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 24 * 1000))
-                .signWith(SignatureAlgorithm.HS512, "MyJwtSecret")
-                .compact();
-        log.info("Bearer " + token);
+        String token = getToken(openid, simpleGrantedAuthorities);
         map.put("token", "Bearer " + token);
         return map;
     }
