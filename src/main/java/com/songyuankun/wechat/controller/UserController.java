@@ -4,6 +4,7 @@ import com.songyuankun.wechat.dao.User;
 import com.songyuankun.wechat.repository.UserRepository;
 import com.songyuankun.wechat.request.UserForm;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -40,6 +41,15 @@ public class UserController {
         int id = Integer.parseInt(principal.getName());
         return userRepository.updateUserNameAndPhone(id, userForm.getUserName(), userForm.getPhone());
     }
+
+    @PostMapping("saveOrUpdate")
+    @Transactional(rollbackOn = Exception.class)
+    public User saveOrUpdate(@AuthenticationPrincipal Principal principal,@RequestBody UserForm userForm) {
+        User user = new User();
+        BeanUtils.copyProperties(userForm, user);
+        return userRepository.save(user);
+    }
+
 
     @PostMapping("page")
     public Page<User> page(@RequestParam(required = false, defaultValue = "0") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
