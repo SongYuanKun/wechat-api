@@ -42,6 +42,12 @@ public class User implements Serializable {
     @Column(name = "user_role")
     private String userRole;
 
+    private Integer age;
+
+    private Integer sex;
+
+    private String birthday;
+
     private String phone;
 
 }

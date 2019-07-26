@@ -1,5 +1,6 @@
 package com.songyuankun.wechat.secutity;
 
+import com.songyuankun.wechat.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,22 +17,23 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
+    private UserRepository userRepository;
     private DbUserDetailsServiceImpl userDetailsService;
     private PasswordEncoder bCryptPasswordEncoder = NoOpPasswordEncoder.getInstance();
 
-    public WebSecurityConfig(DbUserDetailsServiceImpl userDetailsService) {
+    public WebSecurityConfig(UserRepository userRepository, DbUserDetailsServiceImpl userDetailsService) {
+        this.userRepository = userRepository;
         this.userDetailsService = userDetailsService;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
-                .antMatchers("/login","/loginByPassword", "/course/public/**").permitAll()
+                .antMatchers("/login", "/admin/loginByPassword", "/course/public/**").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()
                 .and()
-                .addFilter(new JWTAuthenticationFilter(authenticationManager()));
+                .addFilter(new JWTAuthenticationFilter(authenticationManager(), userRepository));
     }
 
     @Override
