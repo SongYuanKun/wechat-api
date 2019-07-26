@@ -29,11 +29,7 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-    @GetMapping
-    public String user(@AuthenticationPrincipal Principal principal) {
-        log.info(principal.getName());
-        return principal.getName();
-    }
+
 
     @PostMapping("update")
     @Transactional(rollbackOn = Exception.class)
@@ -42,19 +38,7 @@ public class UserController {
         return userRepository.updateUserNameAndPhone(id, userForm.getUserName(), userForm.getPhone());
     }
 
-    @PostMapping("saveOrUpdate")
-    @Transactional(rollbackOn = Exception.class)
-    public User saveOrUpdate(@AuthenticationPrincipal Principal principal,@RequestBody UserForm userForm) {
-        User user = new User();
-        BeanUtils.copyProperties(userForm, user);
-        return userRepository.save(user);
-    }
 
 
-    @PostMapping("page")
-    public Page<User> page(@RequestParam(required = false, defaultValue = "0") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        return userRepository.findAll(pageable);
-    }
 
 }

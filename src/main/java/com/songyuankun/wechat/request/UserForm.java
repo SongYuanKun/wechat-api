@@ -20,5 +20,7 @@ public class UserForm implements Serializable {
     private String phone;
     private String address;
     private Integer sex;
+    private Integer age;
+    private String birthday;
 
 }

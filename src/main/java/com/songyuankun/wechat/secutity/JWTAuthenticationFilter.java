@@ -1,8 +1,11 @@
 package com.songyuankun.wechat.secutity;
 
+import com.songyuankun.wechat.dao.User;
+import com.songyuankun.wechat.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.util.StringUtils;
@@ -13,11 +16,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
 
-    JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
+    private UserRepository userRepository;
+
+    JWTAuthenticationFilter(AuthenticationManager authenticationManager, UserRepository userRepository) {
         super(authenticationManager);
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -30,7 +38,6 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
             chain.doFilter(request, response);
             return;
         }
-
         UsernamePasswordAuthenticationToken authentication = getAuthentication(header);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -48,7 +55,11 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
                     .getSubject();
 
             if (user != null) {
-                return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
+                User one = userRepository.getOne(Integer.parseInt(user));
+                List<String> roleList = Arrays.asList(one.getUserRole().split(","));
+                List<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
+                roleList.forEach(role -> simpleGrantedAuthorities.add(new SimpleGrantedAuthority(role)));
+                return new UsernamePasswordAuthenticationToken(user, "123456", simpleGrantedAuthorities);
             }
             return null;
         }
