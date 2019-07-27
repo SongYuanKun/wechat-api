@@ -20,6 +20,10 @@ public class MyAppointmentTimeResponse {
     private Integer timePointId;
     private TimePoint timePoint;
 
+    private String userName;
+
+    private String phone;
+
     private Integer status;
 
 

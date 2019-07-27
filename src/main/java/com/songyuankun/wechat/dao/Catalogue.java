@@ -21,7 +21,7 @@ import java.util.Date;
 @ToString
 @Getter
 @Setter
-public class Catalogue {
+public class Catalogue extends BaseDao {
     @Id
     @GeneratedValue
     private Integer id;
@@ -40,14 +40,10 @@ public class Catalogue {
     @Column(name = "user_id")
     private Integer userId;
 
-    @Column(name = "create_time")
-    private Date createTime;
 
     @Column(name = "update_id")
     private Integer updateId;
 
-    @Column(name = "update_time")
-    private Date updateTime;
     /**
      * 课程状态
      */

@@ -19,7 +19,7 @@ import java.io.Serializable;
 @ToString
 @Getter
 @Setter
-public class Room implements Serializable {
+public class Room extends BaseDao implements Serializable {
     @Id
     @GeneratedValue
     private Integer id;

@@ -20,13 +20,11 @@ import java.util.Date;
 @ToString
 @Getter
 @Setter
-public class User implements Serializable {
+public class User extends BaseDao implements Serializable {
     @Id
     @GeneratedValue
     private Integer id;
     private String uid;
-    @Column(name = "create_time")
-    private Date createTime;
     @Column(name = "password")
     private String password;
     @Column(name = "session_key")
@@ -37,8 +35,6 @@ public class User implements Serializable {
     private Integer gender;
     @Column(name = "user_name")
     private String userName;
-    @Column(name = "update_time")
-    private Date updateTime;
     @Column(name = "user_role")
     private String userRole;
 
