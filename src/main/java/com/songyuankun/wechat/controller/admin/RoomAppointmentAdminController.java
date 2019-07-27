@@ -6,6 +6,7 @@ import com.songyuankun.wechat.dao.AppointmentTimePoint;
 import com.songyuankun.wechat.dao.TimePoint;
 import com.songyuankun.wechat.repository.AppointmentTimePointRepository;
 import com.songyuankun.wechat.request.RoomAppointmentForm;
+import com.songyuankun.wechat.request.query.RoomAppointmentQuery;
 import com.songyuankun.wechat.response.MyAppointmentTimeResponse;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
@@ -61,22 +62,25 @@ public class RoomAppointmentAdminController {
         return all;
     }
 
-    @GetMapping("queryAppointmentList")
-    public PageImpl<MyAppointmentTimeResponse> queryAppointmentList(@RequestParam(required = false, defaultValue = "0") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
+    @PostMapping("queryAppointmentList")
+    public PageImpl<MyAppointmentTimeResponse> queryAppointmentList(@Validated @RequestBody RoomAppointmentQuery roomAppointmentQuery) {
         List<MyAppointmentTimeResponse> responseList = new ArrayList<>();
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Pageable pageable = PageRequest.of(roomAppointmentQuery.getPageNumber(), roomAppointmentQuery.getPageSize());
         Page<AppointmentTimePoint> appointmentTimePoints = appointmentTimePointRepository.findAll(pageable);
         for (AppointmentTimePoint appointmentTimePoint : appointmentTimePoints) {
             MyAppointmentTimeResponse myAppointmentTimeResponse = new MyAppointmentTimeResponse();
-            myAppointmentTimeResponse.setDay(appointmentTimePoint.getDay());
-            myAppointmentTimeResponse.setUserName(appointmentTimePoint.getUserName());
-            myAppointmentTimeResponse.setPhone(appointmentTimePoint.getPhone());
-            myAppointmentTimeResponse.setStatus(appointmentTimePoint.getStatus());
-            myAppointmentTimeResponse.setTimePointId(appointmentTimePoint.getTimePointId());
+            BeanUtils.copyProperties(appointmentTimePoint, myAppointmentTimeResponse);
             myAppointmentTimeResponse.setTimePoint(TimePoint.MAP.get(appointmentTimePoint.getTimePointId()));
             responseList.add(myAppointmentTimeResponse);
         }
         return new PageImpl<>(responseList, pageable, appointmentTimePoints.getTotalElements());
+    }
+
+    @GetMapping("changeStatus")
+    public AppointmentTimePoint changeStatus(@RequestParam Integer id, @RequestParam Integer status) {
+        AppointmentTimePoint appointmentTimePoint = appointmentTimePointRepository.getOne(id);
+        appointmentTimePoint.setStatus(status);
+        return appointmentTimePointRepository.save(appointmentTimePoint);
     }
 
 }

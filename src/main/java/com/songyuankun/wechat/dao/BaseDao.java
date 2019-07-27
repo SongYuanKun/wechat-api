@@ -15,13 +15,13 @@ import java.util.Date;
 class BaseDao {
 
     @Column(name = "create_user_id")
-    private int createUserId;
+    private Integer createUserId;
 
     @Column(name = "create_time")
     private Date createTime;
 
     @Column(name = "update_user_id")
-    private int updateUserId;
+    private Integer updateUserId;
 
     @Column(name = "update_time")
     private Date updateTime;
