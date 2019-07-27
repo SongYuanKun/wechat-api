@@ -15,9 +15,12 @@ import lombok.ToString;
 @ToString
 public class MyAppointmentTimeResponse {
 
+    private Integer id;
+
     private String day;
 
     private Integer timePointId;
+
     private TimePoint timePoint;
 
     private String userName;

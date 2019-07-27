@@ -41,15 +41,7 @@ public class AppointmentTimePoint extends BaseDao implements Serializable {
 
     private String phone;
 
-
-    @Transient
-    @JoinColumn(name = "time_point_id", updatable = false, insertable = false)
-    @NotFound(action = NotFoundAction.IGNORE)
-    private TimePoint timePoint;
-
     private Integer status;
-
-    private String statusZh;
 
     private String day;
 

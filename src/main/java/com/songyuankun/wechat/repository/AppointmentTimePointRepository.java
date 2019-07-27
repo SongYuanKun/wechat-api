@@ -1,6 +1,7 @@
 package com.songyuankun.wechat.repository;
 
 import com.songyuankun.wechat.dao.AppointmentTimePoint;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -14,6 +15,9 @@ public interface AppointmentTimePointRepository extends JpaRepository<Appointmen
 
 
     List<AppointmentTimePoint> findAllByDay(String day);
+
     List<AppointmentTimePoint> findAllByUserId(Integer userId, Pageable pageable);
+
+    Page<AppointmentTimePoint> findAllByDayAndUserNameIsLike(String day, String userName, Pageable pageable);
 
 }
