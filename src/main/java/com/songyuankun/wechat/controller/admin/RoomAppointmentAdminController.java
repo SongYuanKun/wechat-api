@@ -16,9 +16,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -65,8 +67,20 @@ public class RoomAppointmentAdminController {
     @PostMapping("queryAppointmentList")
     public PageImpl<MyAppointmentTimeResponse> queryAppointmentList(@Validated @RequestBody RoomAppointmentQuery roomAppointmentQuery) {
         List<MyAppointmentTimeResponse> responseList = new ArrayList<>();
-        Pageable pageable = PageRequest.of(roomAppointmentQuery.getPageNumber(), roomAppointmentQuery.getPageSize());
-        Page<AppointmentTimePoint> appointmentTimePoints = appointmentTimePointRepository.findAll(pageable);
+        String username = roomAppointmentQuery.getUserName();
+        String day = roomAppointmentQuery.getDay();
+        Pageable pageable = PageRequest.of(roomAppointmentQuery.getPageNumber() - 1, roomAppointmentQuery.getPageSize());
+        Page<AppointmentTimePoint> appointmentTimePoints = appointmentTimePointRepository.findAll((
+                (root, query, cb) -> {
+                    List<Predicate> predicates = new ArrayList<>();
+                    if (!StringUtils.isEmpty(username)) {
+                        predicates.add(cb.like(root.get("userName"), username));
+                    }
+                    if (!StringUtils.isEmpty(day)) {
+                        predicates.add(cb.equal(root.get("day"), day));
+                    }
+                    return cb.and(predicates.toArray(new Predicate[0]));
+                }), pageable);
         for (AppointmentTimePoint appointmentTimePoint : appointmentTimePoints) {
             MyAppointmentTimeResponse myAppointmentTimeResponse = new MyAppointmentTimeResponse();
             BeanUtils.copyProperties(appointmentTimePoint, myAppointmentTimeResponse);
