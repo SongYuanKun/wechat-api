@@ -20,7 +20,7 @@ import java.util.Date;
 @ToString
 @Getter
 @Setter
-public class Course implements Serializable {
+public class Course extends BaseDao implements Serializable {
 
     @Id
     @GeneratedValue
@@ -38,8 +38,7 @@ public class Course implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "create_time")
-    private Date createTime;
+
 
     /**
      * 课程状态

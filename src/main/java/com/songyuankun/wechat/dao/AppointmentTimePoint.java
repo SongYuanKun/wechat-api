@@ -3,6 +3,8 @@ package com.songyuankun.wechat.dao;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
@@ -19,7 +21,7 @@ import java.io.Serializable;
 @ToString
 @Getter
 @Setter
-public class AppointmentTimePoint implements Serializable {
+public class AppointmentTimePoint extends BaseDao implements Serializable {
 
     @Id
     @GeneratedValue
@@ -33,6 +35,17 @@ public class AppointmentTimePoint implements Serializable {
 
     @Column(name = "time_point_id")
     private Integer timePointId;
+
+    @Column(name="user_name")
+    private String userName;
+
+    private String phone;
+
+
+    @Transient
+    @JoinColumn(name = "time_point_id", updatable = false, insertable = false)
+    @NotFound(action = NotFoundAction.IGNORE)
+    private TimePoint timePoint;
 
     private Integer status;
 

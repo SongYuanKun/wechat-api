@@ -18,7 +18,7 @@ import java.util.Map;
 @ToString
 @Getter
 @Setter
-public class TimePoint {
+public class TimePoint extends BaseDao {
 
     private Integer id;
 

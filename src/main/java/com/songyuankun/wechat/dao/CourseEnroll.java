@@ -22,7 +22,7 @@ import java.util.Date;
 @ToString
 @Getter
 @Setter
-public class CourseEnroll implements Serializable {
+public class CourseEnroll extends BaseDao implements Serializable {
 
     @Id
     @GeneratedValue
@@ -37,8 +37,6 @@ public class CourseEnroll implements Serializable {
     @JoinColumn(name = "course_id", updatable = false, insertable = false)
     @NotFound(action = NotFoundAction.IGNORE)
     private Course course;
-    @Column(name = "create_time")
-    private Date createTime;
     @Column(name = "status")
     private Integer status;
     private String phone;

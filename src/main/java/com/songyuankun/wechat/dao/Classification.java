@@ -21,7 +21,7 @@ import javax.persistence.Table;
 @ToString
 @Getter
 @Setter
-public class Classification {
+public class Classification extends BaseDao{
     @Id
     @GeneratedValue
     private Integer id;
