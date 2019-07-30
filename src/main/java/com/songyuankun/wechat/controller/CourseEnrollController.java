@@ -1,5 +1,6 @@
 package com.songyuankun.wechat.controller;
 
+import com.songyuankun.wechat.common.DaoCommon;
 import com.songyuankun.wechat.dao.CourseEnroll;
 import com.songyuankun.wechat.repository.CourseEnrollRepository;
 import com.songyuankun.wechat.repository.CourseRepository;
@@ -41,7 +42,8 @@ public class CourseEnrollController {
         int userId = Integer.parseInt(authentication.getName());
         courseEnroll.setUserId(userId);
         courseEnroll.setStatus(0);
-        courseEnroll.setCreateTime(new Date());
+        DaoCommon.createDao(authentication, courseEnroll);
+
         courseEnrollRepository.save(courseEnroll);
         return courseEnroll;
     }

@@ -8,11 +8,14 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import java.util.Date;
 
+/**
+ * @author songyuankun
+ */
 @ToString
 @Getter
 @Setter
 @MappedSuperclass
-class BaseDao {
+public abstract class BaseDao {
 
     @Column(name = "create_user_id")
     private Integer createUserId;
