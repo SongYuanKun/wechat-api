@@ -1,5 +1,6 @@
 package com.songyuankun.wechat.controller.admin;
 
+import com.songyuankun.wechat.common.DaoCommon;
 import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.common.ResponseUtils;
 import com.songyuankun.wechat.dao.AppointmentTimePoint;
@@ -49,6 +50,7 @@ public class RoomAppointmentAdminController {
             appointmentTimePoint.setDay(roomAppointmentForm.getDay());
             appointmentTimePoint.setUserId(userId);
             appointmentTimePoint.setTimePointId(integer);
+            DaoCommon.createDao(authentication, appointmentTimePoint);
             save = appointmentTimePointRepository.save(appointmentTimePoint);
         }
         return ResponseUtils.success(save);
@@ -91,9 +93,10 @@ public class RoomAppointmentAdminController {
     }
 
     @GetMapping("changeStatus")
-    public AppointmentTimePoint changeStatus(@RequestParam Integer id, @RequestParam Integer status) {
+    public AppointmentTimePoint changeStatus(Authentication authentication,@RequestParam Integer id, @RequestParam Integer status) {
         AppointmentTimePoint appointmentTimePoint = appointmentTimePointRepository.getOne(id);
         appointmentTimePoint.setStatus(status);
+        DaoCommon.updateDao(authentication, appointmentTimePoint);
         return appointmentTimePointRepository.save(appointmentTimePoint);
     }
 

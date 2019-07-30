@@ -1,5 +1,6 @@
 package com.songyuankun.wechat.controller;
 
+import com.songyuankun.wechat.common.DaoCommon;
 import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.common.ResponseUtils;
 import com.songyuankun.wechat.dao.AppointmentTimePoint;
@@ -17,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,8 +42,10 @@ public class RoomAppointmentController {
         Integer userId = Integer.valueOf(authentication.getName());
         for (Integer integer : roomAppointmentForm.getCurrentTime()) {
             AppointmentTimePoint appointmentTimePoint = new AppointmentTimePoint();
+            DaoCommon.createDao(authentication, appointmentTimePoint);
             appointmentTimePoint.setDay(roomAppointmentForm.getDay());
-            appointmentTimePoint.setUserId(userId);
+            appointmentTimePoint.setCreateUserId(userId);
+            appointmentTimePoint.setCreateTime(new Date());
             appointmentTimePoint.setTimePointId(integer);
             appointmentTimePointRepository.save(appointmentTimePoint);
         }

@@ -1,5 +1,6 @@
 package com.songyuankun.wechat.controller;
 
+import com.songyuankun.wechat.common.DaoCommon;
 import com.songyuankun.wechat.dao.Catalogue;
 import com.songyuankun.wechat.repository.CatalogueRepository;
 import com.songyuankun.wechat.request.CatalogueForm;
@@ -40,6 +41,8 @@ public class CatalogueController {
         if (catalogue.getId()==null){
             catalogue.setStatus(0);
             catalogue.setUserId(userId);
+            DaoCommon.createDao(authentication, catalogue);
+
         }
         catalogueRepository.save(catalogue);
         return catalogue;
@@ -47,9 +50,10 @@ public class CatalogueController {
 
     @PostMapping("update")
     @Transactional(rollbackOn = Exception.class)
-    public Catalogue update(@RequestBody CatalogueForm catalogueForm) {
+    public Catalogue update(Authentication authentication, @RequestBody CatalogueForm catalogueForm) {
         Catalogue catalogue = new Catalogue();
         BeanUtils.copyProperties(catalogueForm, catalogue);
+        DaoCommon.updateDao(authentication, catalogue);
         return catalogueRepository.save(catalogue);
     }
 

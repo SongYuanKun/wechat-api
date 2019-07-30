@@ -1,5 +1,6 @@
 package com.songyuankun.wechat.controller;
 
+import com.songyuankun.wechat.common.DaoCommon;
 import com.songyuankun.wechat.dao.Course;
 import com.songyuankun.wechat.repository.CourseRepository;
 import com.songyuankun.wechat.request.CourseForm;
@@ -39,7 +40,7 @@ public class CourseController {
         Course course = new Course();
         BeanUtils.copyProperties(courseForm, course);
         course.setUserId(userId);
-
+        DaoCommon.createDao(authentication, course);
         course.setStatus(0);
         courseRepository.save(course);
         return course;
@@ -47,8 +48,9 @@ public class CourseController {
 
     @PostMapping("update_detail")
     @Transactional(rollbackOn = Exception.class)
-    public Integer updateDetail(@RequestBody CourseUpdateDetail courseUpdateDetail) {
+    public Integer updateDetail(Authentication authentication, @RequestBody CourseUpdateDetail courseUpdateDetail) {
         Course course = new Course();
+        DaoCommon.updateDao(authentication, course);
         BeanUtils.copyProperties(courseUpdateDetail, course);
         return courseRepository.updateDetail(course);
     }

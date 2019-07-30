@@ -1,18 +1,17 @@
 package com.songyuankun.wechat.controller;
 
+import com.songyuankun.wechat.common.DaoCommon;
 import com.songyuankun.wechat.dao.User;
 import com.songyuankun.wechat.repository.UserRepository;
 import com.songyuankun.wechat.request.UserForm;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.transaction.Transactional;
-import java.security.Principal;
 
 /**
  * @author songyuankun
@@ -29,16 +28,14 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-
-
     @PostMapping("update")
     @Transactional(rollbackOn = Exception.class)
-    public int updateUser(@AuthenticationPrincipal Principal principal, @RequestBody UserForm userForm) {
-        int id = Integer.parseInt(principal.getName());
-        return userRepository.updateUserNameAndPhone(id, userForm.getUserName(), userForm.getPhone());
+    public User updateUser(Authentication authentication, @RequestBody UserForm userForm) {
+        int id = Integer.parseInt(authentication.getName());
+        User one = userRepository.getOne(id);
+        one.setPhone(userForm.getPhone());
+        one.setUserName(userForm.getUserName());
+        DaoCommon.createDao(authentication, one);
+        return userRepository.save(one);
     }
-
-
-
-
 }

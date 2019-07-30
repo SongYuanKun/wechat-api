@@ -1,5 +1,6 @@
 package com.songyuankun.wechat.controller.admin;
 
+import com.songyuankun.wechat.common.DaoCommon;
 import com.songyuankun.wechat.dao.User;
 import com.songyuankun.wechat.repository.UserRepository;
 import com.songyuankun.wechat.request.UserForm;
@@ -8,6 +9,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,12 +39,15 @@ public class UserAdminController {
 
     @PostMapping("saveOrUpdate")
     @Transactional(rollbackOn = Exception.class)
-    public User saveOrUpdate(@RequestBody UserForm userForm) {
+    public User saveOrUpdate(Authentication authentication, @RequestBody UserForm userForm) {
         User user;
         if (userForm.getId() != null) {
             user = userRepository.getOne(userForm.getId());
+            DaoCommon.updateDao(authentication, user);
+
         } else {
             user = new User();
+            DaoCommon.createDao(authentication, user);
         }
         BeanUtils.copyProperties(userForm, user);
         return userRepository.save(user);
