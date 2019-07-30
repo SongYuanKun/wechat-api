@@ -38,7 +38,12 @@ public class UserAdminController {
     @PostMapping("saveOrUpdate")
     @Transactional(rollbackOn = Exception.class)
     public User saveOrUpdate(@RequestBody UserForm userForm) {
-        User user = new User();
+        User user;
+        if (userForm.getId() != null) {
+            user = userRepository.getOne(userForm.getId());
+        } else {
+            user = new User();
+        }
         BeanUtils.copyProperties(userForm, user);
         return userRepository.save(user);
     }

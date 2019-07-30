@@ -18,6 +18,4 @@ public interface AppointmentTimePointRepository extends JpaRepository<Appointmen
 
     List<AppointmentTimePoint> findAllByUserId(Integer userId, Pageable pageable);
 
-    Page<AppointmentTimePoint> findAllByDayAndUserNameIsLike(String day, String userName, Pageable pageable);
-
 }
