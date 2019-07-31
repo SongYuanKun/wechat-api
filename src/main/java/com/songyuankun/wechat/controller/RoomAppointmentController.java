@@ -56,8 +56,7 @@ public class RoomAppointmentController {
     public List<TimePoint> queryEmptyTime(String date) {
         List<AppointmentTimePoint> appointmentTimePoints = appointmentTimePointRepository.findAllByDay(date);
         List<Integer> timePoints = appointmentTimePoints.stream().map(AppointmentTimePoint::getTimePointId).collect(Collectors.toList());
-        List<TimePoint> all = new ArrayList<>();
-        BeanUtils.copyProperties(TimePoint.LIST, all);
+        List<TimePoint> all = new ArrayList<>(TimePoint.LIST);
         all.forEach(t -> t.setStatus(timePoints.contains(t.getId()) ? 1 : 0));
         return all;
     }
