@@ -20,25 +20,8 @@ import java.util.Map;
 @Setter
 public class TimePoint extends BaseDao {
 
-    private Integer id;
-
-    public static final Map<Integer, TimePoint> MAP = new HashMap<>(32);
-    public static final List<TimePoint> LIST = new ArrayList<>();
-
-
-    /**
-     * 类型
-     */
-    private Integer type;
-
-    private int status;
-
-    private TimePoint(Integer id, String value, Integer type, int status) {
-        this.id = id;
-        this.value = value;
-        this.type = type;
-        this.status = status;
-    }
+    public static Map<Integer, TimePoint> MAP = new HashMap<>(32);
+    public static List<TimePoint> LIST = new ArrayList<>();
 
     static {
         for (TimePointEnum timePointEnum : TimePointEnum.values()) {
@@ -48,10 +31,23 @@ public class TimePoint extends BaseDao {
         }
     }
 
+    private Integer id;
+    /**
+     * 类型
+     */
+    private Integer type;
+    private int status;
     /**
      * 页面显示值
      */
     private String value;
+
+    private TimePoint(Integer id, String value, Integer type, int status) {
+        this.id = id;
+        this.value = value;
+        this.type = type;
+        this.status = status;
+    }
 
 
     public enum TimePointEnum {
