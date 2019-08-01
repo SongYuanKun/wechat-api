@@ -14,4 +14,7 @@ public interface CourseRepository extends JpaRepository<Course, Integer>, JpaSpe
     @Modifying
     @Query(value = "update Course c set c.teacherName= :#{#course.teacherName} ,c.introduction= :#{#course.introduction}  where c.id= :#{#course.id}")
     Integer updateDetail(Course course);
+
+    Course getById(Integer id);
+
 }

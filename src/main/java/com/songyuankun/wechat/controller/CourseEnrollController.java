@@ -15,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -56,7 +55,7 @@ public class CourseEnrollController {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<CourseEnroll> courseEnrollPage = courseEnrollRepository.findAll(Example.of(courseEnroll), pageable);
         List<CourseEnroll> content = courseEnrollPage.getContent();
-        content.forEach(c -> c.setCourse(courseRepository.getOne(c.getCourseId())));
+        content.forEach(c -> c.setCourse(courseRepository.getById(c.getCourseId())));
         return courseEnrollPage;
     }
 

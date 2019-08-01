@@ -15,7 +15,7 @@ import java.util.Date;
 @Getter
 @Setter
 @MappedSuperclass
-public abstract class BaseDao {
+public class BaseDao {
 
     @Column(name = "create_user_id")
     private Integer createUserId;
