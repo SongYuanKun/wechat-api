@@ -31,6 +31,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable().authorizeRequests()
                 .antMatchers("/login", "/admin/loginByPassword", "/course/public/**").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/course/**","/course_enroll/**").hasAuthority("ROLE_USER")
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager(), userRepository));
