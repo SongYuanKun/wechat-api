@@ -5,19 +5,21 @@ import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.common.ResponseUtils;
 import com.songyuankun.wechat.dao.AppointmentTimePoint;
 import com.songyuankun.wechat.dao.TimePoint;
+import com.songyuankun.wechat.enums.AppointmentTimePointStatusEnum;
 import com.songyuankun.wechat.repository.AppointmentTimePointRepository;
 import com.songyuankun.wechat.request.RoomAppointmentForm;
 import com.songyuankun.wechat.response.MyAppointmentTimeResponse;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -65,8 +67,10 @@ public class RoomAppointmentController {
     public List<MyAppointmentTimeResponse> queryMyAppointment(Authentication authentication, @RequestParam(required = false, defaultValue = "0") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
         List<MyAppointmentTimeResponse> responseList = new ArrayList<>();
         Integer userId = Integer.valueOf(authentication.getName());
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        List<AppointmentTimePoint> appointmentTimePoints = appointmentTimePointRepository.findAllByUserId(userId, pageable);
+        Sort sort = new Sort(Sort.Direction.DESC, "day", "time_point_id");
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+        List<Integer> statusList = Arrays.asList(AppointmentTimePointStatusEnum.SUCCESS.getValue(), AppointmentTimePointStatusEnum.SIGN_IN.getValue());
+        List<AppointmentTimePoint> appointmentTimePoints = appointmentTimePointRepository.findAllByUserIdAndStatusIn(userId, statusList, pageable);
         for (AppointmentTimePoint appointmentTimePoint : appointmentTimePoints) {
             MyAppointmentTimeResponse myAppointmentTimeResponse = new MyAppointmentTimeResponse();
             myAppointmentTimeResponse.setDay(appointmentTimePoint.getDay());
