@@ -46,7 +46,8 @@ public class RoomAppointmentController {
             AppointmentTimePoint appointmentTimePoint = new AppointmentTimePoint();
             DaoCommon.createDao(authentication, appointmentTimePoint);
             appointmentTimePoint.setDay(roomAppointmentForm.getDay());
-            appointmentTimePoint.setCreateUserId(userId);
+            appointmentTimePoint.setUserId(userId);
+            appointmentTimePoint.setStatus(0);
             appointmentTimePoint.setCreateTime(new Date());
             appointmentTimePoint.setTimePointId(integer);
             appointmentTimePointRepository.save(appointmentTimePoint);
