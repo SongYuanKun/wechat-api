@@ -12,10 +12,7 @@ import com.songyuankun.wechat.response.MyAppointmentTimeResponse;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
@@ -71,7 +68,8 @@ public class RoomAppointmentAdminController {
         List<MyAppointmentTimeResponse> responseList = new ArrayList<>();
         String username = roomAppointmentQuery.getUserName();
         String day = roomAppointmentQuery.getDay();
-        Pageable pageable = PageRequest.of(roomAppointmentQuery.getPageNumber() - 1, roomAppointmentQuery.getPageSize());
+        Sort sort = new Sort(Sort.Direction.DESC, "id");
+        Pageable pageable = PageRequest.of(roomAppointmentQuery.getPageNumber() - 1, roomAppointmentQuery.getPageSize(), sort);
         Page<AppointmentTimePoint> appointmentTimePoints = appointmentTimePointRepository.findAll((
                 (root, query, cb) -> {
                     List<Predicate> predicates = new ArrayList<>();
