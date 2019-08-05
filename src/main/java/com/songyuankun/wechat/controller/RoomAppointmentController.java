@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author songyuankun
@@ -48,8 +49,9 @@ public class RoomAppointmentController {
         appointmentTimePoint.setStartTime(TimePoint.MAP.get(roomAppointmentForm.getStartTime()).getStartTime());
         appointmentTimePoint.setEndTime(TimePoint.MAP.get(roomAppointmentForm.getEndTime()).getEndTime());
         appointmentTimePoint.setUserId(userId);
-            appointmentTimePoint.setStatus(0);
-        appointmentTimePoint.setTimePointIds(StringUtils.join(roomAppointmentForm.getCurrentTime(), ","));
+        appointmentTimePoint.setStatus(0);
+        List<Integer> currentTime = roomAppointmentForm.getCurrentTime().stream().distinct().collect(Collectors.toList());
+        appointmentTimePoint.setTimePointIds(StringUtils.join(currentTime, ","));
         AppointmentTimePoint save = appointmentTimePointRepository.save(appointmentTimePoint);
         return ResponseUtils.success(save);
     }

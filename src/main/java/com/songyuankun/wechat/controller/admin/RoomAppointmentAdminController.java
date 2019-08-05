@@ -11,16 +11,17 @@ import com.songyuankun.wechat.request.query.RoomAppointmentQuery;
 import com.songyuankun.wechat.response.MyAppointmentTimeResponse;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.*;
 import org.springframework.security.core.Authentication;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author songyuankun
@@ -47,7 +48,8 @@ public class RoomAppointmentAdminController {
         appointmentTimePoint.setEndTime(TimePoint.MAP.get(roomAppointmentForm.getEndTime()).getEndTime());
         appointmentTimePoint.setUserId(userId);
         appointmentTimePoint.setStatus(0);
-        appointmentTimePoint.setTimePointIds(org.apache.commons.lang3.StringUtils.join(roomAppointmentForm.getCurrentTime(), ","));
+        List<Integer> currentTime = roomAppointmentForm.getCurrentTime().stream().distinct().collect(Collectors.toList());
+        appointmentTimePoint.setTimePointIds(StringUtils.join(currentTime, ","));
         AppointmentTimePoint save = appointmentTimePointRepository.save(appointmentTimePoint);
         return ResponseUtils.success(save);
     }
