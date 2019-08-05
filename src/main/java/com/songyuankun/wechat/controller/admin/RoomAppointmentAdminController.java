@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author songyuankun
@@ -41,24 +40,29 @@ public class RoomAppointmentAdminController {
     @PostMapping("save")
     public Response save(Authentication authentication, @RequestBody @Validated RoomAppointmentForm roomAppointmentForm) {
         Integer userId = Integer.valueOf(authentication.getName());
-        AppointmentTimePoint save = null;
-        for (Integer integer : roomAppointmentForm.getCurrentTime()) {
-            AppointmentTimePoint appointmentTimePoint = new AppointmentTimePoint();
-            appointmentTimePoint.setDay(roomAppointmentForm.getDay());
-            appointmentTimePoint.setUserId(userId);
-            appointmentTimePoint.setTimePointId(integer);
-            DaoCommon.createDao(authentication, appointmentTimePoint);
-            save = appointmentTimePointRepository.save(appointmentTimePoint);
-        }
+        AppointmentTimePoint appointmentTimePoint = new AppointmentTimePoint();
+        DaoCommon.createDao(authentication, appointmentTimePoint);
+        BeanUtils.copyProperties(roomAppointmentForm, appointmentTimePoint);
+        appointmentTimePoint.setStartTime(TimePoint.MAP.get(roomAppointmentForm.getStartTime()).getStartTime());
+        appointmentTimePoint.setEndTime(TimePoint.MAP.get(roomAppointmentForm.getEndTime()).getEndTime());
+        appointmentTimePoint.setUserId(userId);
+        appointmentTimePoint.setStatus(0);
+        appointmentTimePoint.setTimePointIds(org.apache.commons.lang3.StringUtils.join(roomAppointmentForm.getCurrentTime(), ","));
+        AppointmentTimePoint save = appointmentTimePointRepository.save(appointmentTimePoint);
         return ResponseUtils.success(save);
     }
 
     @GetMapping("queryAppointmentTime")
     public List<TimePoint> queryEmptyTime(String date) {
         List<AppointmentTimePoint> appointmentTimePoints = appointmentTimePointRepository.findAllByDay(date);
-        List<Integer> timePoints = appointmentTimePoints.stream().map(AppointmentTimePoint::getTimePointId).collect(Collectors.toList());
-        List<TimePoint> all = new ArrayList<>();
-        BeanUtils.copyProperties(TimePoint.LIST, all);
+        List<Integer> timePoints = new ArrayList<>();
+        StringBuilder timePointString = new StringBuilder();
+        for (AppointmentTimePoint appointmentTimePoint : appointmentTimePoints) {
+            timePointString.append(appointmentTimePoint.getTimePointIds()).append(",");
+        }
+        String[] split = timePointString.toString().split(",");
+        BeanUtils.copyProperties(split, timePoints);
+        List<TimePoint> all = new ArrayList<>(TimePoint.LIST);
         all.forEach(t -> t.setStatus(timePoints.contains(t.getId()) ? 1 : 0));
         return all;
     }
@@ -84,7 +88,7 @@ public class RoomAppointmentAdminController {
         for (AppointmentTimePoint appointmentTimePoint : appointmentTimePoints) {
             MyAppointmentTimeResponse myAppointmentTimeResponse = new MyAppointmentTimeResponse();
             BeanUtils.copyProperties(appointmentTimePoint, myAppointmentTimeResponse);
-            myAppointmentTimeResponse.setTimePoint(TimePoint.MAP.get(appointmentTimePoint.getTimePointId()));
+            myAppointmentTimeResponse.setTimeValue(appointmentTimePoint.getStartTime() + "-" + appointmentTimePoint.getEndTime());
             responseList.add(myAppointmentTimeResponse);
         }
         return new PageImpl<>(responseList, pageable, appointmentTimePoints.getTotalElements());

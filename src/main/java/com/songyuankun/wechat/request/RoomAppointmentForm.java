@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
@@ -23,6 +24,12 @@ public class RoomAppointmentForm implements Serializable {
     private String phone;
     @NotEmpty
     private String day;
+    @NotNull
+    private Integer startTime;
+    @NotNull
+    private Integer endTime;
+
+
     @NotEmpty
     private List<Integer> currentTime;
 }
