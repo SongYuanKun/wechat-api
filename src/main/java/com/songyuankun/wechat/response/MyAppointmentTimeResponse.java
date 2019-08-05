@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 /**
  * @author songyuankun
  */
@@ -19,15 +21,17 @@ public class MyAppointmentTimeResponse {
 
     private String day;
 
-    private Integer timePointId;
+    private String startTime;
 
-    private TimePoint timePoint;
+    private String endTime;
 
     private String userName;
 
     private String phone;
 
     private Integer status;
+
+    private String timeValue;
 
 
 }

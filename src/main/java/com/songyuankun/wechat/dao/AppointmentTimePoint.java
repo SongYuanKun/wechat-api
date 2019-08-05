@@ -3,12 +3,11 @@ package com.songyuankun.wechat.dao;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 房间被预订的时间点
@@ -33,8 +32,8 @@ public class AppointmentTimePoint extends BaseDao implements Serializable {
     @Column(name = "user_id")
     private Integer userId;
 
-    @Column(name = "time_point_id")
-    private Integer timePointId;
+    @Column(name = "time_point_ids")
+    private String timePointIds;
 
     @Column(name="user_name")
     private String userName;
@@ -44,5 +43,9 @@ public class AppointmentTimePoint extends BaseDao implements Serializable {
     private Integer status;
 
     private String day;
+
+    private String startTime;
+
+    private String endTime;
 
 }
