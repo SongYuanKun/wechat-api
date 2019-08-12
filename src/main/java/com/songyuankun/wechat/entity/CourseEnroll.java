@@ -1,4 +1,4 @@
-package com.songyuankun.wechat.dao;
+package com.songyuankun.wechat.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +9,6 @@ import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 课程报名表
@@ -22,7 +21,7 @@ import java.util.Date;
 @ToString
 @Getter
 @Setter
-public class CourseEnroll extends BaseDao implements Serializable {
+public class CourseEnroll extends BaseEntity implements Serializable {
 
     @Id
     @GeneratedValue

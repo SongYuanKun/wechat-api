@@ -1,4 +1,4 @@
-package com.songyuankun.wechat.dao;
+package com.songyuankun.wechat.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +16,7 @@ import java.util.*;
 @ToString
 @Getter
 @Setter
-public class TimePoint extends BaseDao {
+public class TimePoint extends BaseEntity {
 
     public static Map<Integer, TimePoint> MAP = new HashMap<>(32);
     public static List<TimePoint> LIST = new ArrayList<>();

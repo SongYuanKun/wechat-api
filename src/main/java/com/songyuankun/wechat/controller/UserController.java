@@ -1,7 +1,7 @@
 package com.songyuankun.wechat.controller;
 
 import com.songyuankun.wechat.common.DaoCommon;
-import com.songyuankun.wechat.dao.User;
+import com.songyuankun.wechat.entity.User;
 import com.songyuankun.wechat.repository.UserRepository;
 import com.songyuankun.wechat.request.UserForm;
 import lombok.extern.slf4j.Slf4j;

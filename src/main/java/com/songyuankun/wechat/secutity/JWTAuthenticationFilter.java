@@ -1,6 +1,6 @@
 package com.songyuankun.wechat.secutity;
 
-import com.songyuankun.wechat.dao.User;
+import com.songyuankun.wechat.entity.User;
 import com.songyuankun.wechat.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.AuthenticationManager;

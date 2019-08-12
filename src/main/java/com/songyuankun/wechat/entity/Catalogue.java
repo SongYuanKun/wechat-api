@@ -1,4 +1,4 @@
-package com.songyuankun.wechat.dao;
+package com.songyuankun.wechat.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +8,6 @@ import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
-import java.util.Date;
 
 /**
  * 文稿表
@@ -21,7 +20,7 @@ import java.util.Date;
 @ToString
 @Getter
 @Setter
-public class Catalogue extends BaseDao {
+public class Catalogue extends BaseEntity {
     @Id
     @GeneratedValue
     private Integer id;

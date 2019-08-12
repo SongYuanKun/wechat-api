@@ -1,7 +1,7 @@
 package com.songyuankun.wechat.controller;
 
 import com.songyuankun.wechat.common.DaoCommon;
-import com.songyuankun.wechat.dao.Catalogue;
+import com.songyuankun.wechat.entity.Catalogue;
 import com.songyuankun.wechat.repository.CatalogueRepository;
 import com.songyuankun.wechat.request.CatalogueForm;
 import io.swagger.annotations.Api;

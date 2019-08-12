@@ -1,7 +1,7 @@
 package com.songyuankun.wechat.controller;
 
 import com.songyuankun.wechat.common.Response;
-import com.songyuankun.wechat.dao.Room;
+import com.songyuankun.wechat.entity.Room;
 import com.songyuankun.wechat.repository.RoomRepository;
 import com.songyuankun.wechat.request.RoomForm;
 import io.swagger.annotations.Api;
