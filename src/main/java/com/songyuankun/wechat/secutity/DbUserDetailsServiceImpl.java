@@ -1,6 +1,6 @@
 package com.songyuankun.wechat.secutity;
 
-import com.songyuankun.wechat.dao.User;
+import com.songyuankun.wechat.entity.User;
 import com.songyuankun.wechat.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

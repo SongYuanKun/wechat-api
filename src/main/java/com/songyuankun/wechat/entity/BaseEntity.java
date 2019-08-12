@@ -1,4 +1,4 @@
-package com.songyuankun.wechat.dao;
+package com.songyuankun.wechat.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +15,7 @@ import java.util.Date;
 @Getter
 @Setter
 @MappedSuperclass
-public class BaseDao {
+public class BaseEntity {
 
     @Column(name = "create_user_id")
     private Integer createUserId;

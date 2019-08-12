@@ -3,7 +3,7 @@ package com.songyuankun.wechat.controller.admin;
 import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.common.ResponseUtils;
 import com.songyuankun.wechat.common.TokenCommon;
-import com.songyuankun.wechat.dao.User;
+import com.songyuankun.wechat.entity.User;
 import com.songyuankun.wechat.repository.UserRepository;
 import com.songyuankun.wechat.util.Md5Util;
 import lombok.extern.slf4j.Slf4j;

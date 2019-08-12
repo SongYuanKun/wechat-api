@@ -1,7 +1,7 @@
 package com.songyuankun.wechat.controller;
 
 import com.songyuankun.wechat.common.DaoCommon;
-import com.songyuankun.wechat.dao.Course;
+import com.songyuankun.wechat.entity.Course;
 import com.songyuankun.wechat.repository.CourseRepository;
 import com.songyuankun.wechat.request.CourseForm;
 import com.songyuankun.wechat.request.update.CourseUpdateDetail;

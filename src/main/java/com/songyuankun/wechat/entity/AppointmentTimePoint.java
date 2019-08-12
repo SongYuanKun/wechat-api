@@ -1,4 +1,4 @@
-package com.songyuankun.wechat.dao;
+package com.songyuankun.wechat.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +7,6 @@ import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * 房间被预订的时间点
@@ -20,7 +19,7 @@ import java.util.List;
 @ToString
 @Getter
 @Setter
-public class AppointmentTimePoint extends BaseDao implements Serializable {
+public class AppointmentTimePoint extends BaseEntity implements Serializable {
 
     @Id
     @GeneratedValue
