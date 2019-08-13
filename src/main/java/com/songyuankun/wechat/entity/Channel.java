@@ -22,7 +22,7 @@ import java.io.Serializable;
  * @author langhsu
  */
 @Entity
-@Table(name = "mto_channel")
+@Table(name = "channel")
 @ToString
 @Getter
 @Setter
