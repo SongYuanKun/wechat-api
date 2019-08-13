@@ -22,7 +22,7 @@ import java.util.Date;
  * @author langhsu
  */
 @Entity
-@Table(name = "mto_comment")
+@Table(name = "comment")
 @ToString
 @Getter
 @Setter

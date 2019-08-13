@@ -14,7 +14,7 @@ import java.util.Date;
  * @author langhsu
  */
 @Entity
-@Table(name = "mto_post")
+@Table(name = "post")
 @ToString
 @Getter
 @Setter
