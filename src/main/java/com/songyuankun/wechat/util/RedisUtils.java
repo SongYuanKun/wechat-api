@@ -45,6 +45,14 @@ public class RedisUtils {
         }
     }
 
+    public void setString(String key, String value, long expire) {
+        valueOperations.set(key, value);
+        if (expire != NOT_EXPIRE) {
+            redisTemplate.expire(key, expire, TimeUnit.SECONDS);
+        }
+    }
+
+
     /**
      * 设置值，默认过期时间1天
      *

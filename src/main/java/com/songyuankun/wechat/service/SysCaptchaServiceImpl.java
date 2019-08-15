@@ -40,7 +40,7 @@ public class SysCaptchaServiceImpl {
         //生成文字验证码
         String code = producer.createText();
         // 存进redis,5分钟后过期
-        redisUtils.set(genRedisKey(uuid), code, CAPTCHA_EXPIRE);
+        redisUtils.setString(genRedisKey(uuid), code, CAPTCHA_EXPIRE);
         return producer.createImage(code);
     }
 
@@ -61,10 +61,7 @@ public class SysCaptchaServiceImpl {
         String captchaCode = redisUtils.get(redisKey);
         //删除验证码
         redisUtils.delete(redisKey);
-        if (code.equalsIgnoreCase(captchaCode)) {
-            return true;
-        }
-        return false;
+        return code.equalsIgnoreCase(captchaCode);
     }
 
     /**
