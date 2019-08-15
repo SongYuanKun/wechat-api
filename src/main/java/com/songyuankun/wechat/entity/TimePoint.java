@@ -16,7 +16,7 @@ import java.util.*;
 @ToString
 @Getter
 @Setter
-public class TimePoint extends BaseEntity {
+public class TimePoint {
 
     public static Map<Integer, TimePoint> MAP = new HashMap<>(32);
     public static List<TimePoint> LIST = new ArrayList<>();

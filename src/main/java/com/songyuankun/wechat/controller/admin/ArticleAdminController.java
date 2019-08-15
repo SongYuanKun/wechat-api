@@ -22,7 +22,7 @@ import javax.transaction.Transactional;
  */
 @Api
 @RestController
-@RequestMapping("article")
+@RequestMapping("admin/article")
 @Slf4j
 public class ArticleAdminController {
     private final ArticleRepository articleRepository;
