@@ -18,7 +18,7 @@ import java.util.Date;
  */
 @Proxy(lazy = false)
 @Entity
-@Table(name = "appointment_time_point")
+@Table(name = "article")
 @ToString
 @Getter
 @Setter
