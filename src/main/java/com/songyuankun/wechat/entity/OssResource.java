@@ -8,10 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Proxy;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -21,7 +18,7 @@ import java.io.Serializable;
  */
 @Proxy(lazy = false)
 @Entity
-@Table(name = "course")
+@Table(name = "oss_resource")
 @ToString
 @Getter
 @Setter
@@ -36,16 +33,17 @@ public class OssResource extends BaseEntity implements Serializable {
     private Integer id;
 
     @ApiModelProperty(value = "名称")
-    private String name;
+    @Column(name = "file_name")
+    private String fileName;
 
     private String url;
 
-    private String key;
+    @Column(name = "file_key")
+    private String fileKey;
 
-    public OssResource(String url, String name, String key) {
-        this.name = name;
+    public OssResource(String fileName, String url, String fileKey) {
+        this.fileName = fileName;
         this.url = url;
-        this.key = key;
+        this.fileKey = fileKey;
     }
-
 }
