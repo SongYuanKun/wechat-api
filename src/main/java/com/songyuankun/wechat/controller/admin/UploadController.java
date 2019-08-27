@@ -8,6 +8,7 @@ import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
 import com.qiniu.util.StringMap;
+import com.songyuankun.wechat.common.DaoCommon;
 import com.songyuankun.wechat.common.ResponseUtils;
 import com.songyuankun.wechat.entity.OssResource;
 import com.songyuankun.wechat.repository.OssResourceRepository;
@@ -16,6 +17,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,11 +45,15 @@ public class UploadController {
     @Value("${qiniu.cdn_host}")
     private String cdnHost;
 
-    private OssResourceRepository ossResourceRepository;
+    private final OssResourceRepository ossResourceRepository;
+
+    public UploadController(OssResourceRepository ossResourceRepository) {
+        this.ossResourceRepository = ossResourceRepository;
+    }
 
     @PostMapping(value = "file")
     @ApiOperation(value = "上传文件", notes = "上传文件")
-    public com.songyuankun.wechat.common.Response<Map<String, Object>> upload(@ApiParam(name = "文件名") @RequestParam("fileName") String fileName, @ApiParam(name = "文件") @RequestParam("file") MultipartFile file) {
+    public com.songyuankun.wechat.common.Response<Map<String, Object>> upload(Authentication authentication, @ApiParam(name = "文件") @RequestParam("file") MultipartFile file) {
         Configuration cfg = new Configuration(Zone.zone0());
 
         UploadManager uploadManager = new UploadManager(cfg);
@@ -68,9 +74,10 @@ public class UploadController {
             String url = cdnHost + "/" + putRet.key;
             result.put("url", url);
             result.put("putRet", putRet);
-            result.put("name", fileName);
+            result.put("name", file.getName());
 
-            OssResource ossResource = new OssResource(fileName, url, putRet.key);
+            OssResource ossResource = new OssResource(file.getName(), url, putRet.key);
+            DaoCommon.createDao(authentication,ossResource);
             ossResourceRepository.save(ossResource);
             return ResponseUtils.success(result);
         } catch (Exception e) {

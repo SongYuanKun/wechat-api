@@ -20,8 +20,7 @@ public class DaoCommon {
         Integer userId = Integer.valueOf(authentication.getName());
         baseDao.setCreateTime(date);
         baseDao.setCreateUserId(userId);
-        baseDao.setUpdateTime(date);
-        baseDao.setUpdateUserId(userId);
+        updateDao(authentication, baseDao);
     }
 
     public static <T extends BaseEntity> void updateDao(Authentication authentication, T baseDao) {
