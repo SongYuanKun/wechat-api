@@ -8,6 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FileUtil {
 
+    private FileUtil() {
+    }
+
     private static final String D = ".";
 
     public static String getSuffix(String fileName) {
