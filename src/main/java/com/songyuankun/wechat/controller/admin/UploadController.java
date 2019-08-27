@@ -12,6 +12,7 @@ import com.songyuankun.wechat.common.DaoCommon;
 import com.songyuankun.wechat.common.ResponseUtils;
 import com.songyuankun.wechat.entity.OssResource;
 import com.songyuankun.wechat.repository.OssResourceRepository;
+import com.songyuankun.wechat.util.FileUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -27,6 +28,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * @author songyuankun
@@ -62,8 +65,11 @@ public class UploadController {
         String upToken = auth.uploadToken(bucket);
 
         Response response = null;
+        String originalFilename = file.getOriginalFilename();
+        String suffix = FileUtil.getSuffix(Objects.requireNonNull(originalFilename));
+        String uuId = UUID.randomUUID().toString() + "." + suffix;
         try {
-            response = uploadManager.put(file.getInputStream(), file.getOriginalFilename(), upToken, new StringMap(), null);
+            response = uploadManager.put(file.getInputStream(), uuId, upToken, new StringMap(), null);
         } catch (IOException e) {
             log.error(e.getLocalizedMessage());
         }
@@ -74,9 +80,9 @@ public class UploadController {
             String url = cdnHost + "/" + putRet.key;
             result.put("url", url);
             result.put("putRet", putRet);
-            result.put("name", file.getName());
+            result.put("name", originalFilename);
 
-            OssResource ossResource = new OssResource(file.getName(), url, putRet.key);
+            OssResource ossResource = new OssResource(originalFilename, url, putRet.key);
             DaoCommon.createDao(authentication,ossResource);
             ossResourceRepository.save(ossResource);
             return ResponseUtils.success(result);
