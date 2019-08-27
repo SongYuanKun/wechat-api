@@ -8,11 +8,14 @@ import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
 import com.qiniu.util.StringMap;
+import com.songyuankun.wechat.common.ResponseUtils;
+import com.songyuankun.wechat.entity.OssResource;
+import com.songyuankun.wechat.repository.OssResourceRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,10 +29,10 @@ import java.util.Map;
 /**
  * @author songyuankun
  */
-
 @Api(tags = "上传接口")
 @RestController
-@RequestMapping("upload")
+@RequestMapping("admin/upload")
+@Slf4j
 public class UploadController {
     @Value("${qiniu.ak}")
     private String accessKey;
@@ -40,9 +43,11 @@ public class UploadController {
     @Value("${qiniu.cdn_host}")
     private String cdnHost;
 
-    @PostMapping(value = "file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    private OssResourceRepository ossResourceRepository;
+
+    @PostMapping(value = "file")
     @ApiOperation(value = "上传文件", notes = "上传文件")
-    public Map<String, Object> upload(@ApiParam(name = "文件") @RequestParam("file") MultipartFile file) {
+    public com.songyuankun.wechat.common.Response<Map<String, Object>> upload(@ApiParam(name = "文件名") @RequestParam("fileName") String fileName, @ApiParam(name = "文件") @RequestParam("file") MultipartFile file) {
         Configuration cfg = new Configuration(Zone.zone0());
 
         UploadManager uploadManager = new UploadManager(cfg);
@@ -54,18 +59,23 @@ public class UploadController {
         try {
             response = uploadManager.put(file.getInputStream(), file.getOriginalFilename(), upToken, new StringMap(), null);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getLocalizedMessage());
         }
         try {
             //解析上传成功的结果
             DefaultPutRet putRet = new Gson().fromJson(response != null ? response.bodyString() : "{}", DefaultPutRet.class);
             Map<String, Object> result = new HashMap<>(16);
-            result.put("url", cdnHost + "/" + putRet.key);
+            String url = cdnHost + "/" + putRet.key;
+            result.put("url", url);
             result.put("putRet", putRet);
-            return result;
+            result.put("name", fileName);
+
+            OssResource ossResource = new OssResource(fileName, url, putRet.key);
+            ossResourceRepository.save(ossResource);
+            return ResponseUtils.success(result);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getLocalizedMessage());
         }
-        return null;
+        return ResponseUtils.error("上传失败");
     }
 }
