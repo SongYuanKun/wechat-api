@@ -4,11 +4,10 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -30,19 +29,21 @@ public class Category extends BaseEntity implements Serializable {
     private Integer id;
 
     @ApiModelProperty(value = "名称")
-    @NotBlank(message = "名称不能为空")
+    @Column(name = "name")
     private String name;
 
     @ApiModelProperty(value = "类型")
-    @NotNull(message = "类型不能为空")
+    @ColumnDefault(value = "0")
     private Integer type;
 
     @ApiModelProperty(value = "级别")
-    @NotNull(message = "级别不能为空")
+    @ColumnDefault(value = "0")
+    @Column(name = "rank")
     private Integer rank;
 
     @ApiModelProperty(value = "父主键")
-    @NotNull(message = "父主键不能为空")
+    @Column(name = "parent_id")
+    @ColumnDefault(value = "0")
     private Integer parentId;
 
     @Transient
