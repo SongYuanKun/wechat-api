@@ -21,8 +21,6 @@ import java.io.Serializable;
 @Setter
 public class Category extends BaseEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     @ApiModelProperty(value = "主键")
     @Id
     @GeneratedValue
@@ -38,7 +36,7 @@ public class Category extends BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "级别")
     @ColumnDefault(value = "0")
-    @Column(name = "rank")
+    @Column(name = "c_rank")
     private Integer rank;
 
     @ApiModelProperty(value = "父主键")

@@ -1,14 +1,17 @@
 package com.songyuankun.wechat.controller.admin;
 
 import com.songyuankun.wechat.common.DaoCommon;
+import com.songyuankun.wechat.common.MyException;
 import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.common.ResponseUtils;
 import com.songyuankun.wechat.entity.Category;
+import com.songyuankun.wechat.enums.CategoryRankEnum;
 import com.songyuankun.wechat.repository.CategoryRepository;
-import com.songyuankun.wechat.request.ArticleForm;
+import com.songyuankun.wechat.request.CategoryForm;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,14 +37,19 @@ public class CategoryAdminController {
     }
 
     @PostMapping("saveOrUpdate")
-    public Category save(Authentication authentication, @RequestBody ArticleForm articleForm) {
+    public Response save(Authentication authentication, @RequestBody CategoryForm categoryForm) {
         Category category = new Category();
-        BeanUtils.copyProperties(articleForm, category);
+        BeanUtils.copyProperties(categoryForm, category);
+        verifyCategory(category);
         if (category.getId() == null) {
             DaoCommon.createDao(authentication, category);
+        } else {
+            category = categoryRepository.getOne(category.getId());
+            DaoCommon.updateDao(authentication, category);
         }
         categoryRepository.save(category);
-        return category;
+        return ResponseUtils.success();
+
     }
 
     @PostMapping("page")
@@ -56,5 +64,52 @@ public class CategoryAdminController {
         return ResponseUtils.success(categoryRepository.findAll());
     }
 
+    @GetMapping("select")
+    public Response<List<Category>> select(Integer type) {
+        Category category = new Category();
+        category.setType(type);
+        List<Category> categoryList = categoryRepository.findAll(Example.of(category));
+        //添加顶级分类
+        Category root = new Category();
+        root.setId(-1);
+        root.setName("根目录");
+        root.setParentId(-1);
+        categoryList.add(root);
+        return ResponseUtils.success(categoryList);
+    }
 
+    @GetMapping("delete/{id}")
+    public Response delete(@PathVariable Integer id) {
+        categoryRepository.deleteById(id);
+        return ResponseUtils.success(null);
+    }
+
+    /**
+     * 数据校验
+     *
+     * @param category
+     */
+    private void verifyCategory(Category category) {
+        //上级分类级别
+        int parentRank = CategoryRankEnum.ROOT.getValue();
+        if (category.getParentId() != CategoryRankEnum.FIRST.getValue()
+                && category.getParentId() != CategoryRankEnum.ROOT.getValue()) {
+            Category parentCategory = categoryRepository.getOne(category.getParentId());
+            parentRank = parentCategory.getRank();
+        }
+        // 一级
+        if (category.getRank() == CategoryRankEnum.FIRST.getValue() && category.getParentId() != CategoryRankEnum.ROOT.getValue()) {
+            throw new MyException("上级目录只能为根目录");
+        }
+
+        //二级
+        if (category.getRank() == CategoryRankEnum.SECOND.getValue() && parentRank != CategoryRankEnum.FIRST.getValue()) {
+            throw new MyException("上级目录只能为一级类型");
+        }
+
+        //三级
+        if (category.getRank() == CategoryRankEnum.THIRD.getValue() && parentRank != CategoryRankEnum.SECOND.getValue()) {
+            throw new MyException("上级目录只能为二级类型");
+        }
+    }
 }

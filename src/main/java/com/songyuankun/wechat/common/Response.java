@@ -26,4 +26,9 @@ public class Response<T> {
         this.message = message;
         this.data = data;
     }
+
+    public Response(Integer code, String message) {
+        this.code = code;
+        this.message = message;
+    }
 }

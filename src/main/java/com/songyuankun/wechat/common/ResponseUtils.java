@@ -12,4 +12,8 @@ public class ResponseUtils {
     public static <T> Response<T> error(String message) {
         return new Response<>(ResultEnums.ERROR.getCode(), message, null);
     }
+
+    public static <T> Response<T> success() {
+        return new Response<>(ResultEnums.SUCCESS.getCode(), ResultEnums.SUCCESS.getMessage());
+    }
 }
