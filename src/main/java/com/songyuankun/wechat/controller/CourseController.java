@@ -66,17 +66,17 @@ public class CourseController {
     }
 
     @PostMapping("public/page")
-    public Page<Course> page(@RequestParam(required = false, defaultValue = "0") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+    public Page<Course> page(@RequestParam(required = false, defaultValue = "1") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber-1, pageSize);
         return courseRepository.findAll(pageable);
     }
 
     @PostMapping("my/create")
-    public Page<Course> page(Authentication authentication, @RequestParam(required = false, defaultValue = "0") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
+    public Page<Course> page(Authentication authentication, @RequestParam(required = false, defaultValue = "1") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
         Integer userId = Integer.valueOf(authentication.getName());
         Course course = new Course();
         course.setUserId(userId);
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Pageable pageable = PageRequest.of(pageNumber-1, pageSize);
         return courseRepository.findAll(Example.of(course), pageable);
     }
 }

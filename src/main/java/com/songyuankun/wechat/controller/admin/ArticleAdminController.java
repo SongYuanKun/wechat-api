@@ -53,17 +53,17 @@ public class ArticleAdminController {
     }
 
     @PostMapping("page")
-    public Page<Article> page(@RequestParam(required = false, defaultValue = "0") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+    public Page<Article> page(@RequestParam(required = false, defaultValue = "1") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber-1, pageSize);
         return articleRepository.findAll(pageable);
     }
 
     @PostMapping("my/create")
-    public Page<Article> page(Authentication authentication, @RequestParam(required = false, defaultValue = "0") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
+    public Page<Article> page(Authentication authentication, @RequestParam(required = false, defaultValue = "1") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
         Integer userId = Integer.valueOf(authentication.getName());
         Article article = new Article();
         article.setCreateUserId(userId);
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Pageable pageable = PageRequest.of(pageNumber-1, pageSize);
         return articleRepository.findAll(Example.of(article), pageable);
     }
 }

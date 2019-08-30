@@ -48,11 +48,11 @@ public class CourseEnrollController {
     }
 
     @PostMapping("my/enroll")
-    public Page<CourseEnroll> page(Authentication authentication, @RequestParam(required = false, defaultValue = "0") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
+    public Page<CourseEnroll> page(Authentication authentication, @RequestParam(required = false, defaultValue = "1") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
         Integer userId = Integer.valueOf(authentication.getName());
         CourseEnroll courseEnroll = new CourseEnroll();
         courseEnroll.setUserId(userId);
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Pageable pageable = PageRequest.of(pageNumber-1, pageSize);
         Page<CourseEnroll> courseEnrollPage = courseEnrollRepository.findAll(Example.of(courseEnroll), pageable);
         List<CourseEnroll> content = courseEnrollPage.getContent();
         content.forEach(c -> c.setCourse(courseRepository.getById(c.getCourseId())));
