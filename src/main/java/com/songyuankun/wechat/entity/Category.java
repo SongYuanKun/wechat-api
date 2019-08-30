@@ -9,6 +9,7 @@ import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author songyuankun
@@ -47,5 +48,7 @@ public class Category extends BaseEntity implements Serializable {
     @Transient
     private String parentName;
 
+    @Transient
+    private List<Category> childrenList;
 
 }

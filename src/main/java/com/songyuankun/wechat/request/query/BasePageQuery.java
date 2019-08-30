@@ -1,18 +1,21 @@
 package com.songyuankun.wechat.request.query;
 
-import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotNull;
+
+
 /**
  * @author songyuankun
  */
-@ApiModel
 @Getter
 @Setter
 @ToString
-public class RoomAppointmentQuery extends BasePageQuery {
-    private String userName;
-    private String day;
+public class BasePageQuery {
+    @NotNull
+    private Integer pageNumber;
+    @NotNull
+    private Integer pageSize;
 }

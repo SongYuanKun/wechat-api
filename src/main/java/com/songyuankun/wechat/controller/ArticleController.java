@@ -32,9 +32,9 @@ public class ArticleController {
     }
 
     @PostMapping("public/page")
-    public Page<Article> publicPage(@RequestParam(required = false, defaultValue = "0") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
+    public Page<Article> publicPage(@RequestParam(required = false, defaultValue = "1") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
         Article article = new Article();
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Pageable pageable = PageRequest.of(pageNumber-1, pageSize);
         return articleRepository.findAll(Example.of(article), pageable);
     }
 }

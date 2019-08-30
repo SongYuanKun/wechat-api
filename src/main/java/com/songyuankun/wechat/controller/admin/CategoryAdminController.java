@@ -8,13 +8,13 @@ import com.songyuankun.wechat.entity.Category;
 import com.songyuankun.wechat.enums.CategoryRankEnum;
 import com.songyuankun.wechat.repository.CategoryRepository;
 import com.songyuankun.wechat.request.CategoryForm;
+import com.songyuankun.wechat.request.query.CategoryQuery;
+import com.songyuankun.wechat.service.CategoryServiceImpl;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,9 +31,11 @@ import java.util.List;
 @Slf4j
 public class CategoryAdminController {
     private final CategoryRepository categoryRepository;
+    private final CategoryServiceImpl categoryService;
 
-    public CategoryAdminController(CategoryRepository categoryRepository) {
+    public CategoryAdminController(CategoryRepository categoryRepository, CategoryServiceImpl categoryService) {
         this.categoryRepository = categoryRepository;
+        this.categoryService = categoryService;
     }
 
     @PostMapping("saveOrUpdate")
@@ -53,15 +55,14 @@ public class CategoryAdminController {
     }
 
     @PostMapping("page")
-    public Page<Category> page(@RequestParam(required = false, defaultValue = "0") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        return categoryRepository.findAll(pageable);
+    public Page<Category> page(@RequestBody CategoryQuery categoryQuery) {
+        return categoryService.findRootByNameAndType(categoryQuery);
     }
 
 
-    @GetMapping("list")
-    public Response<List<Category>> list() {
-        return ResponseUtils.success(categoryRepository.findAll());
+    @GetMapping("info/{id}")
+    public Response<Category> info(@PathVariable Integer id) {
+        return ResponseUtils.success(categoryRepository.getOne(id));
     }
 
     @GetMapping("select")
@@ -87,7 +88,7 @@ public class CategoryAdminController {
     /**
      * 数据校验
      *
-     * @param category
+     * @param category category
      */
     private void verifyCategory(Category category) {
         //上级分类级别
