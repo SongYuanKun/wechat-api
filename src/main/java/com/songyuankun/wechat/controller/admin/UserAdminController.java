@@ -56,7 +56,7 @@ public class UserAdminController {
 
     @PostMapping("page")
     public Page<User> page(@RequestParam(required = false, defaultValue = "1") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
         return userRepository.findAll(pageable);
     }
 
