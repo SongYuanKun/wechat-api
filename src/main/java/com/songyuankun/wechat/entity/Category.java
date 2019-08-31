@@ -45,10 +45,4 @@ public class Category extends BaseEntity implements Serializable {
     @ColumnDefault(value = "0")
     private Integer parentId;
 
-    @Transient
-    private String parentName;
-
-    @Transient
-    private List<Category> childrenList;
-
 }

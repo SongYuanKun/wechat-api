@@ -9,6 +9,7 @@ import com.songyuankun.wechat.enums.CategoryRankEnum;
 import com.songyuankun.wechat.repository.CategoryRepository;
 import com.songyuankun.wechat.request.CategoryForm;
 import com.songyuankun.wechat.request.query.CategoryQuery;
+import com.songyuankun.wechat.response.CategoryPageResponse;
 import com.songyuankun.wechat.service.CategoryServiceImpl;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 分类接口
@@ -55,8 +58,14 @@ public class CategoryAdminController {
     }
 
     @PostMapping("page")
-    public Page<Category> page(@RequestBody CategoryQuery categoryQuery) {
-        return categoryService.findRootByNameAndType(categoryQuery);
+    public Response<CategoryPageResponse> page(@RequestBody CategoryQuery categoryQuery) {
+        CategoryPageResponse categoryPageResponse = new CategoryPageResponse();
+        Page<Category> rootByNameAndType = categoryService.findRootByNameAndType(categoryQuery);
+        List<Integer> parentIdList = rootByNameAndType.stream().map(Category::getId).distinct().collect(Collectors.toList());
+        List<Category> childrenList = categoryService.getChildrenList(parentIdList);
+        categoryPageResponse.setCategoryPage(rootByNameAndType);
+        categoryPageResponse.setChildrenList(childrenList);
+        return ResponseUtils.success(categoryPageResponse);
     }
 
 
