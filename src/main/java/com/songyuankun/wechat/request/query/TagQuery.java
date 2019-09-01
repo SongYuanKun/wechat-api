@@ -14,5 +14,5 @@ import lombok.ToString;
 @Setter
 @ToString
 public class TagQuery extends BasePageQuery {
-    private  String name;
+    private String name;
 }

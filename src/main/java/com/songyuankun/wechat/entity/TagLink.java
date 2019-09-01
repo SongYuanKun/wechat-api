@@ -2,9 +2,9 @@ package com.songyuankun.wechat.entity;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
@@ -19,6 +19,7 @@ import java.io.Serializable;
 @ToString
 @Getter
 @Setter
+@NoArgsConstructor
 public class TagLink extends BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "主键")
@@ -31,4 +32,9 @@ public class TagLink extends BaseEntity implements Serializable {
 
     @Column(name = "tag_id")
     private Integer tagId;
+
+    public TagLink(Integer articleId, Integer tagId) {
+        this.articleId = articleId;
+        this.tagId = tagId;
+    }
 }

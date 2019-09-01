@@ -40,7 +40,7 @@ public class LoginAdminController {
     }
 
     @PostMapping("loginByPassword")
-    public Response<String> loginByPassword(@RequestParam String phone, @RequestParam String password, @RequestParam String uuid,@RequestParam String captcha) {
+    public Response<String> loginByPassword(@RequestParam String phone, @RequestParam String password, @RequestParam String uuid, @RequestParam String captcha) {
         boolean validate = sysCaptchaService.validate(uuid, captcha);
         if (!validate) {
             return ResponseUtils.error("验证码错误");

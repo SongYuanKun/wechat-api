@@ -1,6 +1,7 @@
 package com.songyuankun.wechat.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.NotFound;
@@ -21,6 +22,7 @@ import java.io.Serializable;
 @ToString
 @Getter
 @Setter
+@NoArgsConstructor
 public class CourseEnroll extends BaseEntity implements Serializable {
 
     @Id

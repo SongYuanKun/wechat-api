@@ -39,6 +39,7 @@ import java.util.UUID;
 @RequestMapping("admin/upload")
 @Slf4j
 public class UploadController {
+    private final OssResourceRepository ossResourceRepository;
     @Value("${qiniu.ak}")
     private String accessKey;
     @Value("${qiniu.sk}")
@@ -47,8 +48,6 @@ public class UploadController {
     private String bucket;
     @Value("${qiniu.cdn_host}")
     private String cdnHost;
-
-    private final OssResourceRepository ossResourceRepository;
 
     public UploadController(OssResourceRepository ossResourceRepository) {
         this.ossResourceRepository = ossResourceRepository;
@@ -83,7 +82,7 @@ public class UploadController {
             result.put("name", originalFilename);
 
             OssResource ossResource = new OssResource(originalFilename, url, putRet.key);
-            DaoCommon.createDao(authentication,ossResource);
+            DaoCommon.createDao(authentication, ossResource);
             ossResourceRepository.save(ossResource);
             return ResponseUtils.success(result);
         } catch (Exception e) {
