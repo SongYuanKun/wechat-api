@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,8 +67,23 @@ public class CategoryServiceImpl {
             childrenList.addAll(all);
         }
         return childrenList;
-
     }
 
+
+    public String renderCategoryArr(String categoryIds, List<Category> categoryList) {
+        if (org.springframework.util.StringUtils.isEmpty(categoryIds)) {
+            return "";
+        }
+        List<String> categoryStrList;
+        String[] categoryIdArr = categoryIds.split(",");
+        // 根据Id查找类别名称
+        categoryStrList = Arrays.stream(categoryIdArr).map(Integer::parseInt).map(categoryId -> categoryList
+                .stream()
+                .filter(category -> category.getId().equals(categoryId))
+                .map(Category::getName)
+                .findAny().orElse("类别已被删除")).collect(Collectors.toList());
+        return String.join(",", categoryStrList);
+
+    }
 
 }

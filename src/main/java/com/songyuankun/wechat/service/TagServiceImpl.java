@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,6 +49,9 @@ public class TagServiceImpl {
 
     public List<Tag> getTagsByArticleId(Integer articleId) {
         List<Integer> idList = tagLinkRepository.findAllByArticleId(articleId).stream().map(TagLink::getTagId).collect(Collectors.toList());
+        if (idList.isEmpty()) {
+            return new ArrayList<>();
+        }
         return tagRepository.findAll(((root, criteriaQuery, criteriaBuilder) -> {
             CriteriaBuilder.In<Integer> in = criteriaBuilder.in(root.get("id").as(Integer.class));
             idList.forEach(in::value);
@@ -56,5 +60,15 @@ public class TagServiceImpl {
             Predicate[] p = new Predicate[list.size()];
             return criteriaBuilder.and(list.toArray(p));
         }));
+    }
+
+    public void saveTagAndNew(List<Tag> tagList, Integer id) {
+        tagList.forEach(tag -> {
+            if (tag.getId() == null) {
+                tagRepository.save(tag);
+            }
+            TagLink tagLink = new TagLink(id, tag.getId());
+            tagLinkRepository.save(tagLink);
+        });
     }
 }

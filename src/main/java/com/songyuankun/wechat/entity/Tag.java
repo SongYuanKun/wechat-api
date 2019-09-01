@@ -2,6 +2,7 @@ package com.songyuankun.wechat.entity;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Proxy;
@@ -26,13 +27,14 @@ import java.io.Serializable;
 @ToString
 @Getter
 @Setter
+@NoArgsConstructor
 public class Tag extends BaseEntity implements Serializable {
 
 
     @ApiModelProperty(value = "主键")
     @Id
     @GeneratedValue
-   private Integer id;
+    private Integer id;
 
     @ApiModelProperty(value = "标签名字")
     private String name;

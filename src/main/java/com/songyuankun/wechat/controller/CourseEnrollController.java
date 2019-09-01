@@ -52,7 +52,7 @@ public class CourseEnrollController {
         Integer userId = Integer.valueOf(authentication.getName());
         CourseEnroll courseEnroll = new CourseEnroll();
         courseEnroll.setUserId(userId);
-        Pageable pageable = PageRequest.of(pageNumber-1, pageSize);
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
         Page<CourseEnroll> courseEnrollPage = courseEnrollRepository.findAll(Example.of(courseEnroll), pageable);
         List<CourseEnroll> content = courseEnrollPage.getContent();
         content.forEach(c -> c.setCourse(courseRepository.getById(c.getCourseId())));

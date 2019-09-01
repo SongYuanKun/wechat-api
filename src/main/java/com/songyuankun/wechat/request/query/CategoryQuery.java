@@ -14,6 +14,6 @@ import lombok.ToString;
 @Setter
 @ToString
 public class CategoryQuery extends BasePageQuery {
-    private  String name;
+    private String name;
     private Integer type;
 }

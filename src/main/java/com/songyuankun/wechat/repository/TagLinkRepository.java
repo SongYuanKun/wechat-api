@@ -1,6 +1,5 @@
 package com.songyuankun.wechat.repository;
 
-import com.songyuankun.wechat.entity.Tag;
 import com.songyuankun.wechat.entity.TagLink;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

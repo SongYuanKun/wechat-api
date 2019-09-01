@@ -1,6 +1,7 @@
 package com.songyuankun.wechat.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Proxy;
@@ -19,6 +20,7 @@ import java.io.Serializable;
 @ToString
 @Getter
 @Setter
+@NoArgsConstructor
 public class Room extends BaseEntity implements Serializable {
     @Id
     @GeneratedValue

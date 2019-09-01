@@ -1,6 +1,7 @@
 package com.songyuankun.wechat.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Proxy;
@@ -19,6 +20,7 @@ import java.io.Serializable;
 @ToString
 @Getter
 @Setter
+@NoArgsConstructor
 public class AppointmentTimePoint extends BaseEntity implements Serializable {
 
     @Id
@@ -34,7 +36,7 @@ public class AppointmentTimePoint extends BaseEntity implements Serializable {
     @Column(name = "time_point_ids")
     private String timePointIds;
 
-    @Column(name="user_name")
+    @Column(name = "user_name")
     private String userName;
 
     private String phone;

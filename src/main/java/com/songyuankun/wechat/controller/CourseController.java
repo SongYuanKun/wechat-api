@@ -67,7 +67,7 @@ public class CourseController {
 
     @PostMapping("public/page")
     public Page<Course> page(@RequestParam(required = false, defaultValue = "1") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber-1, pageSize);
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
         return courseRepository.findAll(pageable);
     }
 
@@ -76,7 +76,7 @@ public class CourseController {
         Integer userId = Integer.valueOf(authentication.getName());
         Course course = new Course();
         course.setUserId(userId);
-        Pageable pageable = PageRequest.of(pageNumber-1, pageSize);
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
         return courseRepository.findAll(Example.of(course), pageable);
     }
 }
