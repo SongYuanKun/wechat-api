@@ -1,9 +1,13 @@
 package com.songyuankun.wechat.controller.admin;
 
 import com.songyuankun.wechat.common.DaoCommon;
+import com.songyuankun.wechat.common.Response;
+import com.songyuankun.wechat.common.ResponseUtils;
 import com.songyuankun.wechat.entity.Article;
 import com.songyuankun.wechat.repository.ArticleRepository;
 import com.songyuankun.wechat.request.ArticleForm;
+import com.songyuankun.wechat.response.ArticleInfoResponse;
+import com.songyuankun.wechat.service.TagServiceImpl;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -26,10 +30,12 @@ import javax.transaction.Transactional;
 @Slf4j
 public class ArticleAdminController {
     private final ArticleRepository articleRepository;
+    private final TagServiceImpl tagService;
 
     @Autowired
-    public ArticleAdminController(ArticleRepository articleRepository) {
+    public ArticleAdminController(ArticleRepository articleRepository, TagServiceImpl tagService) {
         this.articleRepository = articleRepository;
+        this.tagService = tagService;
     }
 
     @PostMapping("saveOrUpdate")
@@ -54,7 +60,7 @@ public class ArticleAdminController {
 
     @PostMapping("page")
     public Page<Article> page(@RequestParam(required = false, defaultValue = "1") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber-1, pageSize);
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
         return articleRepository.findAll(pageable);
     }
 
@@ -63,7 +69,17 @@ public class ArticleAdminController {
         Integer userId = Integer.valueOf(authentication.getName());
         Article article = new Article();
         article.setCreateUserId(userId);
-        Pageable pageable = PageRequest.of(pageNumber-1, pageSize);
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
         return articleRepository.findAll(Example.of(article), pageable);
+    }
+
+
+    @GetMapping("info/{id}")
+    public Response<ArticleInfoResponse> info(@PathVariable Integer id) {
+        Article one = articleRepository.getOne(id);
+        ArticleInfoResponse articleInfoResponse = new ArticleInfoResponse();
+        BeanUtils.copyProperties(one, articleInfoResponse);
+        articleInfoResponse.setTagList(tagService.getTagsByArticleId(id));
+        return ResponseUtils.success(articleInfoResponse);
     }
 }

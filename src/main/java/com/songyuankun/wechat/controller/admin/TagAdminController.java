@@ -11,9 +11,12 @@ import com.songyuankun.wechat.service.TagServiceImpl;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 分类接口
@@ -52,6 +55,20 @@ public class TagAdminController {
     public Response<Page<Tag>> page(@RequestBody TagQuery tagQuery) {
         Page<Tag> allByQuery = tagService.findAllByQuery(tagQuery);
         return ResponseUtils.success(allByQuery);
+    }
+
+
+    @GetMapping("info/{id}")
+    public Response<Tag> info(@PathVariable Integer id) {
+        return ResponseUtils.success(tagRepository.getOne(id));
+    }
+
+    @GetMapping("select")
+    public Response<List<Tag>> select(Integer type) {
+        Tag tag = new Tag();
+        tag.setType(type);
+        List<Tag> tagList = tagRepository.findAll(Example.of(tag));
+        return ResponseUtils.success(tagList);
     }
 
     @GetMapping("delete/{id}")
