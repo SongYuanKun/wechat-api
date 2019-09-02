@@ -77,7 +77,7 @@ public class RoomAppointmentAdminController {
     }
 
     @GetMapping("changeStatus")
-    public AppointmentTimePoint changeStatus(Authentication authentication,@RequestParam Integer id, @RequestParam Integer status) {
+    public AppointmentTimePoint changeStatus(Authentication authentication, @RequestParam Integer id, @RequestParam Integer status) {
         AppointmentTimePoint appointmentTimePoint = appointmentTimePointRepository.getOne(id);
         appointmentTimePoint.setStatus(status);
         DaoCommon.updateDao(authentication, appointmentTimePoint);

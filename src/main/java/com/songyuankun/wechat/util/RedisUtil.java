@@ -35,26 +35,15 @@ public class RedisUtil {
     }
 
 
-
     /**
      * 获取值，同时设置过期时间
-     *
      */
-    public String get(String key, long expire) {
+    public String get(String key) {
         String value = valueOperations.get(key);
-        if (expire != NOT_EXPIRE) {
-            redisTemplate.expire(key, expire, TimeUnit.SECONDS);
-        }
+            redisTemplate.expire(key, RedisUtil.NOT_EXPIRE, TimeUnit.SECONDS);
         return value;
     }
 
-    /**
-     * 获取值，不设置过期时间
-     *
-     */
-    public String get(String key) {
-        return get(key, NOT_EXPIRE);
-    }
 
     /**
      * 删除

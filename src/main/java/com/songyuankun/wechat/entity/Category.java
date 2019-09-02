@@ -2,6 +2,7 @@ package com.songyuankun.wechat.entity;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
@@ -9,7 +10,6 @@ import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * @author songyuankun
@@ -20,6 +20,7 @@ import java.util.List;
 @ToString
 @Getter
 @Setter
+@NoArgsConstructor
 public class Category extends BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "主键")
@@ -44,11 +45,5 @@ public class Category extends BaseEntity implements Serializable {
     @Column(name = "parent_id")
     @ColumnDefault(value = "0")
     private Integer parentId;
-
-    @Transient
-    private String parentName;
-
-    @Transient
-    private List<Category> childrenList;
 
 }

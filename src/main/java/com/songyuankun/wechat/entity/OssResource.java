@@ -4,6 +4,7 @@ package com.songyuankun.wechat.entity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Proxy;
@@ -22,6 +23,7 @@ import java.io.Serializable;
 @ToString
 @Getter
 @Setter
+@NoArgsConstructor
 @ApiModel(value = "OssResource对象", description = "云存储资源表")
 public class OssResource extends BaseEntity implements Serializable {
 

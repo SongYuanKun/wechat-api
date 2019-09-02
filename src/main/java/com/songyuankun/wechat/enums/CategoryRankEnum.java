@@ -4,6 +4,7 @@ import lombok.Getter;
 
 /**
  * CategoryRankEnum
+ *
  * @author songyuankun
  */
 @Getter
