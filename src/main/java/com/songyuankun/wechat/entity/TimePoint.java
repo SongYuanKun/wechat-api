@@ -18,8 +18,8 @@ import java.util.*;
 @Setter
 public class TimePoint {
 
-    public static Map<Integer, TimePoint> MAP = new HashMap<>(32);
-    public static List<TimePoint> LIST = new ArrayList<>();
+    private static final Map<Integer, TimePoint> TIME_POINT_MAP = new HashMap<>(32);
+    private static final List<TimePoint> TIME_POINT_LIST = new ArrayList<>();
 
     static {
         Calendar calendar = Calendar.getInstance();
@@ -38,16 +38,24 @@ public class TimePoint {
         int i = 1;
         while (true) {
             Date startTime = calendar.getTime();
-            calendar.add(Calendar.MINUTE, 30);
+            calendar.add(Calendar.HOUR_OF_DAY, 1);
             Date endTime = calendar.getTime();
             if (finishTime.before(endTime)) {
                 break;
             }
-            TimePoint timePoint = createTimePoint(i, startTime, endTime, 1);
-            LIST.add(timePoint);
-            MAP.put(i, timePoint);
+            TimePoint timePoint = createTimePoint(i, startTime, endTime);
+            TIME_POINT_LIST.add(timePoint);
+            TIME_POINT_MAP.put(i, timePoint);
             i++;
         }
+    }
+
+    public static Map<Integer, TimePoint> getTimePointMap() {
+        return TIME_POINT_MAP;
+    }
+
+    public static List<TimePoint> getTimePointList() {
+        return TIME_POINT_LIST;
     }
 
     private int id;
@@ -72,9 +80,9 @@ public class TimePoint {
         this.type = type;
     }
 
-    private static TimePoint createTimePoint(int i, Date startTime, Date endTime, int type) {
+    private static TimePoint createTimePoint(int i, Date startTime, Date endTime) {
         String start = DateFormatUtils.format(startTime, "HH:mm");
         String end = DateFormatUtils.format(endTime, "HH:mm");
-        return new TimePoint(i, start, end, 0, start + "-" + end, type);
+        return new TimePoint(i, start, end, 0, start + "-" + end, 1);
     }
 }
