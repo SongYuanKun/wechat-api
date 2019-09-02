@@ -1,4 +1,4 @@
-package com.songyuankun.wechat.request;
+package com.songyuankun.wechat.response;
 
 import com.songyuankun.wechat.entity.Article;
 import com.songyuankun.wechat.entity.Tag;
@@ -12,13 +12,13 @@ import java.util.List;
 /**
  * @author songyuankun
  */
-
 @ApiModel
 @Getter
 @Setter
 @ToString
-public class ArticleForm extends Article {
+public class ArticleInfoResponse extends Article {
+
+    private String categoryListStr;
 
     private List<Tag> tagList;
-
 }

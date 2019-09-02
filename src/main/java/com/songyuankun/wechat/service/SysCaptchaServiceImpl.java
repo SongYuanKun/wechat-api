@@ -28,7 +28,6 @@ public class SysCaptchaServiceImpl {
 
     /**
      * 获取验证码
-     *
      */
 
     public BufferedImage getCaptcha(String uuid) {
@@ -44,7 +43,6 @@ public class SysCaptchaServiceImpl {
 
     /**
      * 验证验证码
-     *
      */
 
     public boolean validate(String uuid, String code) {
@@ -61,7 +59,6 @@ public class SysCaptchaServiceImpl {
 
     /**
      * 生成redis key
-     *
      */
     private String genRedisKey(String uuid) {
         return RedisKeyConstants.MANAGE_SYS_CAPTCHA + uuid;

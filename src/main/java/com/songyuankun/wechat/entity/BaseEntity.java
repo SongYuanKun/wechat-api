@@ -2,9 +2,9 @@ package com.songyuankun.wechat.entity;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
@@ -16,6 +16,7 @@ import java.util.Date;
 @ToString
 @Getter
 @Setter
+@NoArgsConstructor
 @MappedSuperclass
 public class BaseEntity {
 

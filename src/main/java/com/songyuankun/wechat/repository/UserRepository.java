@@ -19,14 +19,15 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
      * @return 用户
      */
     User findByUid(String uid);
-/**
+
+    /**
      * openId查用户
      *
-     * @param phone phone
+     * @param phone    phone
      * @param password password
      * @return 用户
      */
-    User findByPhoneAndPassword(String phone,String password);
+    User findByPhoneAndPassword(String phone, String password);
 
     /**
      * 更新用户名称和电话

@@ -50,7 +50,7 @@ public class RoomController {
     @PostMapping("page")
     public Response<Page<Room>> page(@RequestParam(required = false, defaultValue = "1") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
         Response<Page<Room>> response = new Response<>();
-        Pageable pageable = PageRequest.of(pageNumber-1, pageSize);
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
         Page<Room> all = roomRepository.findAll(pageable);
         response.setData(all);
         return response;

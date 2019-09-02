@@ -13,7 +13,6 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class CategoryQuery extends BasePageQuery {
+public class TagQuery extends BasePageQuery {
     private String name;
-    private Integer type;
 }
