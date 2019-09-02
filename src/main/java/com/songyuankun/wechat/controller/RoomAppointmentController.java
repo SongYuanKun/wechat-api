@@ -6,7 +6,7 @@ import com.songyuankun.wechat.entity.TimePoint;
 import com.songyuankun.wechat.enums.AppointmentTimePointStatusEnum;
 import com.songyuankun.wechat.repository.AppointmentTimePointRepository;
 import com.songyuankun.wechat.request.RoomAppointmentForm;
-import com.songyuankun.wechat.request.query.MyAppointmentQuery;
+import com.songyuankun.wechat.request.query.BasePageQuery;
 import com.songyuankun.wechat.response.MyAppointmentTimeResponse;
 import com.songyuankun.wechat.service.RoomAppointmentServiceImpl;
 import io.swagger.annotations.Api;
@@ -51,7 +51,7 @@ public class RoomAppointmentController {
     }
 
     @PostMapping("queryMyAppointment")
-    public List<MyAppointmentTimeResponse> queryMyAppointment(Authentication authentication, @RequestBody MyAppointmentQuery myAppointmentQuery) {
+    public List<MyAppointmentTimeResponse> queryMyAppointment(Authentication authentication, @RequestBody BasePageQuery myAppointmentQuery) {
         List<MyAppointmentTimeResponse> responseList = new ArrayList<>();
         Integer userId = Integer.valueOf(authentication.getName());
         Sort sort = new Sort(Sort.Direction.DESC, "day", "startTime");
