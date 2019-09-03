@@ -46,7 +46,7 @@ public class RoomAppointmentServiceImpl {
         all.forEach(t -> {
             t.setStatus(timePoints.contains(t.getId()) ? 1 : 0);
             if (day.equals(date) && format.compareTo(t.getStartTime()) > 0) {
-                t.setStatus(1);
+                t.setStatus(2);
             }
         });
         return all;
