@@ -8,11 +8,13 @@ import com.songyuankun.wechat.entity.TimePoint;
 import com.songyuankun.wechat.repository.AppointmentTimePointRepository;
 import com.songyuankun.wechat.request.RoomAppointmentForm;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +30,10 @@ public class RoomAppointmentServiceImpl {
     }
 
     public List<TimePoint> queryEmptyTimeTime(String date) {
+        Calendar calendar = Calendar.getInstance();
+        String day = DateFormatUtils.format(calendar, "yyyy-MM-dd");
+        calendar.add(Calendar.HOUR_OF_DAY, 1);
+        String format = DateFormatUtils.format(calendar, "HH:mm");
         List<AppointmentTimePoint> appointmentTimePoints = appointmentTimePointRepository.findAllByDay(date);
         List<Integer> timePoints = new ArrayList<>();
         StringBuilder timePointString = new StringBuilder();
@@ -37,7 +43,12 @@ public class RoomAppointmentServiceImpl {
         String[] split = timePointString.toString().split(",");
         BeanUtils.copyProperties(split, timePoints);
         List<TimePoint> all = new ArrayList<>(TimePoint.getTimePointList());
-        all.forEach(t -> t.setStatus(timePoints.contains(t.getId()) ? 1 : 0));
+        all.forEach(t -> {
+            t.setStatus(timePoints.contains(t.getId()) ? 1 : 0);
+            if (day.equals(date) && format.compareTo(t.getStartTime()) > 0) {
+                t.setStatus(1);
+            }
+        });
         return all;
     }
 
