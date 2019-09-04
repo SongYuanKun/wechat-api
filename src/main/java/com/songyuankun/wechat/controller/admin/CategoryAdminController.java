@@ -75,15 +75,7 @@ public class CategoryAdminController {
 
     @GetMapping("select")
     public Response<List<Category>> select(Integer type) {
-        Category category = new Category();
-        category.setType(type);
-        List<Category> categoryList = categoryRepository.findAll(Example.of(category));
-        //添加顶级分类
-        Category root = new Category();
-        root.setId(-1);
-        root.setName("根目录");
-        root.setParentId(-1);
-        categoryList.add(root);
+        List<Category> categoryList = categoryService.select(type);
         return ResponseUtils.success(categoryList);
     }
 
