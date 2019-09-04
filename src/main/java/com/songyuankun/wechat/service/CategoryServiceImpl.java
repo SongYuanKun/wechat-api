@@ -7,6 +7,7 @@ import com.songyuankun.wechat.repository.CategoryRepository;
 import com.songyuankun.wechat.request.query.CategoryQuery;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -84,6 +85,19 @@ public class CategoryServiceImpl {
                 .findAny().orElse("类别已被删除")).collect(Collectors.toList());
         return String.join(",", categoryStrList);
 
+    }
+
+    public List<Category> select(Integer type){
+        Category category = new Category();
+        category.setType(type);
+        List<Category> categoryList = categoryRepository.findAll(Example.of(category));
+        //添加顶级分类
+        Category root = new Category();
+        root.setId(-1);
+        root.setName("根目录");
+        root.setParentId(-1);
+        categoryList.add(root);
+        return categoryList;
     }
 
 }
