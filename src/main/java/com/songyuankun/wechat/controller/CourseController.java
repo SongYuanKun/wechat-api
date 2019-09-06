@@ -55,22 +55,6 @@ public class CourseController {
         return courseRepository.updateDetail(course);
     }
 
-    @GetMapping("public/getById")
-    public Course getById(@RequestParam Integer id) {
-        return courseRepository.getOne(id);
-    }
-
-    @PostMapping("public/all")
-    public List<Course> all() {
-        return courseRepository.findAll();
-    }
-
-    @PostMapping("public/page")
-    public Page<Course> page(@RequestParam(required = false, defaultValue = "1") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
-        return courseRepository.findAll(pageable);
-    }
-
     @PostMapping("my/create")
     public Page<Course> page(Authentication authentication, @RequestParam(required = false, defaultValue = "1") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
         Integer userId = Integer.valueOf(authentication.getName());

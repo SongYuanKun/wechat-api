@@ -45,11 +45,6 @@ public class RoomAppointmentController {
         return roomAppointmentService.save(authentication, roomAppointmentForm);
     }
 
-    @GetMapping("queryAppointmentTime")
-    public List<TimePoint> queryEmptyTime(String date) {
-        return roomAppointmentService.queryEmptyTimeTime(date);
-    }
-
     @PostMapping("queryMyAppointment")
     public List<MyAppointmentTimeResponse> queryMyAppointment(Authentication authentication, @RequestBody BasePageQuery myAppointmentQuery) {
         List<MyAppointmentTimeResponse> responseList = new ArrayList<>();
