@@ -2,7 +2,6 @@ package com.songyuankun.wechat.controller;
 
 import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.entity.AppointmentTimePoint;
-import com.songyuankun.wechat.entity.TimePoint;
 import com.songyuankun.wechat.enums.AppointmentTimePointStatusEnum;
 import com.songyuankun.wechat.repository.AppointmentTimePointRepository;
 import com.songyuankun.wechat.request.RoomAppointmentForm;
@@ -17,7 +16,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.Arrays;

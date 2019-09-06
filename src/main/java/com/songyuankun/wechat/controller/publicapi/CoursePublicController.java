@@ -1,22 +1,15 @@
 package com.songyuankun.wechat.controller.publicapi;
 
-import com.songyuankun.wechat.common.DaoCommon;
 import com.songyuankun.wechat.entity.Course;
 import com.songyuankun.wechat.repository.CourseRepository;
-import com.songyuankun.wechat.request.CourseForm;
-import com.songyuankun.wechat.request.update.CourseUpdateDetail;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 /**
