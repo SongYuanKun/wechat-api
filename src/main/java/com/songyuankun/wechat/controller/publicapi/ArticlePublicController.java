@@ -1,4 +1,4 @@
-package com.songyuankun.wechat.controller;
+package com.songyuankun.wechat.controller.publicapi;
 
 import com.songyuankun.wechat.entity.Article;
 import com.songyuankun.wechat.repository.ArticleRepository;
@@ -16,22 +16,22 @@ import org.springframework.web.bind.annotation.*;
  */
 @Api
 @RestController
-@RequestMapping("article")
+@RequestMapping("public/article")
 @Slf4j
-public class ArticleController {
+public class ArticlePublicController {
     private final ArticleRepository articleRepository;
 
     @Autowired
-    public ArticleController(ArticleRepository articleRepository) {
+    public ArticlePublicController(ArticleRepository articleRepository) {
         this.articleRepository = articleRepository;
     }
 
-    @GetMapping("public/getById")
+    @GetMapping("getById")
     public Article getById(@RequestParam Integer id) {
         return articleRepository.getOne(id);
     }
 
-    @PostMapping("public/page")
+    @PostMapping("page")
     public Page<Article> publicPage(@RequestParam(required = false, defaultValue = "1") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
         Article article = new Article();
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
