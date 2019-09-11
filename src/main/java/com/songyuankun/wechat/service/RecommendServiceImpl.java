@@ -7,6 +7,7 @@ import com.songyuankun.wechat.request.query.RecommendQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,5 +48,14 @@ public class RecommendServiceImpl {
 
     public void removeByIds(List<Integer> asList) {
         asList.forEach(id -> recommendRepository.deleteById(id));
+    }
+
+    public void removeById(Integer id) {
+        recommendRepository.deleteById(id);
+    }
+
+    public Page<Recommend> findAllOrderByTop() {
+        Pageable pageable = PageRequest.of(0, 5, Sort.by(Sort.Order.desc("id"), Sort.Order.asc("top")));
+        return recommendRepository.findAll(pageable);
     }
 }

@@ -22,7 +22,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Recommend implements Serializable {
+public class Recommend extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

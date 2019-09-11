@@ -33,9 +33,12 @@ public class ArticleBlogController {
         return articleRepository.getOne(id);
     }
 
-    @PostMapping("page")
-    public Response<Page<Article>> publicPage(@RequestParam(required = false, defaultValue = "1") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
+    @GetMapping("page")
+    public Response<Page<Article>> publicPage(@RequestParam(required = false, defaultValue = "1") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize, @RequestParam(required = false) Boolean recommend) {
         Article article = new Article();
+        if (recommend != null) {
+            article.setRecommend(true);
+        }
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
         Page<Article> all = articleRepository.findAll(Example.of(article), pageable);
         return ResponseUtils.success(all);

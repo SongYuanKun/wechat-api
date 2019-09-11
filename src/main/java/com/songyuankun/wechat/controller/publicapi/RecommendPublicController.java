@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author songyuankun
  */
 @RestController
-@RequestMapping("/admin/recommend")
+@RequestMapping("/public/recommend")
 public class RecommendPublicController {
     private final RecommendServiceImpl recommendService;
 

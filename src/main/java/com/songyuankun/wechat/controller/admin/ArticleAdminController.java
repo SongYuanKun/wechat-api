@@ -52,7 +52,10 @@ public class ArticleAdminController {
         BeanUtils.copyProperties(articleForm, article);
         if (article.getId() == null) {
             DaoCommon.createDao(authentication, article);
-        }
+        } else {
+            article = articleRepository.getOne(article.getId());
+        DaoCommon.updateDao(authentication, article);
+    }
         tagService.saveTagAndNew(articleForm.getTagList(), article.getId());
         articleRepository.save(article);
         return article;
