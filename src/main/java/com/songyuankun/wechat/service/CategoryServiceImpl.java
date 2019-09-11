@@ -87,7 +87,7 @@ public class CategoryServiceImpl {
 
     }
 
-    public List<Category> select(Integer type){
+    public List<Category> select(Integer type) {
         Category category = new Category();
         category.setType(type);
         List<Category> categoryList = categoryRepository.findAll(Example.of(category));

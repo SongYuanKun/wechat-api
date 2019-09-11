@@ -40,7 +40,7 @@ public class RedisUtil {
      */
     public String get(String key) {
         String value = valueOperations.get(key);
-            redisTemplate.expire(key, RedisUtil.NOT_EXPIRE, TimeUnit.SECONDS);
+        redisTemplate.expire(key, RedisUtil.NOT_EXPIRE, TimeUnit.SECONDS);
         return value;
     }
 
