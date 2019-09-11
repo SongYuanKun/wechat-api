@@ -8,6 +8,7 @@ import com.songyuankun.wechat.entity.Category;
 import com.songyuankun.wechat.repository.ArticleRepository;
 import com.songyuankun.wechat.repository.CategoryRepository;
 import com.songyuankun.wechat.request.ArticleForm;
+import com.songyuankun.wechat.request.update.ArticleUpdateStatus;
 import com.songyuankun.wechat.response.ArticleInfoResponse;
 import com.songyuankun.wechat.service.CategoryServiceImpl;
 import com.songyuankun.wechat.service.TagServiceImpl;
@@ -57,13 +58,22 @@ public class ArticleAdminController {
         return article;
     }
 
-    @PostMapping("update")
+    @PostMapping("update/status")
     @Transactional(rollbackOn = Exception.class)
-    public Article update(Authentication authentication, @RequestBody ArticleForm articleForm) {
-        Article article = new Article();
-        BeanUtils.copyProperties(articleForm, article);
+    public Response update(Authentication authentication, @RequestBody ArticleUpdateStatus articleUpdateStatus) {
+        Article article = articleRepository.getOne(articleUpdateStatus.getId());
+        if (articleUpdateStatus.getPublish() != null) {
+            article.setPublish(articleUpdateStatus.getPublish());
+        }
+        if (articleUpdateStatus.getRecommend() != null) {
+            article.setRecommend(articleUpdateStatus.getRecommend());
+        }
+        if (articleUpdateStatus.getTop() != null) {
+            article.setTop(articleUpdateStatus.getTop());
+        }
         DaoCommon.updateDao(authentication, article);
-        return articleRepository.save(article);
+        articleRepository.save(article);
+        return ResponseUtils.success();
     }
 
     @PostMapping("page")
@@ -99,5 +109,11 @@ public class ArticleAdminController {
         BeanUtils.copyProperties(one, articleInfoResponse);
         articleInfoResponse.setTagList(tagService.getTagsByArticleId(id));
         return ResponseUtils.success(articleInfoResponse);
+    }
+
+    @GetMapping("delete/{id}")
+    public Response<ArticleInfoResponse> delete(@PathVariable Integer id) {
+        articleRepository.deleteById(id);
+        return ResponseUtils.success();
     }
 }

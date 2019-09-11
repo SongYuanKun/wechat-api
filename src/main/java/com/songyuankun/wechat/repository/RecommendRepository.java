@@ -13,6 +13,6 @@ import org.springframework.data.repository.query.Param;
 public interface RecommendRepository extends JpaRepository<Recommend, Integer>, JpaSpecificationExecutor<Recommend> {
 
     @Modifying
-    @Query(value = "update Recommend set   top=false where id <> :id")
-    void updateTopByNotEqualId(boolean b, @Param("id") Integer id);
+    @Query(value = "update Recommend set   top=:b where id <> :id")
+    void updateTopByNotEqualId(@Param("b") boolean b, @Param("id") Integer id);
 }
