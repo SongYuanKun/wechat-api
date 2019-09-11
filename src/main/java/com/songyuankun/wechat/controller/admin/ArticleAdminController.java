@@ -54,8 +54,8 @@ public class ArticleAdminController {
             DaoCommon.createDao(authentication, article);
         } else {
             article = articleRepository.getOne(article.getId());
-        DaoCommon.updateDao(authentication, article);
-    }
+            DaoCommon.updateDao(authentication, article);
+        }
         tagService.saveTagAndNew(articleForm.getTagList(), article.getId());
         articleRepository.save(article);
         return article;

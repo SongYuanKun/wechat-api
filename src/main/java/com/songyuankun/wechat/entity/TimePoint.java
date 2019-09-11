@@ -50,27 +50,15 @@ public class TimePoint {
         }
     }
 
-    public static Map<Integer, TimePoint> getTimePointMap() {
-        return TIME_POINT_MAP;
-    }
-
-    public static List<TimePoint> getTimePointList() {
-        return TIME_POINT_LIST;
-    }
-
     private int id;
-
     private String startTime;
     private String endTime;
     private int status;
     private int type;
-
-
     /**
      * 页面显示值
      */
     private String value;
-
     private TimePoint(int id, String startTime, String endTime, int status, String value, int type) {
         this.id = id;
         this.startTime = startTime;
@@ -78,6 +66,14 @@ public class TimePoint {
         this.status = status;
         this.value = value;
         this.type = type;
+    }
+
+    public static Map<Integer, TimePoint> getTimePointMap() {
+        return TIME_POINT_MAP;
+    }
+
+    public static List<TimePoint> getTimePointList() {
+        return TIME_POINT_LIST;
     }
 
     private static TimePoint createTimePoint(int i, Date startTime, Date endTime) {
