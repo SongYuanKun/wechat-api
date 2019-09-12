@@ -59,7 +59,7 @@ public class RecommendAdminController {
     }
 
 
-    @PutMapping("/top/{id}")
+    @GetMapping("/top/{id}")
     public Response updateTop(@PathVariable Integer id) {
         recommendService.updateTop(id);
         return ResponseUtils.success();
