@@ -4,6 +4,8 @@ import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.common.ResponseUtils;
 import com.songyuankun.wechat.entity.Article;
 import com.songyuankun.wechat.repository.ArticleRepository;
+import com.songyuankun.wechat.request.query.ArticleQuery;
+import com.songyuankun.wechat.service.ArticleServiceImpl;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +24,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class ArticleBlogController {
     private final ArticleRepository articleRepository;
+    private final ArticleServiceImpl articleService;
 
     @Autowired
-    public ArticleBlogController(ArticleRepository articleRepository) {
+    public ArticleBlogController(ArticleRepository articleRepository, ArticleServiceImpl articleService) {
         this.articleRepository = articleRepository;
+        this.articleService = articleService;
     }
 
     @GetMapping("getById")
@@ -44,11 +48,16 @@ public class ArticleBlogController {
             Sort.Order createTime = Sort.Order.desc("createTime");
             sort = sort.and(Sort.by(createTime));
         }
-
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
-
-
         Page<Article> all = articleRepository.findAll(Example.of(article), pageable);
         return ResponseUtils.success(all);
     }
+
+    @GetMapping("hotReads")
+    public Response<Page<Article>> hotReads(@RequestParam(required = false, defaultValue = "1") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
+        Sort sort = Sort.by(Sort.Order.desc("readNum"));
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+        return ResponseUtils.success(articleService.findAll(new ArticleQuery(), pageable));
+    }
+
 }

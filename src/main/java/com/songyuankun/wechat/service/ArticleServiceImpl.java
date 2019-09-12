@@ -10,10 +10,7 @@ import com.songyuankun.wechat.request.query.ArticleQuery;
 import com.songyuankun.wechat.response.ArticleInfoResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.Predicate;
@@ -40,16 +37,13 @@ public class ArticleServiceImpl {
 
     public Page<Article> publicPage(ArticleQuery articleQuery) {
         Pageable pageable = PageRequest.of(articleQuery.getPageNumber() - 1, articleQuery.getPageSize());
-        return articleRepository.findAll((root, criteriaQuery, criteriaBuilder) -> {
-            String title = articleQuery.getTitle();
-            List<Predicate> list = Lists.newArrayList();
-            if (StringUtils.isNotEmpty(title)) {
-                list.add(criteriaBuilder.like(root.get("title").as(String.class), "%" + title + "%"));
-            }
-            list.add(criteriaBuilder.isTrue(root.get("public").as(Boolean.class)));
-            Predicate[] p = new Predicate[list.size()];
-            return criteriaBuilder.and(list.toArray(p));
-        }, pageable);
+        return findAll(articleQuery,pageable);
+    }
+
+    public Page<Article> hotReads(ArticleQuery articleQuery) {
+        Sort sort = Sort.by(Sort.Order.desc("readNum"));
+        Pageable pageable = PageRequest.of(articleQuery.getPageNumber() - 1, articleQuery.getPageSize(), sort);
+        return findAll(articleQuery,pageable);
     }
 
     public Page<ArticleInfoResponse> page(ArticleQuery articleQuery) {
@@ -70,4 +64,18 @@ public class ArticleServiceImpl {
     public Article getOne(Integer id) {
         return articleRepository.getOne(id);
     }
+
+    public Page<Article> findAll(ArticleQuery articleQuery, Pageable pageable) {
+        return articleRepository.findAll((root, criteriaQuery, criteriaBuilder) -> {
+            String title = articleQuery.getTitle();
+            List<Predicate> list = Lists.newArrayList();
+            if (StringUtils.isNotEmpty(title)) {
+                list.add(criteriaBuilder.like(root.get("title").as(String.class), "%" + title + "%"));
+            }
+            list.add(criteriaBuilder.isTrue(root.get("publish").as(Boolean.class)));
+            Predicate[] p = new Predicate[list.size()];
+            return criteriaBuilder.and(list.toArray(p));
+        }, pageable);
+    }
+
 }
