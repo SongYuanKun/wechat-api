@@ -4,26 +4,25 @@ import com.songyuankun.wechat.common.DaoCommon;
 import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.common.ResponseUtils;
 import com.songyuankun.wechat.entity.Article;
-import com.songyuankun.wechat.entity.Category;
 import com.songyuankun.wechat.repository.ArticleRepository;
-import com.songyuankun.wechat.repository.CategoryRepository;
 import com.songyuankun.wechat.request.ArticleForm;
+import com.songyuankun.wechat.request.query.ArticleQuery;
 import com.songyuankun.wechat.request.update.ArticleUpdateStatus;
 import com.songyuankun.wechat.response.ArticleInfoResponse;
-import com.songyuankun.wechat.service.CategoryServiceImpl;
+import com.songyuankun.wechat.service.ArticleServiceImpl;
 import com.songyuankun.wechat.service.TagServiceImpl;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author songyuankun
@@ -33,21 +32,19 @@ import java.util.stream.Collectors;
 @RequestMapping("admin/article")
 @Slf4j
 public class ArticleAdminController {
+    private final ArticleServiceImpl articleService;
     private final ArticleRepository articleRepository;
-    private final CategoryRepository categoryRepository;
     private final TagServiceImpl tagService;
-    private final CategoryServiceImpl categoryService;
 
     @Autowired
-    public ArticleAdminController(ArticleRepository articleRepository, CategoryRepository categoryRepository, TagServiceImpl tagService, CategoryServiceImpl categoryService) {
+    public ArticleAdminController(ArticleServiceImpl articleService, ArticleRepository articleRepository, TagServiceImpl tagService) {
+        this.articleService = articleService;
         this.articleRepository = articleRepository;
-        this.categoryRepository = categoryRepository;
         this.tagService = tagService;
-        this.categoryService = categoryService;
     }
 
     @PostMapping("saveOrUpdate")
-    public Article save(Authentication authentication, @RequestBody ArticleForm articleForm) {
+    public Response<Article> save(Authentication authentication, @RequestBody ArticleForm articleForm) {
         Article article = new Article();
         BeanUtils.copyProperties(articleForm, article);
         if (article.getId() == null) {
@@ -58,7 +55,7 @@ public class ArticleAdminController {
         }
         tagService.saveTagAndNew(articleForm.getTagList(), article.getId());
         articleRepository.save(article);
-        return article;
+        return ResponseUtils.success(article);
     }
 
     @PostMapping("update/status")
@@ -80,28 +77,26 @@ public class ArticleAdminController {
     }
 
     @PostMapping("page")
-    public Page<ArticleInfoResponse> page(@RequestParam(required = false, defaultValue = "1") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
-        Page<Article> all = articleRepository.findAll(pageable);
-        List<Category> collect = categoryRepository.findAll().stream().filter(category -> category.getType().equals(0)).collect(Collectors.toList());
-        List<ArticleInfoResponse> articleInfoResponseList = new ArrayList<>();
-        all.stream().forEach(article -> {
-            ArticleInfoResponse articleInfoResponse = new ArticleInfoResponse();
-            BeanUtils.copyProperties(article, articleInfoResponse);
-            articleInfoResponse.setCategoryListStr(categoryService.renderCategoryArr(article.getCategoryId(), collect));
-            articleInfoResponse.setTagList(tagService.getTagsByArticleId(article.getId()));
-            articleInfoResponseList.add(articleInfoResponse);
-        });
-        return new PageImpl<>(articleInfoResponseList, pageable, all.getTotalElements());
+    public Response<Page<ArticleInfoResponse>> page(@RequestBody ArticleQuery articleQuery) {
+        Page<ArticleInfoResponse> page = articleService.page(articleQuery);
+        return ResponseUtils.success(page);
     }
 
+
+    @PostMapping("publicPage")
+    public Response<Page<Article>> publicPage(@RequestBody ArticleQuery articleQuery) {
+        Page<Article> articles = articleService.publicPage(articleQuery);
+        return ResponseUtils.success(articles);
+    }
+
+
     @PostMapping("my/create")
-    public Page<Article> page(Authentication authentication, @RequestParam(required = false, defaultValue = "1") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
+    public Response<Page<Article>> page(Authentication authentication, @RequestParam(required = false, defaultValue = "1") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
         Integer userId = Integer.valueOf(authentication.getName());
         Article article = new Article();
         article.setCreateUserId(userId);
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
-        return articleRepository.findAll(Example.of(article), pageable);
+        return ResponseUtils.success(articleRepository.findAll(Example.of(article), pageable));
     }
 
 

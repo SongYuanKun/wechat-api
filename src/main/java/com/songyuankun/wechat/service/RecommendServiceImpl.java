@@ -43,7 +43,7 @@ public class RecommendServiceImpl {
         recommend.setTop(true);
         recommendRepository.save(recommend);
         //批量更新其他
-        recommendRepository.updateTopByNotEqualId(id);
+        recommendRepository.updateTopFalseByNotEqualId(id);
     }
 
     public void removeByIds(List<Integer> asList) {
