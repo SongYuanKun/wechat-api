@@ -7,10 +7,7 @@ import com.songyuankun.wechat.repository.ArticleRepository;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,12 +34,20 @@ public class ArticleBlogController {
     }
 
     @GetMapping("page")
-    public Response<Page<Article>> publicPage(@RequestParam(required = false, defaultValue = "1") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize, @RequestParam(required = false) Boolean recommend) {
+    public Response publicPage(@RequestParam(required = false, defaultValue = "1") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize, @RequestParam(required = false) Boolean recommend, @RequestParam(required = false) Boolean latest) {
         Article article = new Article();
-        if (recommend != null) {
+        if (recommend != null && recommend) {
             article.setRecommend(true);
         }
-        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
+        Sort sort = Sort.by(Sort.Order.desc("top"));
+        if (latest != null && latest) {
+            Sort.Order createTime = Sort.Order.desc("createTime");
+            sort = sort.and(Sort.by(createTime));
+        }
+
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
+
+
         Page<Article> all = articleRepository.findAll(Example.of(article), pageable);
         return ResponseUtils.success(all);
     }
