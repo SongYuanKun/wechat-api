@@ -13,8 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
  */
 public interface RecommendRepository extends JpaRepository<Recommend, Integer>, JpaSpecificationExecutor<Recommend> {
 
+    /**
+     * 将其他置顶取消
+     *
+     * @param id id
+     */
     @Modifying
     @Transactional
     @Query(value = "update Recommend set   top=false where id <> :id")
-    void updateTopByNotEqualId(@Param("id") Integer id);
+    void updateTopFalseByNotEqualId(@Param("id") Integer id);
 }
