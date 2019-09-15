@@ -5,15 +5,15 @@ import com.songyuankun.wechat.common.ResponseUtils;
 import com.songyuankun.wechat.entity.Article;
 import com.songyuankun.wechat.repository.ArticleRepository;
 import com.songyuankun.wechat.request.query.ArticleQuery;
+import com.songyuankun.wechat.response.ArticleInfoResponse;
 import com.songyuankun.wechat.service.ArticleServiceImpl;
+import com.songyuankun.wechat.service.TagServiceImpl;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author songyuankun
@@ -25,21 +25,28 @@ import org.springframework.web.bind.annotation.RestController;
 public class ArticleBlogController {
     private final ArticleRepository articleRepository;
     private final ArticleServiceImpl articleService;
+    private final TagServiceImpl tagService;
 
     @Autowired
-    public ArticleBlogController(ArticleRepository articleRepository, ArticleServiceImpl articleService) {
+    public ArticleBlogController(ArticleRepository articleRepository, ArticleServiceImpl articleService, TagServiceImpl tagService) {
         this.articleRepository = articleRepository;
         this.articleService = articleService;
+        this.tagService = tagService;
     }
 
-    @GetMapping("getById")
-    public Article getById(@RequestParam Integer id) {
-        return articleRepository.getOne(id);
+    @GetMapping("info/{id}")
+    public Response<ArticleInfoResponse> info(@PathVariable Integer id) {
+        Article one = articleRepository.getOne(id);
+        ArticleInfoResponse articleInfoResponse = new ArticleInfoResponse();
+        BeanUtils.copyProperties(one, articleInfoResponse);
+        articleInfoResponse.setTagList(tagService.getTagsByArticleId(id));
+        return ResponseUtils.success(articleInfoResponse);
     }
 
     @GetMapping("page")
     public Response publicPage(@RequestParam(required = false, defaultValue = "1") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize, @RequestParam(required = false) Boolean recommend, @RequestParam(required = false) Boolean latest) {
         Article article = new Article();
+        article.setPublish(true);
         if (recommend != null && recommend) {
             article.setRecommend(true);
         }
@@ -54,9 +61,9 @@ public class ArticleBlogController {
     }
 
     @GetMapping("hotReads")
-    public Response<Page<Article>> hotReads(@RequestParam(required = false, defaultValue = "1") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
+    public Response<Page<Article>> hotReads() {
         Sort sort = Sort.by(Sort.Order.desc("readNum"));
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+        Pageable pageable = PageRequest.of(0, 10, sort);
         return ResponseUtils.success(articleService.findAll(new ArticleQuery(), pageable));
     }
 

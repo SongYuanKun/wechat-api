@@ -77,6 +77,7 @@ public class LoginController {
             user.setGender(Integer.parseInt(gender));
             user.setUserName(nickName);
             user.setUpdateTime(new Date());
+            user.setUserRole("ROLE_USER");
             userRepository.save(user);
         }
         JSONObject userInfo = WeChatCommon.getUserInfo(encryptedData, sessionKey, iv);
