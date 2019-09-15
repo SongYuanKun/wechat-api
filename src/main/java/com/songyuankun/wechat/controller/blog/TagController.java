@@ -2,8 +2,8 @@ package com.songyuankun.wechat.controller.blog;
 
 import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.common.ResponseUtils;
-import com.songyuankun.wechat.entity.Tag;
 import com.songyuankun.wechat.request.query.TagQuery;
+import com.songyuankun.wechat.response.TagResponse;
 import com.songyuankun.wechat.service.TagServiceImpl;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,7 @@ public class TagController {
         TagQuery tagQuery = new TagQuery();
         tagQuery.setPageNumber(1);
         tagQuery.setPageSize(10);
-        Page<Tag> page = tagService.findAllByQuery(tagQuery);
+        Page<TagResponse> page = tagService.tags(tagQuery);
         return ResponseUtils.success(page.getContent());
     }
 }

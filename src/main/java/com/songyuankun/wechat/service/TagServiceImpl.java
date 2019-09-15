@@ -7,10 +7,10 @@ import com.songyuankun.wechat.entity.TagLink;
 import com.songyuankun.wechat.repository.TagLinkRepository;
 import com.songyuankun.wechat.repository.TagRepository;
 import com.songyuankun.wechat.request.query.TagQuery;
+import com.songyuankun.wechat.response.TagResponse;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -46,6 +46,30 @@ public class TagServiceImpl {
             return criteriaBuilder.and(list.toArray(p));
         }, pageable);
     }
+
+    public Page<TagResponse> tags(TagQuery tagQuery) {
+        Page<Tag> allByQuery = findAllByQuery(tagQuery);
+        List<TagResponse> tagResponseList = new ArrayList<>();
+
+        allByQuery.getContent().forEach(tag -> {
+            long linkNum = getTagLinkNum(tag.getId());
+            TagResponse tagResponse = new TagResponse();
+            BeanUtils.copyProperties(tag, tagResponse);
+            tagResponse.setLinkNum(linkNum);
+            tagResponseList.add(tagResponse);
+        });
+        return new PageImpl<>(tagResponseList, allByQuery.getPageable(), allByQuery.getTotalElements());
+
+
+    }
+
+
+    public long getTagLinkNum(Integer tagId) {
+        TagLink tagLink = new TagLink();
+        tagLink.setTagId(tagId);
+        return tagLinkRepository.count(Example.of(tagLink));
+    }
+
 
     public List<Tag> getTagsByArticleId(Integer articleId) {
         List<Integer> idList = tagLinkRepository.findAllByArticleId(articleId).stream().map(TagLink::getTagId).collect(Collectors.toList());
