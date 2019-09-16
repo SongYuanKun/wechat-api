@@ -53,6 +53,9 @@ public class CategoryServiceImpl {
 
     public List<Category> getChildrenList(List<Integer> categoryIdList) {
         List<Category> childrenList = new ArrayList<>();
+        if (categoryIdList.isEmpty()) {
+            return childrenList;
+        }
         List<Category> all = categoryRepository.findAll((categoryRoot, criteriaQuery, criteriaBuilder)
                 -> {
             List<Predicate> list = Lists.newArrayList();
@@ -71,7 +74,7 @@ public class CategoryServiceImpl {
     }
 
 
-    public String renderCategoryArr(String categoryIds, List<Category> categoryList) {
+     String renderCategoryArr(String categoryIds, List<Category> categoryList) {
         if (org.springframework.util.StringUtils.isEmpty(categoryIds)) {
             return "";
         }
