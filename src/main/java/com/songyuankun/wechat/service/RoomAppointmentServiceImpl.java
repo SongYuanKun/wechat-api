@@ -35,16 +35,18 @@ public class RoomAppointmentServiceImpl {
         calendar.add(Calendar.HOUR_OF_DAY, 1);
         String format = DateFormatUtils.format(calendar, "HH:mm");
         List<AppointmentTimePoint> appointmentTimePoints = appointmentTimePointRepository.findAllByDay(date);
-        List<Integer> timePoints = new ArrayList<>();
         StringBuilder timePointString = new StringBuilder();
         for (AppointmentTimePoint appointmentTimePoint : appointmentTimePoints) {
             timePointString.append(appointmentTimePoint.getTimePointIds()).append(",");
         }
         String[] split = timePointString.toString().split(",");
-        BeanUtils.copyProperties(split, timePoints);
+        List<Integer> notEmptyTimeList = new ArrayList<>();
+        for (String s : split) {
+            notEmptyTimeList.add(Integer.parseInt(s));
+        }
         List<TimePoint> all = new ArrayList<>(TimePoint.getTimePointList());
         all.forEach(t -> {
-            t.setStatus(timePoints.contains(t.getId()) ? 1 : 0);
+            t.setStatus(notEmptyTimeList.contains(t.getId()) ? 1 : 0);
             if (day.equals(date) && format.compareTo(t.getStartTime()) > 0) {
                 t.setStatus(2);
             }
