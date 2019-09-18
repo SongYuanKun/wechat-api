@@ -76,6 +76,6 @@ public class Article extends BaseEntity implements Serializable {
     private Boolean top;
 
     @ApiModelProperty(value = "格式化后的内容")
-    @Column(name = "content_format")
+    @Column(name = "content_format", columnDefinition = "text")
     private String contentFormat;
 }
