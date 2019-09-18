@@ -45,17 +45,8 @@ public class ArticleAdminController {
 
     @PostMapping("saveOrUpdate")
     public Response<Article> save(Authentication authentication, @RequestBody ArticleForm articleForm) {
-        Article article = new Article();
-        BeanUtils.copyProperties(articleForm, article);
-        if (article.getId() == null) {
-            DaoCommon.createDao(authentication, article);
-        } else {
-            article = articleRepository.getOne(article.getId());
-            DaoCommon.updateDao(authentication, article);
-        }
-        tagService.saveTagAndNew(articleForm.getTagList(), article.getId());
-        articleRepository.save(article);
-        return ResponseUtils.success(article);
+
+        return ResponseUtils.success(articleService.saveOrUpdate(authentication,articleForm));
     }
 
     @PostMapping("update/status")
