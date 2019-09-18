@@ -40,10 +40,10 @@ public class ArticleServiceImpl {
         return findAll(articleQuery,pageable);
     }
 
-    public Page<Article> hotReads(ArticleQuery articleQuery) {
+    public Page<Article> hotReads() {
         Sort sort = Sort.by(Sort.Order.desc("readNum"));
-        Pageable pageable = PageRequest.of(articleQuery.getPageNumber() - 1, articleQuery.getPageSize(), sort);
-        return findAll(articleQuery,pageable);
+        Pageable pageable = PageRequest.of(0, 10, sort);
+        return articleRepository.findAll(pageable);
     }
 
     public Page<ArticleInfoResponse> page(ArticleQuery articleQuery) {
