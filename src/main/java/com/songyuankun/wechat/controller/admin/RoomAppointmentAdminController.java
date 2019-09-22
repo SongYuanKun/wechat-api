@@ -60,7 +60,7 @@ public class RoomAppointmentAdminController {
                 (root, query, criteriaBuilder) -> {
                     List<Predicate> predicates = new ArrayList<>();
                     if (!StringUtils.isEmpty(username)) {
-                        predicates.add(criteriaBuilder.like(root.get("userName"), username));
+                        predicates.add(criteriaBuilder.like(root.get("userName"), "%" + username + "%"));
                     }
                     if (!StringUtils.isEmpty(day)) {
                         predicates.add(criteriaBuilder.equal(root.get("day"), day));

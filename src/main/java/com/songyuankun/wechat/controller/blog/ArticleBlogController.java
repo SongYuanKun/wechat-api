@@ -4,7 +4,6 @@ import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.common.ResponseUtils;
 import com.songyuankun.wechat.entity.Article;
 import com.songyuankun.wechat.repository.ArticleRepository;
-import com.songyuankun.wechat.request.query.ArticleQuery;
 import com.songyuankun.wechat.response.ArticleInfoResponse;
 import com.songyuankun.wechat.service.ArticleServiceImpl;
 import com.songyuankun.wechat.service.TagServiceImpl;
@@ -62,9 +61,7 @@ public class ArticleBlogController {
 
     @GetMapping("hotReads")
     public Response<Page<Article>> hotReads() {
-        Sort sort = Sort.by(Sort.Order.desc("readNum"));
-        Pageable pageable = PageRequest.of(0, 10, sort);
-        return ResponseUtils.success(articleService.findAll(new ArticleQuery(), pageable));
+        return ResponseUtils.success(articleService.hotReads());
     }
 
 }
