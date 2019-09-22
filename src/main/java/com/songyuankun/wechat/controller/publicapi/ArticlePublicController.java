@@ -26,8 +26,8 @@ public class ArticlePublicController {
 
 
     @GetMapping("getById")
-    public Article getById(@RequestParam Integer id) {
-        return articleService.getOne(id);
+    public Response<Article> getById(@RequestParam Integer id) {
+        return ResponseUtils.success(articleService.getOne(id));
     }
 
     @PostMapping("page")
