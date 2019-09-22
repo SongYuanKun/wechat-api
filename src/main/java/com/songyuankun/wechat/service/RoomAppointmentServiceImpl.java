@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,16 +36,19 @@ public class RoomAppointmentServiceImpl {
         calendar.add(Calendar.HOUR_OF_DAY, 1);
         String format = DateFormatUtils.format(calendar, "HH:mm");
         List<AppointmentTimePoint> appointmentTimePoints = appointmentTimePointRepository.findAllByDay(date);
-        List<Integer> timePoints = new ArrayList<>();
-        StringBuilder timePointString = new StringBuilder();
+       List<String> split=new ArrayList<>();
         for (AppointmentTimePoint appointmentTimePoint : appointmentTimePoints) {
-            timePointString.append(appointmentTimePoint.getTimePointIds()).append(",");
+            split.addAll(Arrays.asList(appointmentTimePoint.getTimePointIds().split(",")));
         }
-        String[] split = timePointString.toString().split(",");
-        BeanUtils.copyProperties(split, timePoints);
+        List<Integer> notEmptyTimeList = new ArrayList<>();
+        for (String s : split) {
+            if (StringUtils.isNotEmpty(s)) {
+                notEmptyTimeList.add(Integer.parseInt(s));
+            }
+        }
         List<TimePoint> all = new ArrayList<>(TimePoint.getTimePointList());
         all.forEach(t -> {
-            t.setStatus(timePoints.contains(t.getId()) ? 1 : 0);
+            t.setStatus(notEmptyTimeList.contains(t.getId()) ? 1 : 0);
             if (day.equals(date) && format.compareTo(t.getStartTime()) > 0) {
                 t.setStatus(2);
             }

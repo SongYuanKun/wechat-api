@@ -2,21 +2,22 @@ package com.songyuankun.wechat.service;
 
 
 import com.google.common.collect.Lists;
+import com.songyuankun.wechat.common.DaoCommon;
 import com.songyuankun.wechat.entity.Article;
 import com.songyuankun.wechat.entity.Category;
 import com.songyuankun.wechat.repository.ArticleRepository;
-import com.songyuankun.wechat.repository.CategoryRepository;
+import com.songyuankun.wechat.request.ArticleForm;
 import com.songyuankun.wechat.request.query.ArticleQuery;
 import com.songyuankun.wechat.response.ArticleInfoResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.*;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author songyuankun
@@ -25,36 +26,49 @@ import java.util.stream.Collectors;
 public class ArticleServiceImpl {
     private final CategoryServiceImpl categoryService;
     private final TagServiceImpl tagService;
-    private final CategoryRepository categoryRepository;
     private final ArticleRepository articleRepository;
 
-    public ArticleServiceImpl(ArticleRepository articleRepository, CategoryServiceImpl categoryService, TagServiceImpl tagService, CategoryRepository categoryRepository) {
+    public ArticleServiceImpl(ArticleRepository articleRepository, CategoryServiceImpl categoryService, TagServiceImpl tagService) {
         this.articleRepository = articleRepository;
         this.categoryService = categoryService;
         this.tagService = tagService;
-        this.categoryRepository = categoryRepository;
     }
+
+    public Article saveOrUpdate(Authentication authentication, ArticleForm articleForm) {
+        Article article = new Article();
+        BeanUtils.copyProperties(articleForm, article);
+        if (article.getId() == null) {
+            DaoCommon.createDao(authentication, article);
+        } else {
+            article = articleRepository.getOne(article.getId());
+            DaoCommon.updateDao(authentication, article);
+        }
+        Article save = articleRepository.save(article);
+        tagService.saveTagAndNew(articleForm.getTagList(), save.getId());
+        return save;
+    }
+
 
     public Page<Article> publicPage(ArticleQuery articleQuery) {
         Pageable pageable = PageRequest.of(articleQuery.getPageNumber() - 1, articleQuery.getPageSize());
         return findAll(articleQuery,pageable);
     }
 
-    public Page<Article> hotReads(ArticleQuery articleQuery) {
+    public Page<Article> hotReads() {
         Sort sort = Sort.by(Sort.Order.desc("readNum"));
-        Pageable pageable = PageRequest.of(articleQuery.getPageNumber() - 1, articleQuery.getPageSize(), sort);
-        return findAll(articleQuery,pageable);
+        Pageable pageable = PageRequest.of(0, 10, sort);
+        return articleRepository.findAll(pageable);
     }
 
     public Page<ArticleInfoResponse> page(ArticleQuery articleQuery) {
         Pageable pageable = PageRequest.of(articleQuery.getPageNumber() - 1, articleQuery.getPageSize());
         Page<Article> all = articleRepository.findAll(pageable);
-        List<Category> collect = categoryRepository.findAll().stream().filter(category -> category.getType().equals(0)).collect(Collectors.toList());
+        List<Category> categoryList = categoryService.select(0);
         List<ArticleInfoResponse> articleInfoResponseList = new ArrayList<>();
         all.stream().forEach(article -> {
             ArticleInfoResponse articleInfoResponse = new ArticleInfoResponse();
             BeanUtils.copyProperties(article, articleInfoResponse);
-            articleInfoResponse.setCategoryListStr(categoryService.renderCategoryArr(article.getCategoryId(), collect));
+            articleInfoResponse.setCategoryListStr(categoryService.renderCategoryArr(article.getCategoryId(), categoryList));
             articleInfoResponse.setTagList(tagService.getTagsByArticleId(article.getId()));
             articleInfoResponseList.add(articleInfoResponse);
         });

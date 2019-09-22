@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
@@ -32,20 +33,25 @@ public class Article extends BaseEntity implements Serializable {
     private String title;
 
     @ApiModelProperty(value = "文章描述")
+    @ColumnDefault("''")
     private String description;
 
     @ApiModelProperty(value = "文章作者")
+    @ColumnDefault("''")
     private String author;
 
     @ApiModelProperty(value = "文章内容")
+    @Column(columnDefinition = "text")
     private String content;
 
     @ApiModelProperty(value = "阅读量")
     @Column(name = "read_num")
+    @ColumnDefault("0")
     private Long readNum;
 
     @ApiModelProperty(value = "点赞量")
     @Column(name = "like_num")
+    @ColumnDefault("0")
     private Long likeNum;
 
     @ApiModelProperty(value = "封面")
@@ -53,6 +59,7 @@ public class Article extends BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "文章展示类别,0:普通，1：大图片，2：无图片")
     @Column(name = "cover_type")
+    @ColumnDefault("0")
     private Integer coverType;
 
     @ApiModelProperty(value = "是否推荐文章")
@@ -69,6 +76,6 @@ public class Article extends BaseEntity implements Serializable {
     private Boolean top;
 
     @ApiModelProperty(value = "格式化后的内容")
-    @Column(name = "content_format")
+    @Column(name = "content_format", columnDefinition = "text")
     private String contentFormat;
 }
