@@ -36,11 +36,12 @@ public class ArticleServiceImpl {
 
     public Article saveOrUpdate(Authentication authentication, ArticleForm articleForm) {
         Article article = new Article();
-        BeanUtils.copyProperties(articleForm, article);
-        if (article.getId() == null) {
+        if (articleForm.getId() == null) {
+            BeanUtils.copyProperties(articleForm, article);
             DaoCommon.createDao(authentication, article);
         } else {
-            article = articleRepository.getOne(article.getId());
+            article = articleRepository.getOne(articleForm.getId());
+            BeanUtils.copyProperties(articleForm, article);
             DaoCommon.updateDao(authentication, article);
         }
         Article save = articleRepository.save(article);

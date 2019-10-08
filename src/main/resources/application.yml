@@ -15,8 +15,8 @@ spring:
   redis:
     database: 0
     host: songyuankun.top
-    port: 6379
-    password: fuckyou
+    port: 6378
+    password: fuckyouSB@123
   cache:
     type: redis
   session:
