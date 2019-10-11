@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
@@ -39,6 +40,8 @@ public class User extends BaseEntity implements Serializable {
     @Column(name = "user_role")
     private String userRole;
 
+    @Column(nullable = false)
+    @ColumnDefault("0")
     private Integer age;
 
     private Integer sex;

@@ -5,12 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Proxy;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -40,6 +38,8 @@ public class Tag extends BaseEntity implements Serializable {
     private String name;
 
     @ApiModelProperty(value = "所属类型：0文章，1阅读")
+    @Column(nullable = false)
+    @ColumnDefault("0")
     private Integer type;
 
 

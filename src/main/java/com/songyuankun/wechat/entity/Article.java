@@ -45,12 +45,12 @@ public class Article extends BaseEntity implements Serializable {
     private String content;
 
     @ApiModelProperty(value = "阅读量")
-    @Column(name = "read_num")
+    @Column(name = "read_num", nullable = false)
     @ColumnDefault("0")
     private Long readNum;
 
     @ApiModelProperty(value = "点赞量")
-    @Column(name = "like_num")
+    @Column(name = "like_num", nullable = false)
     @ColumnDefault("0")
     private Long likeNum;
 
