@@ -41,7 +41,7 @@ public class ArticleBlogController {
     }
 
     @GetMapping("page")
-    public Response publicPage(@RequestParam(required = false, defaultValue = "1") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize, @RequestParam(required = false) Boolean recommend, @RequestParam(required = false) Boolean latest) {
+    public Response publicPage(@RequestParam(required = false, defaultValue = "1") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize, @RequestParam(required = false) Boolean recommend, @RequestParam(required = false) Boolean latest,@RequestParam(required = false) Boolean favorite) {
         Article article = new Article();
         article.setPublish(true);
         if (recommend != null && recommend) {
@@ -51,6 +51,10 @@ public class ArticleBlogController {
         if (latest != null && latest) {
             Sort.Order createTime = Sort.Order.desc("createTime");
             sort = sort.and(Sort.by(createTime));
+        }
+        if (favorite != null && favorite) {
+            Sort.Order likeNum = Sort.Order.desc("likeNum");
+            sort = sort.and(Sort.by(likeNum));
         }
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
         Page<Article> all = articleService.findAll(Example.of(article), pageable);
