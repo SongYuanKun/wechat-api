@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import javax.transaction.Transactional;
+
 /**
  * @author songyuankun
  */
@@ -14,11 +16,13 @@ public interface ArticleRepository extends JpaRepository<Article, Integer>, JpaS
 
 
     @Modifying
-    @Query(value = "update article set like_num = like_num + 1 where id = :id")
-    void updateLikeNum(@Param("id") int id);
+    @javax.transaction.Transactional(rollbackOn = Exception.class)
+    @Query(value = "update Article set like_num = like_num + 1 where id = :id")
+    void updateLikeNum(@Param("id") Integer id);
 
     @Modifying
-    @Query(value = "update article set read_num = read_num + 1 where id = :id")
-    void updateReadNum(@Param("id") int id);
+    @Transactional(rollbackOn = Exception.class)
+    @Query(value = "update Article set read_num = read_num + 1 where id = :id")
+    void updateReadNum(@Param("id") Integer id);
 
 }
