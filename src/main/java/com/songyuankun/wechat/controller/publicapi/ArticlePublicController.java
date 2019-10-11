@@ -27,6 +27,7 @@ public class ArticlePublicController {
 
     @GetMapping("getById")
     public Response<Article> getById(@RequestParam Integer id) {
+        articleService.updateReadNum(id);
         return ResponseUtils.success(articleService.getOne(id));
     }
 
