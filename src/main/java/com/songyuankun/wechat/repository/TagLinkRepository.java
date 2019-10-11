@@ -13,4 +13,8 @@ public interface TagLinkRepository extends JpaRepository<TagLink, Integer>, JpaS
 
 
     List<TagLink> findAllByArticleId(Integer articleId);
+
+    void deleteAllByArticleId(Integer articleId);
+
+    void deleteAllByTagId(Integer id);
 }
