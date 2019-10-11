@@ -93,4 +93,18 @@ public class ArticleServiceImpl {
         }, pageable);
     }
 
+
+    public Page<Article> findAll(Example<Article> example, Pageable pageable) {
+        return articleRepository.findAll(example, pageable);
+    }
+
+
+    public void updateLikeNum(Integer id) {
+        articleRepository.updateLikeNum(id);
+    }
+
+    public void updateReadNum(Integer id) {
+        articleRepository.updateReadNum(id);
+    }
+
 }

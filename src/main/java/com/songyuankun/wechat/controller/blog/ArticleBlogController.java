@@ -3,7 +3,6 @@ package com.songyuankun.wechat.controller.blog;
 import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.common.ResponseUtils;
 import com.songyuankun.wechat.entity.Article;
-import com.songyuankun.wechat.repository.ArticleRepository;
 import com.songyuankun.wechat.response.ArticleInfoResponse;
 import com.songyuankun.wechat.service.ArticleServiceImpl;
 import com.songyuankun.wechat.service.TagServiceImpl;
@@ -22,20 +21,19 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("blog/article")
 @Slf4j
 public class ArticleBlogController {
-    private final ArticleRepository articleRepository;
     private final ArticleServiceImpl articleService;
     private final TagServiceImpl tagService;
 
     @Autowired
-    public ArticleBlogController(ArticleRepository articleRepository, ArticleServiceImpl articleService, TagServiceImpl tagService) {
-        this.articleRepository = articleRepository;
+    public ArticleBlogController(ArticleServiceImpl articleService, TagServiceImpl tagService) {
         this.articleService = articleService;
         this.tagService = tagService;
     }
 
     @GetMapping("info/{id}")
     public Response<ArticleInfoResponse> info(@PathVariable Integer id) {
-        Article one = articleRepository.getOne(id);
+        articleService.updateReadNum(id);
+        Article one = articleService.getOne(id);
         ArticleInfoResponse articleInfoResponse = new ArticleInfoResponse();
         BeanUtils.copyProperties(one, articleInfoResponse);
         articleInfoResponse.setTagList(tagService.getTagsByArticleId(id));
@@ -55,13 +53,20 @@ public class ArticleBlogController {
             sort = sort.and(Sort.by(createTime));
         }
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
-        Page<Article> all = articleRepository.findAll(Example.of(article), pageable);
+        Page<Article> all = articleService.findAll(Example.of(article), pageable);
         return ResponseUtils.success(all);
     }
 
     @GetMapping("hotReads")
     public Response<Page<Article>> hotReads() {
         return ResponseUtils.success(articleService.hotReads());
+    }
+
+
+    @PutMapping("like/{id}")
+    public Response likeArticle(@PathVariable Integer id) {
+        articleService.updateLikeNum(id);
+        return ResponseUtils.success();
     }
 
 }
