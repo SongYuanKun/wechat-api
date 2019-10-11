@@ -4,7 +4,6 @@ import com.songyuankun.wechat.common.DaoCommon;
 import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.common.ResponseUtils;
 import com.songyuankun.wechat.entity.Tag;
-import com.songyuankun.wechat.repository.TagRepository;
 import com.songyuankun.wechat.request.TagForm;
 import com.songyuankun.wechat.request.query.TagQuery;
 import com.songyuankun.wechat.service.TagServiceImpl;
@@ -28,11 +27,9 @@ import java.util.List;
 @RequestMapping("admin/tag")
 @Slf4j
 public class TagAdminController {
-    private final TagRepository tagRepository;
     private final TagServiceImpl tagService;
 
-    public TagAdminController(TagRepository tagRepository, TagServiceImpl tagService) {
-        this.tagRepository = tagRepository;
+    public TagAdminController(TagServiceImpl tagService) {
         this.tagService = tagService;
     }
 
@@ -43,10 +40,10 @@ public class TagAdminController {
         if (tag.getId() == null) {
             DaoCommon.createDao(authentication, tag);
         } else {
-            tag = tagRepository.getOne(tag.getId());
+            tag = tagService.getOne(tag.getId());
             DaoCommon.updateDao(authentication, tag);
         }
-        tagRepository.save(tag);
+        tagService.save(tag);
         return ResponseUtils.success();
 
     }
@@ -60,20 +57,20 @@ public class TagAdminController {
 
     @GetMapping("info/{id}")
     public Response<Tag> info(@PathVariable Integer id) {
-        return ResponseUtils.success(tagRepository.getOne(id));
+        return ResponseUtils.success(tagService.getOne(id));
     }
 
     @GetMapping("select")
     public Response<List<Tag>> select(Integer type) {
         Tag tag = new Tag();
         tag.setType(type);
-        List<Tag> tagList = tagRepository.findAll(Example.of(tag));
+        List<Tag> tagList = tagService.findAll(Example.of(tag));
         return ResponseUtils.success(tagList);
     }
 
     @GetMapping("delete/{id}")
     public Response delete(@PathVariable Integer id) {
-        tagRepository.deleteById(id);
+        tagService.deleteById(id);
         return ResponseUtils.success(null);
     }
 }

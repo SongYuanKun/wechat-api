@@ -64,7 +64,7 @@ public class TagServiceImpl {
     }
 
 
-    public long getTagLinkNum(Integer tagId) {
+    private long getTagLinkNum(Integer tagId) {
         TagLink tagLink = new TagLink();
         tagLink.setTagId(tagId);
         return tagLinkRepository.count(Example.of(tagLink));
@@ -86,7 +86,8 @@ public class TagServiceImpl {
         }));
     }
 
-    public void saveTagAndNew(List<Tag> tagList, Integer id) {
+    void saveTagAndNew(List<Tag> tagList, Integer id) {
+        tagLinkRepository.deleteAllByArticleId(id);
         tagList.forEach(tag -> {
             if (tag.getId() == null) {
                 tagRepository.save(tag);
@@ -94,5 +95,22 @@ public class TagServiceImpl {
             TagLink tagLink = new TagLink(id, tag.getId());
             tagLinkRepository.save(tagLink);
         });
+    }
+
+    public Tag getOne(Integer id) {
+        return tagRepository.getOne(id);
+    }
+
+    public Tag save(Tag tag) {
+        return tagRepository.save(tag);
+    }
+
+    public List<Tag> findAll(Example<Tag> of) {
+        return tagRepository.findAll(of);
+    }
+
+    public void deleteById(Integer id) {
+        tagLinkRepository.deleteAllByTagId(id);
+        tagRepository.deleteById(id);
     }
 }
