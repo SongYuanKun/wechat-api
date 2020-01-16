@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  *
  * @author songyuankun
  */
-@Api
+@Api(tags = "admin/category")
 @RestController
 @RequestMapping("admin/category")
 @Slf4j

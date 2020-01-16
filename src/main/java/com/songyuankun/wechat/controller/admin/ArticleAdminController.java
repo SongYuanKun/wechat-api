@@ -12,6 +12,7 @@ import com.songyuankun.wechat.response.ArticleInfoResponse;
 import com.songyuankun.wechat.service.ArticleServiceImpl;
 import com.songyuankun.wechat.service.TagServiceImpl;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ import javax.transaction.Transactional;
 /**
  * @author songyuankun
  */
-@Api
+@Api(tags = "admin/article")
 @RestController
 @RequestMapping("admin/article")
 @Slf4j

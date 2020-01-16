@@ -165,7 +165,7 @@
                 <version>1.3.7</version>
                 <configuration>
                     <!-- api-docs访问url -->
-                    <swaggerInput>http://localhost:8081/v2/api-docs</swaggerInput>
+                    <swaggerInput>http://localhost:8082/v2/api-docs</swaggerInput>
                     <!-- 生成为单个文档，输出路径 -->
                     <!--                    <outputFile>docs/generated/all</outputFile>-->
                     <!-- 生成为多个文档，输出路径 -->
@@ -177,7 +177,6 @@
                         <swagger2markup.markupLanguage>ASCIIDOC</swagger2markup.markupLanguage>
                         <!-- markdown格式文档 -->
                         <!--                        <swagger2markup.markupLanguage>MARKDOWN</swagger2markup.markupLanguage>-->
-                        <swagger2markup.pathsGroupedBy>TAGS</swagger2markup.pathsGroupedBy>
                     </config>
                 </configuration>
             </plugin>
