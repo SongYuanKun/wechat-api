@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 /**
  * 静态文件访问配置
  *
- * @author Administrator
+ * @author songyuankun
  */
 @Configuration
 public class MyWebAppConfigurer extends WebMvcConfigurationSupport {

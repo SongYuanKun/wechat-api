@@ -74,7 +74,7 @@ public class CategoryServiceImpl {
     }
 
 
-     String renderCategoryArr(String categoryIds, List<Category> categoryList) {
+    String renderCategoryArr(String categoryIds, List<Category> categoryList) {
         if (org.springframework.util.StringUtils.isEmpty(categoryIds)) {
             return "";
         }

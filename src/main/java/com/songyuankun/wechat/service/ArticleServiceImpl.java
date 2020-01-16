@@ -52,7 +52,7 @@ public class ArticleServiceImpl {
 
     public Page<Article> publicPage(ArticleQuery articleQuery) {
         Pageable pageable = PageRequest.of(articleQuery.getPageNumber() - 1, articleQuery.getPageSize());
-        return findAll(articleQuery,pageable);
+        return findAll(articleQuery, pageable);
     }
 
     public Page<Article> hotReads() {

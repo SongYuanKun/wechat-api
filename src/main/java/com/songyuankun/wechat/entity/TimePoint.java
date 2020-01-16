@@ -59,6 +59,7 @@ public class TimePoint {
      * 页面显示值
      */
     private String value;
+
     private TimePoint(int id, String startTime, String endTime, int status, String value, int type) {
         this.id = id;
         this.startTime = startTime;

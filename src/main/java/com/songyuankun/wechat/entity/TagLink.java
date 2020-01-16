@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
@@ -28,10 +27,10 @@ public class TagLink extends BaseEntity implements Serializable {
     @GeneratedValue
     private Integer id;
 
-    @Column(name = "article_id",nullable = false)
+    @Column(name = "article_id", nullable = false)
     private Integer articleId;
 
-    @Column(name = "tag_id",nullable = false)
+    @Column(name = "tag_id", nullable = false)
     private Integer tagId;
 
     public TagLink(Integer articleId, Integer tagId) {

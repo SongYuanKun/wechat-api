@@ -36,7 +36,7 @@ public class RoomAppointmentServiceImpl {
         calendar.add(Calendar.HOUR_OF_DAY, 1);
         String format = DateFormatUtils.format(calendar, "HH:mm");
         List<AppointmentTimePoint> appointmentTimePoints = appointmentTimePointRepository.findAllByDay(date);
-       List<String> split=new ArrayList<>();
+        List<String> split = new ArrayList<>();
         for (AppointmentTimePoint appointmentTimePoint : appointmentTimePoints) {
             split.addAll(Arrays.asList(appointmentTimePoint.getTimePointIds().split(",")));
         }
@@ -56,7 +56,7 @@ public class RoomAppointmentServiceImpl {
         return all;
     }
 
-    public Response save(Authentication authentication, RoomAppointmentForm roomAppointmentForm) {
+    public Response<AppointmentTimePoint> save(Authentication authentication, RoomAppointmentForm roomAppointmentForm) {
         Integer userId = Integer.valueOf(authentication.getName());
         AppointmentTimePoint appointmentTimePoint = new AppointmentTimePoint();
         DaoCommon.createDao(authentication, appointmentTimePoint);
