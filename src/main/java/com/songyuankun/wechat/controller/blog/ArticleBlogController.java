@@ -45,7 +45,7 @@ public class ArticleBlogController {
 
     @ApiOperation(value = "获取文章列表", notes = "获取文章列表")
     @GetMapping("page")
-    public Response<Object> publicPage(@ApiParam("页码") @RequestParam(required = false, defaultValue = "1") Integer pageNumber, @ApiParam("每页大小") @RequestParam(required = false, defaultValue = "10") Integer pageSize, @ApiParam("最新评论") @RequestParam(required = false) Boolean recommend, @ApiParam("最新发布") @RequestParam(required = false) Boolean latest, @ApiParam("最多喜欢") @RequestParam(required = false) Boolean favorite) {
+    public Response<Object> publicPage(@ApiParam("页码") @RequestParam(required = false, defaultValue = "1") Integer pageNumber, @ApiParam("每页大小") @RequestParam(required = false, defaultValue = "10") Integer pageSize, @ApiParam("推荐") @RequestParam(required = false) Boolean recommend, @ApiParam("最新发布") @RequestParam(required = false) Boolean latest, @ApiParam("最多喜欢") @RequestParam(required = false) Boolean favorite) {
         Article article = new Article();
         article.setPublish(true);
         if (recommend != null && recommend) {
