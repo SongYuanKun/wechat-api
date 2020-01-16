@@ -28,7 +28,7 @@ import javax.transaction.Transactional;
 /**
  * @author songyuankun
  */
-@Api(tags = "admin/article")
+@Api(value = "admin/article")
 @RestController
 @RequestMapping("admin/article")
 @Slf4j
@@ -44,6 +44,7 @@ public class ArticleAdminController {
         this.tagService = tagService;
     }
 
+    @ApiOperation("保存文章")
     @PostMapping("saveOrUpdate")
     public Response<Article> save(Authentication authentication, @RequestBody ArticleForm articleForm) {
 
