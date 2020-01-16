@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author songyuankun
  */
-@Api
+@Api(tags = "")
 @RestController
 @RequestMapping("blog/recommend")
 @Slf4j

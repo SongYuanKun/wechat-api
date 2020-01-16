@@ -6,18 +6,19 @@ import com.songyuankun.wechat.entity.Article;
 import com.songyuankun.wechat.response.ArticleInfoResponse;
 import com.songyuankun.wechat.service.ArticleServiceImpl;
 import com.songyuankun.wechat.service.TagServiceImpl;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
-import org.springframework.data.domain.Example;
 import org.springframework.web.bind.annotation.*;
 
 /**
  * @author songyuankun
  */
-@Api(tags = "blog")
+@Api(tags = "文章相关接口")
 @RestController
 @RequestMapping("blog/article")
 @Slf4j
@@ -31,14 +32,9 @@ public class ArticleBlogController {
         this.tagService = tagService;
     }
 
-    @ApiOperation("接口描述：[运输端]校验计划对应的操作码是否正确")
-    @ApiResponses({
-            @ApiResponse(code = 0, message = "校验成功"),
-            @ApiResponse(code = 20001, message = "校验失败"),
-            @ApiResponse(code = 40001, message = "参数不合法"),
-            @ApiResponse(code = 50001, message = "系统异常"),})
+    @ApiOperation(value = "获取文章详情", notes = "获取文章详情")
     @GetMapping("info/{id}")
-    public Response<ArticleInfoResponse> info(@PathVariable Integer id) {
+    public Response<ArticleInfoResponse> info(@ApiParam("文章id") @PathVariable Integer id) {
         articleService.updateReadNum(id);
         Article one = articleService.getOne(id);
         ArticleInfoResponse articleInfoResponse = new ArticleInfoResponse();
@@ -47,9 +43,9 @@ public class ArticleBlogController {
         return ResponseUtils.success(articleInfoResponse);
     }
 
-    @ApiOperation(value = "获取文章列表", notes = "获取文章列表", httpMethod = "GET")
+    @ApiOperation(value = "获取文章列表", notes = "获取文章列表")
     @GetMapping("page")
-    public Response publicPage(@RequestParam(required = false, defaultValue = "1") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize, @RequestParam(required = false) Boolean recommend, @RequestParam(required = false) Boolean latest,@RequestParam(required = false) Boolean favorite) {
+    public Response<Object> publicPage(@ApiParam("页码") @RequestParam(required = false, defaultValue = "1") Integer pageNumber, @ApiParam("每页大小") @RequestParam(required = false, defaultValue = "10") Integer pageSize, @ApiParam("最新评论") @RequestParam(required = false) Boolean recommend, @ApiParam("最新发布") @RequestParam(required = false) Boolean latest, @ApiParam("最多喜欢") @RequestParam(required = false) Boolean favorite) {
         Article article = new Article();
         article.setPublish(true);
         if (recommend != null && recommend) {
@@ -69,7 +65,7 @@ public class ArticleBlogController {
         return ResponseUtils.success(all);
     }
 
-    @ApiOperation(value = "获取最热文章", notes = "获取最热文章", httpMethod = "GET")
+    @ApiOperation(value = "获取最热文章", notes = "获取最热文章")
     @GetMapping("hotReads")
     public Response<Page<Article>> hotReads() {
         return ResponseUtils.success(articleService.hotReads());
@@ -78,7 +74,7 @@ public class ArticleBlogController {
 
     @ApiOperation(value = "文章点赞", notes = "文章点赞")
     @PutMapping("like/{id}")
-    public Response likeArticle(@PathVariable Integer id) {
+    public Response<Object> likeArticle(@ApiParam("文章id") @PathVariable Integer id) {
         articleService.updateLikeNum(id);
         return ResponseUtils.success();
     }

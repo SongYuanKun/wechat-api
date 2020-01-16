@@ -20,7 +20,7 @@ import java.util.List;
  *
  * @author songyuankun
  */
-@Api(value = "blog/category")
+@Api(tags = "blog/category")
 @RestController
 @RequestMapping("blog/category")
 @Slf4j
