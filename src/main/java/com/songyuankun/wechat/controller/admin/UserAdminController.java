@@ -20,7 +20,7 @@ import java.security.Principal;
 /**
  * @author songyuankun
  */
-@Api(tags = "admin/user")
+@Api(value = "admin/user")
 @RestController
 @Slf4j
 @RequestMapping("admin/user")

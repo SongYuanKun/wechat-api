@@ -6,17 +6,18 @@ import com.songyuankun.wechat.entity.Article;
 import com.songyuankun.wechat.response.ArticleInfoResponse;
 import com.songyuankun.wechat.service.ArticleServiceImpl;
 import com.songyuankun.wechat.service.TagServiceImpl;
-import io.swagger.annotations.Api;
+import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
+import org.springframework.data.domain.Example;
 import org.springframework.web.bind.annotation.*;
 
 /**
  * @author songyuankun
  */
-@Api
+@Api(tags = "blog")
 @RestController
 @RequestMapping("blog/article")
 @Slf4j
@@ -30,6 +31,12 @@ public class ArticleBlogController {
         this.tagService = tagService;
     }
 
+    @ApiOperation("接口描述：[运输端]校验计划对应的操作码是否正确")
+    @ApiResponses({
+            @ApiResponse(code = 0, message = "校验成功"),
+            @ApiResponse(code = 20001, message = "校验失败"),
+            @ApiResponse(code = 40001, message = "参数不合法"),
+            @ApiResponse(code = 50001, message = "系统异常"),})
     @GetMapping("info/{id}")
     public Response<ArticleInfoResponse> info(@PathVariable Integer id) {
         articleService.updateReadNum(id);
@@ -40,6 +47,7 @@ public class ArticleBlogController {
         return ResponseUtils.success(articleInfoResponse);
     }
 
+    @ApiOperation(value = "获取文章列表", notes = "获取文章列表", httpMethod = "GET")
     @GetMapping("page")
     public Response publicPage(@RequestParam(required = false, defaultValue = "1") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize, @RequestParam(required = false) Boolean recommend, @RequestParam(required = false) Boolean latest,@RequestParam(required = false) Boolean favorite) {
         Article article = new Article();
@@ -61,12 +69,14 @@ public class ArticleBlogController {
         return ResponseUtils.success(all);
     }
 
+    @ApiOperation(value = "获取最热文章", notes = "获取最热文章", httpMethod = "GET")
     @GetMapping("hotReads")
     public Response<Page<Article>> hotReads() {
         return ResponseUtils.success(articleService.hotReads());
     }
 
 
+    @ApiOperation(value = "文章点赞", notes = "文章点赞")
     @PutMapping("like/{id}")
     public Response likeArticle(@PathVariable Integer id) {
         articleService.updateLikeNum(id);

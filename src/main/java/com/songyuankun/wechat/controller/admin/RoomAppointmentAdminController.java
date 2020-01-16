@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * @author songyuankun
  */
-@Api(tags = "admin/room_appointment")
+@Api(value = "admin/room_appointment")
 @RestController
 @RequestMapping("admin/room_appointment")
 @Slf4j

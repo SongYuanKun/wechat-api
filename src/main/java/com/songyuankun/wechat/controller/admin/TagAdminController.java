@@ -22,7 +22,7 @@ import java.util.List;
  *
  * @author songyuankun
  */
-@Api(tags = "admin/tag")
+@Api(value = "admin/tag")
 @RestController
 @RequestMapping("admin/tag")
 @Slf4j

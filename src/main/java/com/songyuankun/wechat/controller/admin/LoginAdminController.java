@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * @author songyuankun
  */
-@Api(tags = "admin")
+@Api(value = "admin")
 @RestController
 @Slf4j
 @RequestMapping("admin")

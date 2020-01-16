@@ -18,7 +18,7 @@ import java.util.Arrays;
 /**
  * @author songyuankun
  */
-@Api(tags = "admin/recommend")
+@Api(value = "admin/recommend")
 @RestController
 @RequestMapping("admin/recommend")
 public class RecommendAdminController {
