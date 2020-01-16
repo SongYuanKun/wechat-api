@@ -4,6 +4,7 @@ import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.common.ResponseUtils;
 import com.songyuankun.wechat.entity.Timeline;
 import com.songyuankun.wechat.service.TimelineServiceImpl;
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import java.util.List;
 /**
  * @author songyuankun
  */
+@Api(tags = "")
 @RestController
 @RequestMapping("blog/timeline")
 public class TimelineController {
