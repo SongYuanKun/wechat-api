@@ -1,6 +1,7 @@
 package com.songyuankun.wechat.entity;
 
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,6 +17,7 @@ import java.io.Serializable;
  *
  * @author songyuankun
  */
+@ApiModel
 @Proxy(lazy = false)
 @Entity
 @Table(name = "article")
