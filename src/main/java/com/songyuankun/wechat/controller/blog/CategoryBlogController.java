@@ -7,6 +7,7 @@ import com.songyuankun.wechat.repository.CategoryRepository;
 import com.songyuankun.wechat.service.CategoryServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +21,7 @@ import java.util.List;
  *
  * @author songyuankun
  */
-@Api(tags = "blog/category")
+@Api(tags = "分类相关接口")
 @RestController
 @RequestMapping("blog/category")
 @Slf4j
@@ -35,13 +36,13 @@ public class CategoryBlogController {
 
     @ApiOperation("分类详情")
     @GetMapping("info/{id}")
-    public Response<Category> info(@PathVariable Integer id) {
+    public Response<Category> info(@ApiParam("分类id") @PathVariable Integer id) {
         return ResponseUtils.success(categoryRepository.getOne(id));
     }
 
     @ApiOperation("分类列表")
     @GetMapping("select")
-    public Response<List<Category>> select(Integer type) {
+    public Response<List<Category>> select(@ApiParam("分类类型") Integer type) {
         List<Category> categoryList = categoryService.select(type);
         return ResponseUtils.success(categoryList);
     }

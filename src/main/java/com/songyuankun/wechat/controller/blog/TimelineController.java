@@ -5,6 +5,7 @@ import com.songyuankun.wechat.common.ResponseUtils;
 import com.songyuankun.wechat.entity.Timeline;
 import com.songyuankun.wechat.service.TimelineServiceImpl;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,7 +16,7 @@ import java.util.List;
 /**
  * @author songyuankun
  */
-@Api(tags = "")
+@Api(tags = "时间轴接口")
 @RestController
 @RequestMapping("blog/timeline")
 public class TimelineController {
@@ -23,6 +24,7 @@ public class TimelineController {
     @Resource
     private TimelineServiceImpl timelineService;
 
+    @ApiOperation(value = "获取时间轴", notes = "获取时间轴")
     @GetMapping
     public Response<List<Timeline>> listTimeline() {
         return ResponseUtils.success(timelineService.listTimeLine());
