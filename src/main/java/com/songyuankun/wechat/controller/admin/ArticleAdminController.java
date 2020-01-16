@@ -48,12 +48,12 @@ public class ArticleAdminController {
     @PostMapping("saveOrUpdate")
     public Response<Article> save(Authentication authentication, @RequestBody ArticleForm articleForm) {
 
-        return ResponseUtils.success(articleService.saveOrUpdate(authentication,articleForm));
+        return ResponseUtils.success(articleService.saveOrUpdate(authentication, articleForm));
     }
 
     @PostMapping("update/status")
     @Transactional(rollbackOn = Exception.class)
-    public Response update(Authentication authentication, @RequestBody ArticleUpdateStatus articleUpdateStatus) {
+    public Response<Object> update(Authentication authentication, @RequestBody ArticleUpdateStatus articleUpdateStatus) {
         Article article = articleRepository.getOne(articleUpdateStatus.getId());
         if (articleUpdateStatus.getPublish() != null) {
             article.setPublish(articleUpdateStatus.getPublish());
