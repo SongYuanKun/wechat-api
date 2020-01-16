@@ -34,7 +34,7 @@ import java.util.UUID;
 /**
  * @author songyuankun
  */
-@Api(tags = "上传接口")
+@Api(tags = "admin/upload")
 @RestController
 @RequestMapping("admin/upload")
 @Slf4j

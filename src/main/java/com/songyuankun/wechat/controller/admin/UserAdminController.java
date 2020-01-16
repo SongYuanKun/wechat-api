@@ -4,6 +4,7 @@ import com.songyuankun.wechat.common.DaoCommon;
 import com.songyuankun.wechat.entity.User;
 import com.songyuankun.wechat.repository.UserRepository;
 import com.songyuankun.wechat.request.UserForm;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import java.security.Principal;
 /**
  * @author songyuankun
  */
+@Api(tags = "admin/user")
 @RestController
 @Slf4j
 @RequestMapping("admin/user")

@@ -21,7 +21,7 @@ import javax.transaction.Transactional;
 /**
  * @author songyuankun
  */
-@Api
+@Api(tags = "course")
 @RestController
 @RequestMapping("course")
 @Slf4j
