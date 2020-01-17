@@ -171,12 +171,13 @@
                     <!-- 生成为多个文档，输出路径 -->
                     <outputDir>docs/generated</outputDir>
                     <config>
-                        <!-- wiki格式文档 -->
-                        <!--                        <swagger2markup.markupLanguage>CONFLUENCE_MARKUP</swagger2markup.markupLanguage>-->
-                        <!-- ascii格式文档 -->
+                        <swagger2markup.outputLanguage>ZH</swagger2markup.outputLanguage>
+                        <!-- wiki格式文档 CONFLUENCE_MARKUP -->
+                        <!-- markdown格式文档 ASCIIDOC -->
+                        <!-- ascii格式文档 ASCIIDOC -->
                         <swagger2markup.markupLanguage>ASCIIDOC</swagger2markup.markupLanguage>
-                        <!-- markdown格式文档 -->
-                        <!--                        <swagger2markup.markupLanguage>MARKDOWN</swagger2markup.markupLanguage>-->
+
+                        <swagger2markup.pathsGroupedBy>TAGS</swagger2markup.pathsGroupedBy>
                     </config>
                 </configuration>
             </plugin>
