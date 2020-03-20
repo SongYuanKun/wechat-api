@@ -16,13 +16,13 @@ public interface ArticleRepository extends JpaRepository<Article, Integer>, JpaS
 
 
     @Modifying
-    @javax.transaction.Transactional(rollbackOn = Exception.class)
-    @Query(value = "update Article set like_num = like_num + 1 where id = :id")
+    @Transactional(rollbackOn = Exception.class)
+    @Query(value = "update Article set Article.likeNum =  Article.likeNum + 1 where id = :id")
     void updateLikeNum(@Param("id") Integer id);
 
     @Modifying
     @Transactional(rollbackOn = Exception.class)
-    @Query(value = "update Article set read_num = read_num + 1 where id = :id")
+    @Query(value = "update Article set Article.readNum = Article.readNum + 1 where id = :id")
     void updateReadNum(@Param("id") Integer id);
 
 }
