@@ -7,11 +7,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import java.io.Serializable;
-
 /**
  * 云存储资源表
  *
@@ -25,6 +26,8 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @ApiModel(value = "OssResource对象", description = "云存储资源表")
+@DynamicInsert
+@DynamicUpdate
 public class OssResource extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

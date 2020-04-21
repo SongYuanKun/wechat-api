@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
@@ -18,6 +20,8 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @MappedSuperclass
+@DynamicInsert
+@DynamicUpdate
 public class BaseEntity {
 
     @ApiModelProperty(value = "创建人")

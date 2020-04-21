@@ -3,6 +3,8 @@ package com.songyuankun.wechat.entity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Proxy;
 
 import java.util.List;
@@ -14,6 +16,8 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@DynamicInsert
+@DynamicUpdate
 public class TimelineMonth {
 
     @ApiModelProperty("月份")

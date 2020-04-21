@@ -4,10 +4,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
-import org.hibernate.annotations.Proxy;
+import org.hibernate.annotations.*;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -23,6 +23,8 @@ import java.io.Serializable;
 @Getter
 @Setter
 @NoArgsConstructor
+@DynamicInsert
+@DynamicUpdate
 public class CourseEnroll extends BaseEntity implements Serializable {
 
     @Id

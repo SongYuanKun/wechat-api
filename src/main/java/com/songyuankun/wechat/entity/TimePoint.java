@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.*;
 
@@ -16,6 +18,8 @@ import java.util.*;
 @ToString
 @Getter
 @Setter
+@DynamicInsert
+@DynamicUpdate
 public class TimePoint {
 
     private static final Map<Integer, TimePoint> TIME_POINT_MAP = new HashMap<>(32);

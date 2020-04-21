@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
@@ -26,6 +28,8 @@ import java.io.Serializable;
 @Getter
 @Setter
 @NoArgsConstructor
+@DynamicInsert
+@DynamicUpdate
 public class Tag extends BaseEntity implements Serializable {
 
 
