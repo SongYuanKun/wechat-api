@@ -5,11 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import java.io.Serializable;
-
 /**
  * 房间被预订的时间点
  *
@@ -22,6 +23,8 @@ import java.io.Serializable;
 @Getter
 @Setter
 @NoArgsConstructor
+@DynamicInsert
+@DynamicUpdate
 public class Recommend extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

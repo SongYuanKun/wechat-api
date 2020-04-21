@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Proxy;
 
 import java.util.List;
@@ -16,6 +18,8 @@ import java.util.List;
 @ToString
 @Getter
 @Setter
+@DynamicInsert
+@DynamicUpdate
 public class Timeline {
 
     @ApiModelProperty("年份")

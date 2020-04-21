@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
@@ -24,6 +26,8 @@ import java.io.Serializable;
 @ToString
 @Getter
 @Setter
+@DynamicInsert
+@DynamicUpdate
 public class Article extends BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "主键")
