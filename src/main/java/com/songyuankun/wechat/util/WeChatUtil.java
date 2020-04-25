@@ -2,7 +2,18 @@ package com.songyuankun.wechat.util;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.songyuankun.wechat.dto.wechat.WeChatArticleDto;
+import com.songyuankun.wechat.enums.WeChatUrlEnum;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.FileUrlResource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 
@@ -10,27 +21,28 @@ import java.util.HashMap;
  * @author songyuankun
  */
 @Component
+@Slf4j
 public class WeChatUtil {
-
+    private final RestTemplate restTemplate;
     private final RedisUtil redisUtil;
 
-    public WeChatUtil(RedisUtil redisUtil) {
+    public WeChatUtil(RedisUtil redisUtil, RestTemplate restTemplate) {
         this.redisUtil = redisUtil;
+        this.restTemplate = restTemplate;
     }
 
     private static String getAccessToken() {
-        String url = "https://api.weixin.qq.com/cgi-bin/token";
         HashMap<String, String> parameters = new HashMap<>(4);
         parameters.put("grant_type", "client_credential");
         parameters.put("appid", "wx831e55a6a77b90b7");
         parameters.put("secret", "3ac3104e959efe7431115ed7979997cf");
-        String s = HttpsUtil.sendGet(url, parameters);
+        String s = HttpsUtil.sendGet(WeChatUrlEnum.TOKEN.getUrl(), parameters);
         JSONObject jsonObject = JSON.parseObject(s);
         return jsonObject.getString("access_token");
     }
 
 
-    public String getAccessTokenFromRedis() {
+    private String getAccessTokenFromRedis() {
         String accessToken = redisUtil.get("WE_CHAT_TOKEN");
         if (accessToken == null) {
             accessToken = getAccessToken();
@@ -41,6 +53,39 @@ public class WeChatUtil {
         return accessToken;
     }
 
+    private String getWeChatUrl(WeChatUrlEnum weChatUrlEnum) {
+        return weChatUrlEnum.getUrl() + "?access_token=" + getAccessTokenFromRedis();
+    }
+
+    public String addMaterial() {
+        String weChatUrl = getWeChatUrl(WeChatUrlEnum.ADD_MATERIAL);
+        WeChatArticleDto weChatArticleDto = new WeChatArticleDto();
+        ResponseEntity<JSONObject> forEntity = restTemplate.getForEntity(weChatUrl, JSONObject.class);
+        return null;
+    }
+
+    /**
+     * @param url url
+     * @return mediaId
+     */
+    public String addImageFromUrl(String url) {
+        String weChatUrl = getWeChatUrl(WeChatUrlEnum.UPLOAD_IMG) + "&type=image";
+        //设置请求头
+        HttpHeaders headers = new HttpHeaders();
+        MediaType type = MediaType.parseMediaType("multipart/form-data");
+        headers.setContentType(type);
+        //设置请求体，注意是LinkedMultiValueMap
+        try {
+            FileUrlResource fileUrlResource = new FileUrlResource(url);
+            MultiValueMap<String, Object> form = new LinkedMultiValueMap<>();
+            form.add("media", fileUrlResource);
+            HttpEntity<MultiValueMap<String, Object>> files = new HttpEntity<>(form, headers);
+            return restTemplate.postForObject(weChatUrl, files, String.class);
+        } catch (Exception e) {
+            log.info("addImageFromUrl error", e);
+        }
+        return null;
+    }
 
 
 }

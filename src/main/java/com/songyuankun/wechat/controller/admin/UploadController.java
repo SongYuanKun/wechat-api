@@ -13,6 +13,7 @@ import com.songyuankun.wechat.common.ResponseUtils;
 import com.songyuankun.wechat.entity.OssResource;
 import com.songyuankun.wechat.repository.OssResourceRepository;
 import com.songyuankun.wechat.util.FileUtil;
+import com.songyuankun.wechat.util.WeChatUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -39,6 +40,7 @@ import java.util.UUID;
 @RequestMapping("admin/upload")
 @Slf4j
 public class UploadController {
+    private final WeChatUtil weChatUtil;
     private final OssResourceRepository ossResourceRepository;
     @Value("${qiniu.ak}")
     private String accessKey;
@@ -49,7 +51,9 @@ public class UploadController {
     @Value("${qiniu.cdn_host}")
     private String cdnHost;
 
-    public UploadController(OssResourceRepository ossResourceRepository) {
+
+    public UploadController(WeChatUtil weChatUtil, OssResourceRepository ossResourceRepository) {
+        this.weChatUtil = weChatUtil;
         this.ossResourceRepository = ossResourceRepository;
     }
 
@@ -81,6 +85,9 @@ public class UploadController {
             result.put("putRet", putRet);
             result.put("name", originalFilename);
 
+            String s = weChatUtil.addImageFromUrl(url);
+            System.out.println(s);
+
             OssResource ossResource = new OssResource(originalFilename, url, putRet.key);
             DaoCommon.createDao(authentication, ossResource);
             ossResourceRepository.save(ossResource);
@@ -88,6 +95,7 @@ public class UploadController {
         } catch (Exception e) {
             log.error(e.getLocalizedMessage());
         }
+
         return ResponseUtils.error("上传失败");
     }
 }
