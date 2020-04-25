@@ -31,11 +31,11 @@ public class WeChatUtil {
 
 
     public String getAccessTokenFromRedis() {
-        String accessToken = redisUtil.get("WECHAT_TOKEN");
+        String accessToken = redisUtil.get("WE_CHAT_TOKEN");
         if (accessToken == null) {
             accessToken = getAccessToken();
             if (accessToken != null) {
-                redisUtil.setString("WECHAT_TOKEN", accessToken, 7200);
+                redisUtil.setString("WE_CHAT_TOKEN", accessToken, 7200);
             }
         }
         return accessToken;
