@@ -35,12 +35,16 @@ public class ArticleBlogController {
     @ApiOperation(value = "获取文章详情", notes = "获取文章详情")
     @GetMapping("info/{id}")
     public Response<ArticleInfoResponse> info(@ApiParam("文章id") @PathVariable Integer id) {
-        articleService.updateReadNum(id);
         Article one = articleService.getOne(id);
-        ArticleInfoResponse articleInfoResponse = new ArticleInfoResponse();
-        BeanUtils.copyProperties(one, articleInfoResponse);
-        articleInfoResponse.setTagList(tagService.getTagsByArticleId(id));
-        return ResponseUtils.success(articleInfoResponse);
+        if (one != null) {
+            articleService.updateReadNum(id);
+            ArticleInfoResponse articleInfoResponse = new ArticleInfoResponse();
+            BeanUtils.copyProperties(one, articleInfoResponse);
+            articleInfoResponse.setTagList(tagService.getTagsByArticleId(id));
+            return ResponseUtils.success(articleInfoResponse);
+        }else {
+            return ResponseUtils.notFound();
+        }
     }
 
     @ApiOperation(value = "获取文章列表", notes = "获取文章列表")
