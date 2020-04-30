@@ -77,7 +77,7 @@ public class ArticleServiceImpl {
     }
 
     public Article getOne(Integer id) {
-        return articleRepository.getOne(id);
+        return articleRepository.queryFirstById(id);
     }
 
     public Page<Article> findAll(ArticleQuery articleQuery, Pageable pageable) {
