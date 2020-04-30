@@ -5,6 +5,10 @@ package com.songyuankun.wechat.common;
  */
 public class ResponseUtils {
 
+    private ResponseUtils() {
+    }
+
+
     public static <T> Response<T> success(T object) {
         return new Response<>(ResultEnums.SUCCESS.getCode(), ResultEnums.SUCCESS.getMessage(), object);
     }
@@ -15,5 +19,9 @@ public class ResponseUtils {
 
     public static <T> Response<T> success() {
         return new Response<>(ResultEnums.SUCCESS.getCode(), ResultEnums.SUCCESS.getMessage());
+    }
+
+    public static <T> Response<T> notFound() {
+        return new Response<>(ResultEnums.NOT_FOUND.getCode(), ResultEnums.NOT_FOUND.getMessage());
     }
 }
