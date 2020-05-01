@@ -17,6 +17,7 @@ public enum ResultEnums {
      */
     SUCCESS(0, "请求成功"),
     ERROR(1, "请求失败"),
+    NOT_FOUND(404, "网页丢失"),
     SYSTEM_ERROR(1000, "系统异常");
 
     private Integer code;

@@ -25,4 +25,5 @@ public interface ArticleRepository extends JpaRepository<Article, Integer>, JpaS
     @Query(value = "update Article set readNum = readNum + 1 where id = :id")
     void updateReadNum(@Param("id") Integer id);
 
+    Article queryFirstById(Integer id);
 }
