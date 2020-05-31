@@ -9,6 +9,7 @@ import com.songyuankun.wechat.repository.ArticleRepository;
 import com.songyuankun.wechat.request.ArticleForm;
 import com.songyuankun.wechat.request.query.ArticleQuery;
 import com.songyuankun.wechat.response.ArticleInfoResponse;
+import com.songyuankun.wechat.util.WeChatUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.*;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author songyuankun
@@ -26,24 +28,33 @@ import java.util.List;
 public class ArticleServiceImpl {
     private final CategoryServiceImpl categoryService;
     private final TagServiceImpl tagService;
+    private final WeChatUtil weChatUtil;
     private final ArticleRepository articleRepository;
 
-    public ArticleServiceImpl(ArticleRepository articleRepository, CategoryServiceImpl categoryService, TagServiceImpl tagService) {
+    public ArticleServiceImpl(ArticleRepository articleRepository, CategoryServiceImpl categoryService, TagServiceImpl tagService, WeChatUtil weChatUtil) {
         this.articleRepository = articleRepository;
         this.categoryService = categoryService;
         this.tagService = tagService;
+        this.weChatUtil = weChatUtil;
     }
 
     public Article saveOrUpdate(Authentication authentication, ArticleForm articleForm) {
         Article article = new Article();
         if (articleForm.getId() == null) {
             BeanUtils.copyProperties(articleForm, article);
+            String mediaId = weChatUtil.addThumbMedia(article.getCover());
+            article.setThumbMediaId(mediaId);
             DaoCommon.createDao(authentication, article);
         } else {
             article = articleRepository.getOne(articleForm.getId());
+            if (!Objects.equals(article.getCover(), articleForm.getCover()) && articleForm.getCover() != null) {
+                String mediaId = weChatUtil.addThumbMedia(article.getCover());
+                article.setThumbMediaId(mediaId);
+            }
             BeanUtils.copyProperties(articleForm, article);
             DaoCommon.updateDao(authentication, article);
         }
+
         Article save = articleRepository.save(article);
         tagService.saveTagAndNew(articleForm.getTagList(), save.getId());
         return save;

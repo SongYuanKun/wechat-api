@@ -85,9 +85,6 @@ public class UploadController {
             result.put("putRet", putRet);
             result.put("name", originalFilename);
 
-            String s = weChatUtil.addImageFromUrl(url);
-            System.out.println(s);
-
             OssResource ossResource = new OssResource(originalFilename, url, putRet.key);
             DaoCommon.createDao(authentication, ossResource);
             ossResourceRepository.save(ossResource);
