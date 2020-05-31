@@ -18,7 +18,7 @@ public class WeChatArticleDto {
     private String author;
     private String digest;
     @JSONField(name = "show_cover_pic")
-    private String showCoverPic;
+    private Integer showCoverPic;
     private String content;
     @JSONField(name = "content_source_url")
     private String contentSourceUrl;

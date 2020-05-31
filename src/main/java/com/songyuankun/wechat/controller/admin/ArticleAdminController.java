@@ -11,6 +11,7 @@ import com.songyuankun.wechat.request.update.ArticleUpdateStatus;
 import com.songyuankun.wechat.response.ArticleInfoResponse;
 import com.songyuankun.wechat.service.ArticleServiceImpl;
 import com.songyuankun.wechat.service.TagServiceImpl;
+import com.songyuankun.wechat.util.WeChatUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -36,12 +37,14 @@ public class ArticleAdminController {
     private final ArticleServiceImpl articleService;
     private final ArticleRepository articleRepository;
     private final TagServiceImpl tagService;
+    private final WeChatUtil weChatUtil;
 
     @Autowired
-    public ArticleAdminController(ArticleServiceImpl articleService, ArticleRepository articleRepository, TagServiceImpl tagService) {
+    public ArticleAdminController(ArticleServiceImpl articleService, ArticleRepository articleRepository, TagServiceImpl tagService, WeChatUtil weChatUtil) {
         this.articleService = articleService;
         this.articleRepository = articleRepository;
         this.tagService = tagService;
+        this.weChatUtil = weChatUtil;
     }
 
     @ApiOperation("保存文章")
@@ -57,6 +60,7 @@ public class ArticleAdminController {
         Article article = articleRepository.getOne(articleUpdateStatus.getId());
         if (articleUpdateStatus.getPublish() != null) {
             article.setPublish(articleUpdateStatus.getPublish());
+            weChatUtil.addNews(article);
         }
         if (articleUpdateStatus.getRecommend() != null) {
             article.setRecommend(articleUpdateStatus.getRecommend());
