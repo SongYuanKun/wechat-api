@@ -84,8 +84,8 @@ public class WeChatUtil {
         weChatArticleDto.setTitle(article.getTitle());
         weChatArticleDto.setThumbMediaId(article.getThumbMediaId());
         weChatArticleDto.setAuthor(article.getAuthor());
-        replaceUrl2WeChatUrl(article.getContentFormat());
-        weChatArticleDto.setContent(article.getContentFormat());
+        String contentFormat = replaceUrl2WeChatUrl(article.getContentFormat());
+        weChatArticleDto.setContent(contentFormat);
         weChatArticleDto.setDigest(article.getDescription());
         if (!StringUtils.isEmpty(article.getThumbMediaId())) {
             weChatArticleDto.setShowCoverPic(1);
