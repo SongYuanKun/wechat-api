@@ -35,6 +35,10 @@ public class Article extends BaseEntity implements Serializable {
     @GeneratedValue
     private Integer id;
 
+    @ApiModelProperty(value = "主键")
+    @Column(name = "media_id")
+    private Integer mediaId;
+
     @ApiModelProperty(value = "文章标题")
     private String title;
 

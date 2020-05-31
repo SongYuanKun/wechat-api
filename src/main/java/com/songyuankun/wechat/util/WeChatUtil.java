@@ -7,10 +7,7 @@ import com.songyuankun.wechat.entity.Article;
 import com.songyuankun.wechat.enums.WeChatUrlEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -67,14 +64,17 @@ public class WeChatUtil {
         weChatArticleDto.setAuthor(article.getAuthor());
         weChatArticleDto.setContent(article.getContent());
         weChatArticleDto.setDigest(article.getDescription());
-        if (!StringUtils.isEmpty(article.getCover())){
+        if (!StringUtils.isEmpty(article.getCover())) {
             weChatArticleDto.setShowCoverPic(1);
-        }else {
+        } else {
             weChatArticleDto.setShowCoverPic(0);
         }
         weChatArticleDto.setContent(article.getContent());
         weChatArticleDto.setContentSourceUrl("http://blog.songyuankun.top/article/" + article.getId().toString());
-        ResponseEntity<JSONObject> forEntity = restTemplate.getForEntity(weChatUrl, JSONObject.class);
+        ResponseEntity<JSONObject> forEntity = restTemplate.postForEntity(weChatUrl, JSON.toJSONString(weChatArticleDto), JSONObject.class);
+        if (forEntity.getStatusCode().equals(HttpStatus.OK) && forEntity.getBody() != null) {
+            return forEntity.getBody().getString("media_id");
+        }
         return null;
     }
 
