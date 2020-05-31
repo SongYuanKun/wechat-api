@@ -6,6 +6,7 @@ import com.songyuankun.wechat.dto.wechat.WeChatArticleDto;
 import com.songyuankun.wechat.enums.WeChatUrlEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileUrlResource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -16,6 +17,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author songyuankun
@@ -68,19 +70,22 @@ public class WeChatUtil {
      * @param url url
      * @return mediaId
      */
-    public String addImageFromUrl(String url) {
-        String weChatUrl = getWeChatUrl(WeChatUrlEnum.UPLOAD_IMG) + "&type=image";
+    public String addThumbMedia(String url) {
+        String weChatUrl = getWeChatUrl(WeChatUrlEnum.ADD_MATERIAL)+ "&type=image";
+
         //设置请求头
         HttpHeaders headers = new HttpHeaders();
         MediaType type = MediaType.parseMediaType("multipart/form-data");
         headers.setContentType(type);
         //设置请求体，注意是LinkedMultiValueMap
         try {
-            FileUrlResource fileUrlResource = new FileUrlResource(url);
+            UrlResource fileUrlResource = new UrlResource(url);
             MultiValueMap<String, Object> form = new LinkedMultiValueMap<>();
             form.add("media", fileUrlResource);
             HttpEntity<MultiValueMap<String, Object>> files = new HttpEntity<>(form, headers);
-            return restTemplate.postForObject(weChatUrl, files, String.class);
+            String s = restTemplate.postForObject(weChatUrl, files, String.class);
+            JSONObject jsonObject = JSONObject.parseObject(s);
+            return jsonObject.getString("media_id");
         } catch (Exception e) {
             log.info("addImageFromUrl error", e);
         }
