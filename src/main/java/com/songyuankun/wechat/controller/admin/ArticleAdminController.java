@@ -50,7 +50,6 @@ public class ArticleAdminController {
     @ApiOperation("保存文章")
     @PostMapping("saveOrUpdate")
     public Response<Article> save(Authentication authentication, @RequestBody ArticleForm articleForm) {
-
         return ResponseUtils.success(articleService.saveOrUpdate(authentication, articleForm));
     }
 
