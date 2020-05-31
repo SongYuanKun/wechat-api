@@ -59,7 +59,6 @@ public class ArticleAdminController {
         Article article = articleRepository.getOne(articleUpdateStatus.getId());
         if (articleUpdateStatus.getPublish() != null) {
             article.setPublish(articleUpdateStatus.getPublish());
-            weChatUtil.addNews(article);
         }
         if (articleUpdateStatus.getRecommend() != null) {
             article.setRecommend(articleUpdateStatus.getRecommend());
@@ -67,6 +66,17 @@ public class ArticleAdminController {
         if (articleUpdateStatus.getTop() != null) {
             article.setTop(articleUpdateStatus.getTop());
         }
+        DaoCommon.updateDao(authentication, article);
+        articleRepository.save(article);
+        return ResponseUtils.success();
+    }
+
+    @GetMapping("send2WeChat/{id}")
+    @Transactional(rollbackOn = Exception.class)
+    public Response<Object> send2WeChat(Authentication authentication, @PathVariable Integer id) {
+        Article article = articleRepository.getOne(id);
+        String mediaId = weChatUtil.addNews(article);
+        article.setMediaId(mediaId);
         DaoCommon.updateDao(authentication, article);
         articleRepository.save(article);
         return ResponseUtils.success();

@@ -37,7 +37,7 @@ public class Article extends BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "主键")
     @Column(name = "media_id")
-    private Integer mediaId;
+    private String mediaId;
 
     @ApiModelProperty(value = "文章标题")
     private String title;

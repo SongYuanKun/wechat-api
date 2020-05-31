@@ -6,15 +6,20 @@ import com.songyuankun.wechat.dto.wechat.WeChatArticleDto;
 import com.songyuankun.wechat.entity.Article;
 import com.songyuankun.wechat.enums.WeChatUrlEnum;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.FileUrlResource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author songyuankun
@@ -40,6 +45,23 @@ public class WeChatUtil {
         return jsonObject.getString("access_token");
     }
 
+    /**
+     * 去除src路径中的前后引号
+     *
+     * @param src 图片的src路径
+     * @return
+     */
+    private static String handleSrc(String src) {
+        if (src != null) {
+            if (src.startsWith("'") || src.startsWith("\"")) {
+                return src.substring(1);
+            }
+            if (src.endsWith("'") || src.endsWith("\"")) {
+                return src;
+            }
+        }
+        return src;
+    }
 
     private String getAccessTokenFromRedis() {
         String accessToken = redisUtil.get("WE_CHAT_TOKEN");
@@ -62,18 +84,39 @@ public class WeChatUtil {
         weChatArticleDto.setTitle(article.getTitle());
         weChatArticleDto.setThumbMediaId(article.getThumbMediaId());
         weChatArticleDto.setAuthor(article.getAuthor());
-        weChatArticleDto.setContent(article.getContent());
+        replaceUrl2WeChatUrl(article.getContentFormat());
+        weChatArticleDto.setContent(article.getContentFormat());
         weChatArticleDto.setDigest(article.getDescription());
-        if (!StringUtils.isEmpty(article.getCover())) {
+        if (!StringUtils.isEmpty(article.getThumbMediaId())) {
             weChatArticleDto.setShowCoverPic(1);
         } else {
             weChatArticleDto.setShowCoverPic(0);
         }
-        weChatArticleDto.setContent(article.getContent());
         weChatArticleDto.setContentSourceUrl("http://blog.songyuankun.top/article/" + article.getId().toString());
-        ResponseEntity<JSONObject> forEntity = restTemplate.postForEntity(weChatUrl, JSON.toJSONString(weChatArticleDto), JSONObject.class);
-        if (forEntity.getStatusCode().equals(HttpStatus.OK) && forEntity.getBody() != null) {
-            return forEntity.getBody().getString("media_id");
+        Map<String, List<WeChatArticleDto>> map = new HashMap<>(8);
+        map.put("articles", Collections.singletonList(weChatArticleDto));
+        String s = restTemplate.postForObject(weChatUrl, JSON.toJSONString(map), String.class);
+        JSONObject jsonObject = JSONObject.parseObject(s);
+        return jsonObject.getString("media_id");
+    }
+
+
+    public String addImageFromUrl(String url) {
+        String weChatUrl = getWeChatUrl(WeChatUrlEnum.UPLOAD_IMG) + "&type=image";
+        //设置请求头
+        HttpHeaders headers = new HttpHeaders();
+        MediaType type = MediaType.parseMediaType("multipart/form-data");
+        headers.setContentType(type);
+        //设置请求体，注意是LinkedMultiValueMap
+        try {
+            UrlResource fileUrlResource = new UrlResource(url);
+            MultiValueMap<String, Object> form = new LinkedMultiValueMap<>(8);
+            form.add("media", fileUrlResource);
+            HttpEntity<MultiValueMap<String, Object>> files = new HttpEntity<>(form, headers);
+            String s = restTemplate.postForObject(weChatUrl, files, String.class);
+            return JSON.parseObject(s).getString("url");
+        } catch (Exception e) {
+            log.info("addImageFromUrl error", e);
         }
         return null;
     }
@@ -102,6 +145,33 @@ public class WeChatUtil {
             log.info("addImageFromUrl error", e);
         }
         return null;
+    }
+
+    public String replaceUrl2WeChatUrl(String content) {
+        List<String> urlList = new ArrayList<>();
+        String img = "";
+        Pattern pImage;
+        Matcher mImage;
+        String regExImg = "<img.*src\\s*=\\s*(.*?)[^>]*?>";
+        String regExSrc = "src\\s*=\\s*\"?(.*?)(\"|>|\\s+)";
+
+        pImage = Pattern.compile(regExImg, Pattern.CASE_INSENSITIVE);
+        mImage = pImage.matcher(content);
+        while (mImage.find()) {
+            img = mImage.group();
+            Matcher m = Pattern.compile(regExSrc).matcher(img);
+            while (m.find()) {
+                String path = m.group(1);
+                String url = handleSrc(path);
+                urlList.add(url);
+            }
+        }
+        for (String url : urlList) {
+            String weChatUrl = addImageFromUrl(url);
+            content = content.replaceAll(url, weChatUrl);
+        }
+        return content;
+
     }
 
 

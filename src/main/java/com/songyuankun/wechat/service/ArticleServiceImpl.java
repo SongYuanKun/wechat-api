@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author songyuankun
@@ -43,13 +42,13 @@ public class ArticleServiceImpl {
         if (articleForm.getId() == null) {
             BeanUtils.copyProperties(articleForm, article);
             String mediaId = weChatUtil.addThumbMedia(article.getCover());
-            article.setThumbMediaId(mediaId);
+            articleForm.setThumbMediaId(mediaId);
             DaoCommon.createDao(authentication, article);
         } else {
             article = articleRepository.getOne(articleForm.getId());
-            if (!Objects.equals(article.getCover(), articleForm.getCover()) && articleForm.getCover() != null) {
+            if (StringUtils.isEmpty(article.getThumbMediaId()) || !article.getCover().equals(articleForm.getCover())) {
                 String mediaId = weChatUtil.addThumbMedia(article.getCover());
-                article.setThumbMediaId(mediaId);
+                articleForm.setThumbMediaId(mediaId);
             }
             BeanUtils.copyProperties(articleForm, article);
             DaoCommon.updateDao(authentication, article);
