@@ -3,9 +3,9 @@ package com.songyuankun.wechat.util;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.songyuankun.wechat.dto.wechat.WeChatArticleDto;
+import com.songyuankun.wechat.entity.Article;
 import com.songyuankun.wechat.enums.WeChatUrlEnum;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.FileUrlResource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -14,10 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author songyuankun
@@ -59,9 +59,21 @@ public class WeChatUtil {
         return weChatUrlEnum.getUrl() + "?access_token=" + getAccessTokenFromRedis();
     }
 
-    public String addMaterial() {
-        String weChatUrl = getWeChatUrl(WeChatUrlEnum.ADD_MATERIAL);
+    public String addNews(Article article) {
+        String weChatUrl = getWeChatUrl(WeChatUrlEnum.ADD_NEWS);
         WeChatArticleDto weChatArticleDto = new WeChatArticleDto();
+        weChatArticleDto.setTitle(article.getTitle());
+        weChatArticleDto.setThumbMediaId(article.getThumbMediaId());
+        weChatArticleDto.setAuthor(article.getAuthor());
+        weChatArticleDto.setContent(article.getContent());
+        weChatArticleDto.setDigest(article.getDescription());
+        if (!StringUtils.isEmpty(article.getCover())){
+            weChatArticleDto.setShowCoverPic(1);
+        }else {
+            weChatArticleDto.setShowCoverPic(0);
+        }
+        weChatArticleDto.setContent(article.getContent());
+        weChatArticleDto.setContentSourceUrl("http://blog.songyuankun.top/article/" + article.getId().toString());
         ResponseEntity<JSONObject> forEntity = restTemplate.getForEntity(weChatUrl, JSONObject.class);
         return null;
     }
@@ -71,7 +83,7 @@ public class WeChatUtil {
      * @return mediaId
      */
     public String addThumbMedia(String url) {
-        String weChatUrl = getWeChatUrl(WeChatUrlEnum.ADD_MATERIAL)+ "&type=image";
+        String weChatUrl = getWeChatUrl(WeChatUrlEnum.ADD_MATERIAL) + "&type=image";
 
         //设置请求头
         HttpHeaders headers = new HttpHeaders();

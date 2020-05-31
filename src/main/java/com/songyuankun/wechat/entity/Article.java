@@ -62,6 +62,7 @@ public class Article extends BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "封面")
     private String cover;
+
     @ApiModelProperty(value = "封面素材id")
     @Column(name = "thumb_media_id")
     @ColumnDefault("")
