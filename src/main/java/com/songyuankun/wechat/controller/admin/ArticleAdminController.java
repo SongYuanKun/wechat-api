@@ -25,7 +25,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * @author songyuankun
@@ -82,6 +84,20 @@ public class ArticleAdminController {
         articleRepository.save(article);
         return ResponseUtils.success();
     }
+
+    @PostMapping("send2WeChat/ids")
+    @Transactional(rollbackOn = Exception.class)
+    public Response<Object> send2WeChat(Authentication authentication, @RequestBody Integer[] ids) {
+        List<Article> articleList = articleRepository.queryAllByIdIn(Arrays.asList(ids));
+        String mediaId = weChatUtil.addNews(articleList);
+        for (Article article : articleList) {
+            article.setMediaId(mediaId);
+            DaoCommon.updateDao(authentication, article);
+            articleRepository.save(article);
+        }
+        return ResponseUtils.success();
+    }
+
 
     @PostMapping("page")
     public Response<Page<ArticleInfoResponse>> page(@RequestBody ArticleQuery articleQuery) {
