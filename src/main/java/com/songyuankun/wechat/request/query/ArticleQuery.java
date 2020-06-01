@@ -15,4 +15,5 @@ import lombok.ToString;
 @ToString
 public class ArticleQuery extends BasePageQuery {
     private String title;
+    private String mediaId;
 }

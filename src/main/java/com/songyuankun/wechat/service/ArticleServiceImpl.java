@@ -73,7 +73,9 @@ public class ArticleServiceImpl {
 
     public Page<ArticleInfoResponse> page(ArticleQuery articleQuery) {
         Pageable pageable = PageRequest.of(articleQuery.getPageNumber() - 1, articleQuery.getPageSize());
-        Page<Article> all = articleRepository.findAll(pageable);
+        Article article1 = new Article();
+        article1.setMediaId(articleQuery.getMediaId());
+        Page<Article> all = articleRepository.findAll(Example.of(article1), pageable);
         List<Category> categoryList = categoryService.select(0);
         List<ArticleInfoResponse> articleInfoResponseList = new ArrayList<>();
         all.stream().forEach(article -> {
