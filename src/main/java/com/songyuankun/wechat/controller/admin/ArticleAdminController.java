@@ -25,6 +25,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.util.Collections;
 
 /**
  * @author songyuankun
@@ -75,7 +76,7 @@ public class ArticleAdminController {
     @Transactional(rollbackOn = Exception.class)
     public Response<Object> send2WeChat(Authentication authentication, @PathVariable Integer id) {
         Article article = articleRepository.getOne(id);
-        String mediaId = weChatUtil.addNews(article);
+        String mediaId = weChatUtil.addNews(Collections.singletonList(article));
         article.setMediaId(mediaId);
         DaoCommon.updateDao(authentication, article);
         articleRepository.save(article);
