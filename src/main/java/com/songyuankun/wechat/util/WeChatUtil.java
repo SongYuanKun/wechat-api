@@ -6,7 +6,6 @@ import com.songyuankun.wechat.dto.wechat.WeChatArticleDto;
 import com.songyuankun.wechat.entity.Article;
 import com.songyuankun.wechat.enums.WeChatUrlEnum;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.FileUrlResource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -49,7 +48,7 @@ public class WeChatUtil {
      * 去除src路径中的前后引号
      *
      * @param src 图片的src路径
-     * @return
+     * @return src
      */
     private static String handleSrc(String src) {
         if (src != null) {
@@ -92,11 +91,11 @@ public class WeChatUtil {
         } else {
             weChatArticleDto.setShowCoverPic(0);
         }
-        weChatArticleDto.setContentSourceUrl("http://blog.songyuankun.top/article/" + article.getId().toString());
+        weChatArticleDto.setContentSourceUrl("https://blog.songyuankun.top/article/" + article.getId().toString());
         Map<String, List<WeChatArticleDto>> map = new HashMap<>(8);
         map.put("articles", Collections.singletonList(weChatArticleDto));
         String s = restTemplate.postForObject(weChatUrl, JSON.toJSONString(map), String.class);
-        JSONObject jsonObject = JSONObject.parseObject(s);
+        JSONObject jsonObject = JSON.parseObject(s);
         return jsonObject.getString("media_id");
     }
 
@@ -139,7 +138,7 @@ public class WeChatUtil {
             form.add("media", fileUrlResource);
             HttpEntity<MultiValueMap<String, Object>> files = new HttpEntity<>(form, headers);
             String s = restTemplate.postForObject(weChatUrl, files, String.class);
-            JSONObject jsonObject = JSONObject.parseObject(s);
+            JSONObject jsonObject = JSON.parseObject(s);
             return jsonObject.getString("media_id");
         } catch (Exception e) {
             log.info("addImageFromUrl error", e);
@@ -149,7 +148,7 @@ public class WeChatUtil {
 
     public String replaceUrl2WeChatUrl(String content) {
         List<String> urlList = new ArrayList<>();
-        String img = "";
+        String img;
         Pattern pImage;
         Matcher mImage;
         String regExImg = "<img.*src\\s*=\\s*(.*?)[^>]*?>";
