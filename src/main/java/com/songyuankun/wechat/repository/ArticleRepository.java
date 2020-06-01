@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 /**
  * @author songyuankun
@@ -26,4 +27,7 @@ public interface ArticleRepository extends JpaRepository<Article, Integer>, JpaS
     void updateReadNum(@Param("id") Integer id);
 
     Article queryFirstById(Integer id);
+
+    List<Article> queryAllByIdIn(List<Integer> ids);
+
 }
