@@ -16,7 +16,10 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -77,23 +80,27 @@ public class WeChatUtil {
         return weChatUrlEnum.getUrl() + "?access_token=" + getAccessTokenFromRedis();
     }
 
-    public String addNews(Article article) {
+    public String addNews(List<Article> articleList) {
         String weChatUrl = getWeChatUrl(WeChatUrlEnum.ADD_NEWS);
-        WeChatArticleDto weChatArticleDto = new WeChatArticleDto();
-        weChatArticleDto.setTitle(article.getTitle());
-        weChatArticleDto.setThumbMediaId(article.getThumbMediaId());
-        weChatArticleDto.setAuthor(article.getAuthor());
-        String contentFormat = replaceUrl2WeChatUrl(article.getContentFormat());
-        weChatArticleDto.setContent(contentFormat);
-        weChatArticleDto.setDigest(article.getDescription());
-        if (!StringUtils.isEmpty(article.getThumbMediaId())) {
-            weChatArticleDto.setShowCoverPic(1);
-        } else {
-            weChatArticleDto.setShowCoverPic(0);
+        List<WeChatArticleDto> weChatArticleDtoList = new ArrayList<>();
+        for (Article article : articleList) {
+            WeChatArticleDto weChatArticleDto = new WeChatArticleDto();
+            weChatArticleDto.setTitle(article.getTitle());
+            weChatArticleDto.setThumbMediaId(article.getThumbMediaId());
+            weChatArticleDto.setAuthor(article.getAuthor());
+            String contentFormat = replaceUrl2WeChatUrl(article.getContentFormat());
+            weChatArticleDto.setContent(contentFormat);
+            weChatArticleDto.setDigest(article.getDescription());
+            if (!StringUtils.isEmpty(article.getThumbMediaId())) {
+                weChatArticleDto.setShowCoverPic(1);
+            } else {
+                weChatArticleDto.setShowCoverPic(0);
+            }
+            weChatArticleDto.setContentSourceUrl("https://blog.songyuankun.top/article/" + article.getId().toString());
+            weChatArticleDtoList.add(weChatArticleDto);
         }
-        weChatArticleDto.setContentSourceUrl("https://blog.songyuankun.top/article/" + article.getId().toString());
         Map<String, List<WeChatArticleDto>> map = new HashMap<>(8);
-        map.put("articles", Collections.singletonList(weChatArticleDto));
+        map.put("articles", weChatArticleDtoList);
         String s = restTemplate.postForObject(weChatUrl, JSON.toJSONString(map), String.class);
         JSONObject jsonObject = JSON.parseObject(s);
         return jsonObject.getString("media_id");
