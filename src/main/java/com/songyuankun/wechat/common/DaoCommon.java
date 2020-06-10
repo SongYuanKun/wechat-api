@@ -17,9 +17,12 @@ public class DaoCommon {
 
     public static <T extends BaseEntity> void createDao(Authentication authentication, T baseDao) {
         Date date = new Date();
-        Integer userId = Integer.valueOf(authentication.getName());
+        String name = authentication.getName();
+        String[] split = name.split(":");
+        Integer userId = Integer.valueOf(split[0]);
         baseDao.setCreateTime(date);
         baseDao.setCreateUserId(userId);
+        baseDao.setEnv(split[1]);
         updateDao(authentication, baseDao);
     }
 
