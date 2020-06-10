@@ -9,6 +9,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     show-sql: true
+    database: MYSQL
     hibernate:
       ddl-auto: update
     database-platform: com.songyuankun.wechat.config.MysqlConfig
