@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -42,6 +43,7 @@ public class BaseEntity {
 
     @ApiModelProperty(value = "更新时间")
     @Column(name = "env")
-    private Date env;
+    @ColumnDefault("''")
+    private String env;
 
 }
