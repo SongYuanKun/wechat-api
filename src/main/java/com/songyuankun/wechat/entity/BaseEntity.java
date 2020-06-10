@@ -40,4 +40,8 @@ public class BaseEntity {
     @Column(name = "update_time")
     private Date updateTime;
 
+    @ApiModelProperty(value = "更新时间")
+    @Column(name = "env")
+    private Date env;
+
 }
