@@ -19,7 +19,7 @@ import java.util.List;
 @Slf4j
 public class TokenCommon {
 
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
     public TokenCommon(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
