@@ -30,10 +30,10 @@ import java.util.List;
 @Slf4j
 @RequestMapping("admin")
 public class LoginAdminController {
-    private SysCaptchaServiceImpl sysCaptchaService;
-    private TokenCommon tokenCommon;
 
-    private UserRepository userRepository;
+    private final SysCaptchaServiceImpl sysCaptchaService;
+    private final TokenCommon tokenCommon;
+    private final UserRepository userRepository;
 
     public LoginAdminController(SysCaptchaServiceImpl sysCaptchaService, TokenCommon tokenCommon, UserRepository userRepository) {
         this.sysCaptchaService = sysCaptchaService;
@@ -43,10 +43,10 @@ public class LoginAdminController {
 
     @PostMapping("loginByPassword")
     public Response<String> loginByPassword(@RequestParam String phone, @RequestParam String password, @RequestParam String uuid, @RequestParam String captcha, @RequestParam String env) {
-        boolean validate = sysCaptchaService.validate(uuid, captcha);
-        if (!validate) {
-            return ResponseUtils.error("验证码错误");
-        }
+//        boolean validate = sysCaptchaService.validate(uuid, captcha);
+//        if (!validate) {
+//            return ResponseUtils.error("验证码错误");
+//        }
         String passwordMd5 = Md5Util.stringInMd5(password);
         User user = userRepository.findByPhoneAndPassword(phone, passwordMd5);
         if (user == null) {
@@ -59,7 +59,7 @@ public class LoginAdminController {
         List<String> roleList = Arrays.asList(user.getUserRole().split(","));
         List<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
         roleList.forEach(role -> simpleGrantedAuthorities.add(new SimpleGrantedAuthority(role)));
-        String token = tokenCommon.getToken(openid + ":" + env, simpleGrantedAuthorities);
+        String token = tokenCommon.getToken(openid, env, simpleGrantedAuthorities);
         return ResponseUtils.success("Bearer " + token);
     }
 
