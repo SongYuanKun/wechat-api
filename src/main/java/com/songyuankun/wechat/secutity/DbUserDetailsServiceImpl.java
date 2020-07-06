@@ -7,6 +7,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -32,6 +33,6 @@ public class DbUserDetailsServiceImpl implements UserDetailsService {
         }
         List<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
         simpleGrantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-        return new org.springframework.security.core.userdetails.User(byUuidKey.getId().toString(), "123456", simpleGrantedAuthorities);
+        return new org.springframework.security.core.userdetails.User(byUuidKey.getId().toString(), new BCryptPasswordEncoder().encode("123456"), simpleGrantedAuthorities);
     }
 }

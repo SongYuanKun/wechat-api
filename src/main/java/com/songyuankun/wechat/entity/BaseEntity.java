@@ -41,7 +41,7 @@ public class BaseEntity {
     @Column(name = "update_time")
     private Date updateTime;
 
-    @ApiModelProperty(value = "更新时间")
+    @ApiModelProperty(value = "环境")
     @Column(name = "env")
     @ColumnDefault("''")
     private String env;

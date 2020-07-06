@@ -79,7 +79,7 @@ public class WeChatCommon {
         requestUrlParam.put("grant_type", "authorization_code");
 
         //发送post请求读取调用微信接口获取openid用户唯一标识
-        return JSONObject.parseObject(HttpsUtil.sendGet(requestUrl, requestUrlParam));
+        return JSON.parseObject(HttpsUtil.sendGet(requestUrl, requestUrlParam));
     }
 
 
