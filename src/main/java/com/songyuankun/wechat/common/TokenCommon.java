@@ -25,8 +25,10 @@ public class TokenCommon {
         this.authenticationManager = authenticationManager;
     }
 
-    public String getToken(String openid, List<SimpleGrantedAuthority> simpleGrantedAuthorities) {
-        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(openid, "123456", simpleGrantedAuthorities));
+    public String getToken(String openid, String env, List<SimpleGrantedAuthority> simpleGrantedAuthorities) {
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(openid, "123456", simpleGrantedAuthorities);
+        usernamePasswordAuthenticationToken.setDetails(env);
+        Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         String token = Jwts.builder()
                 .setSubject(((org.springframework.security.core.userdetails.User) authenticate.getPrincipal()).getUsername())
                 .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 24 * 1000))
