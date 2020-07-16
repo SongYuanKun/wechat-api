@@ -59,7 +59,7 @@ public class LoginAdminController {
         List<String> roleList = Arrays.asList(user.getUserRole().split(","));
         List<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
         roleList.forEach(role -> simpleGrantedAuthorities.add(new SimpleGrantedAuthority(role)));
-        String token = tokenCommon.getToken(openid, simpleGrantedAuthorities);
+        String token = tokenCommon.getToken(openid, env, simpleGrantedAuthorities);
         return ResponseUtils.success("Bearer " + token);
     }
 
