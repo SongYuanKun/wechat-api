@@ -30,10 +30,10 @@ import java.util.List;
 @Slf4j
 @RequestMapping("admin")
 public class LoginAdminController {
-    private SysCaptchaServiceImpl sysCaptchaService;
-    private TokenCommon tokenCommon;
 
-    private UserRepository userRepository;
+    private final SysCaptchaServiceImpl sysCaptchaService;
+    private final TokenCommon tokenCommon;
+    private final UserRepository userRepository;
 
     public LoginAdminController(SysCaptchaServiceImpl sysCaptchaService, TokenCommon tokenCommon, UserRepository userRepository) {
         this.sysCaptchaService = sysCaptchaService;

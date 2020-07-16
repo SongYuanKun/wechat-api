@@ -1,5 +1,6 @@
 package com.songyuankun.wechat.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.songyuankun.wechat.common.TokenCommon;
 import com.songyuankun.wechat.common.WeChatCommon;
@@ -44,7 +45,7 @@ public class LoginController {
         Map<String, Object> map = new HashMap<>(16);
         log.info("用户非敏感信息" + rawData);
 
-        JSONObject rawDataJson = JSONObject.parseObject(rawData);
+        JSONObject rawDataJson = JSON.parseObject(rawData);
 
         log.info("签名" + signature);
         JSONObject sessionKeyOpenId = weChatCommon.getSessionKeyOrOpenId(code);
@@ -89,7 +90,7 @@ public class LoginController {
 
         List<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
         simpleGrantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-        String token = tokenCommon.getToken(openid, simpleGrantedAuthorities);
+        String token = tokenCommon.getToken(openid, "husky", simpleGrantedAuthorities);
         map.put("token", "Bearer " + token);
         return map;
     }
