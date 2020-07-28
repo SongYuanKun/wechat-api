@@ -21,18 +21,12 @@ public class MyThread {
         this.restTemplate = restTemplate;
     }
 
-    public CompletableFuture<String> get() {
-        try {
-            String url = "http://api.qa.huohua.cn/resource/getFileList?classroom=MK2007232201";
+    public void get() {
+            String url = "http://10.251.34.200:8080/resource/getFileList?classroom=MK2007232201";
             ResponseEntity<JSONObject> results = restTemplate.getForEntity(url, JSONObject.class);
             HttpStatus statusCode = results.getStatusCode();
             if (statusCode != HttpStatus.OK) {
                 log.info(Objects.requireNonNull(results.getBody()).toJSONString());
             }
-        } catch (Exception e) {
-            log.info("error", e);
-        }
-
-        return CompletableFuture.completedFuture("");
     }
 }
