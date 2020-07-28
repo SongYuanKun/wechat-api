@@ -23,7 +23,7 @@ public class MyThread {
 
     public CompletableFuture<String> get() {
         try {
-            String url = "http://manage.huohua.cn/material/api/";
+            String url = "http://api.qa.huohua.cn/resource/getFileList?classroom=MK2007232201";
             ResponseEntity<JSONObject> results = restTemplate.getForEntity(url, JSONObject.class);
             HttpStatus statusCode = results.getStatusCode();
             if (statusCode != HttpStatus.OK) {
