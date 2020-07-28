@@ -17,8 +17,7 @@ public class MyThreadTest extends WeChatApiApplicationTests {
     private MyThread myThread;
 
     @Test
-    //5个线程 执行100000次
-    @PerfTest(invocations = 1000, threads = 100)
+    @PerfTest(invocations = 1000, threads = 20)
     public void test() {
         myThread.get();
     }
