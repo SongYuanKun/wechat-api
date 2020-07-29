@@ -5,7 +5,6 @@ import com.google.common.collect.Lists;
 import com.songyuankun.wechat.entity.Category;
 import com.songyuankun.wechat.repository.CategoryRepository;
 import com.songyuankun.wechat.request.query.CategoryQuery;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -25,7 +24,7 @@ import java.util.stream.Collectors;
  */
 @Service
 public class CategoryServiceImpl {
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
     public CategoryServiceImpl(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
@@ -42,7 +41,7 @@ public class CategoryServiceImpl {
             if (StringUtils.isNotEmpty(name)) {
                 list.add(criteriaBuilder.like(categoryRoot.get("name").as(String.class), "%" + name + "%"));
             }
-            if (ObjectUtils.isNotEmpty(type)) {
+            if (type != null) {
                 list.add(criteriaBuilder.equal(categoryRoot.get("type").as(Integer.class), type));
             }
             list.add(criteriaBuilder.equal(categoryRoot.get("parentId").as(Integer.class), -1));

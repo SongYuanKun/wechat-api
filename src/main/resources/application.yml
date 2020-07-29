@@ -9,6 +9,8 @@ nacos:
     auto-refresh: true
     type: yaml
     data-id: wechat-api
+  discovery:
+    server-addr: 60.205.221.172:8848
 spring:
   application:
     name: wechat-api
