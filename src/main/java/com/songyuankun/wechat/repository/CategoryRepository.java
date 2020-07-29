@@ -11,5 +11,9 @@ import java.util.List;
  */
 public interface CategoryRepository extends JpaRepository<Category, Integer>, JpaSpecificationExecutor<Category> {
 
+    /**
+     * @param parentId parentId
+     * @return List<Category>
+     */
     List<Category> findAllByParentId(int parentId);
 }
