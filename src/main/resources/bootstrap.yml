@@ -5,6 +5,6 @@ spring:
         server-addr: 39.96.20.251:8848
         file-extension: yaml
       discovery:
-        server-addr: 60.205.221.172:8848
+        server-addr: 39.96.20.251:8848
   application:
     name: wechat-api
