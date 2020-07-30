@@ -40,7 +40,7 @@ public class RoomAppointmentAdminController {
     }
 
     @PostMapping("save")
-    public Response save(Authentication authentication, @RequestBody @Validated RoomAppointmentForm roomAppointmentForm) {
+    public Response<AppointmentTimePoint> save(Authentication authentication, @RequestBody @Validated RoomAppointmentForm roomAppointmentForm) {
         return roomAppointmentService.save(authentication, roomAppointmentForm);
     }
 
