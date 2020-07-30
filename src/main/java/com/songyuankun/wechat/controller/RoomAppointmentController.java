@@ -51,7 +51,7 @@ public class RoomAppointmentController {
     public List<MyAppointmentTimeResponse> queryMyAppointment(Authentication authentication, @RequestBody BasePageQuery myAppointmentQuery) {
         List<MyAppointmentTimeResponse> responseList = new ArrayList<>();
         Integer userId = Integer.valueOf(authentication.getName());
-        Sort sort = new Sort(Sort.Direction.DESC, "day", "startTime");
+        Sort sort = Sort.by(Sort.Direction.DESC, "day", "startTime");
         Pageable pageable = PageRequest.of(myAppointmentQuery.getPageNumber() - 1, myAppointmentQuery.getPageSize(), sort);
         List<Integer> statusList = Arrays.asList(AppointmentTimePointStatusEnum.SUCCESS.getValue(), AppointmentTimePointStatusEnum.SIGN_IN.getValue());
         List<AppointmentTimePoint> appointmentTimePoints = appointmentTimePointRepository.findAllByUserIdAndStatusIn(userId, statusList, pageable);
