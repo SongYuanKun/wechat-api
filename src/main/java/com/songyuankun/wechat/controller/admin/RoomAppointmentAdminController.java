@@ -54,7 +54,7 @@ public class RoomAppointmentAdminController {
         List<MyAppointmentTimeResponse> responseList = new ArrayList<>();
         String username = roomAppointmentQuery.getUserName();
         String day = roomAppointmentQuery.getDay();
-        Sort sort = new Sort(Sort.Direction.DESC, "id");
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
         Pageable pageable = PageRequest.of(roomAppointmentQuery.getPageNumber() - 1, roomAppointmentQuery.getPageSize(), sort);
         Page<AppointmentTimePoint> appointmentTimePoints = appointmentTimePointRepository.findAll((
                 (root, query, criteriaBuilder) -> {
