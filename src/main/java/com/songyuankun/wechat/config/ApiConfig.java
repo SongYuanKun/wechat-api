@@ -15,8 +15,8 @@ import java.nio.charset.StandardCharsets;
 @Configuration
 public class ApiConfig {
     @Bean
-    public RestTemplate restTemplate(ClientHttpRequestFactory factory) {
-        RestTemplate restTemplate = new RestTemplate(factory);
+    public RestTemplate restTemplate(ClientHttpRequestFactory simpleClientHttpRequestFactory) {
+        RestTemplate restTemplate = new RestTemplate(simpleClientHttpRequestFactory);
         restTemplate.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
         return restTemplate;
     }
