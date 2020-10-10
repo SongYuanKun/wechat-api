@@ -3,6 +3,7 @@ package com.songyuankun.wechat.controller.blog;
 import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.common.ResponseUtils;
 import com.songyuankun.wechat.entity.Article;
+import com.songyuankun.wechat.event.NumberEventProducer;
 import com.songyuankun.wechat.response.ArticleInfoResponse;
 import com.songyuankun.wechat.service.ArticleServiceImpl;
 import com.songyuankun.wechat.service.TagServiceImpl;
@@ -11,7 +12,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,11 +25,12 @@ import org.springframework.web.bind.annotation.*;
 public class ArticleBlogController {
     private final ArticleServiceImpl articleService;
     private final TagServiceImpl tagService;
+    private final NumberEventProducer numberEventProducer;
 
-    @Autowired
-    public ArticleBlogController(ArticleServiceImpl articleService, TagServiceImpl tagService) {
+    public ArticleBlogController(ArticleServiceImpl articleService, TagServiceImpl tagService, NumberEventProducer numberEventProducer) {
         this.articleService = articleService;
         this.tagService = tagService;
+        this.numberEventProducer = numberEventProducer;
     }
 
     @ApiOperation(value = "获取文章详情", notes = "获取文章详情")
@@ -37,7 +38,8 @@ public class ArticleBlogController {
     public Response<ArticleInfoResponse> info(@ApiParam("文章id") @PathVariable Integer id) {
         Article one = articleService.getOne(id);
         if (one != null) {
-            articleService.updateReadNum(id);
+            //读写分离处理
+            numberEventProducer.onData(1,id);
             ArticleInfoResponse articleInfoResponse = new ArticleInfoResponse();
             BeanUtils.copyProperties(one, articleInfoResponse);
             articleInfoResponse.setTagList(tagService.getTagsByArticleId(id));
@@ -79,7 +81,8 @@ public class ArticleBlogController {
     @ApiOperation(value = "文章点赞", notes = "文章点赞")
     @PutMapping("like/{id}")
     public Response<Object> likeArticle(@ApiParam("文章id") @PathVariable Integer id) {
-        articleService.updateLikeNum(id);
+        //读写分离处理
+        numberEventProducer.onData(2,id);
         return ResponseUtils.success();
     }
 

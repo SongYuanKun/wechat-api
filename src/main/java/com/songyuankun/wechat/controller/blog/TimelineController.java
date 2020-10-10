@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -21,8 +20,11 @@ import java.util.List;
 @RequestMapping("blog/timeline")
 public class TimelineController {
 
-    @Resource
-    private TimelineServiceImpl timelineService;
+    private final TimelineServiceImpl timelineService;
+
+    public TimelineController(TimelineServiceImpl timelineService) {
+        this.timelineService = timelineService;
+    }
 
     @ApiOperation(value = "获取时间轴", notes = "获取时间轴")
     @GetMapping
