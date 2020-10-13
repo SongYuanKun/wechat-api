@@ -4,24 +4,26 @@ import com.alibaba.fastjson.JSON;
 import com.lmax.disruptor.EventHandler;
 import com.songyuankun.wechat.service.ArticleServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.context.ContextLoader;
-import org.springframework.web.context.WebApplicationContext;
-
-import java.util.Objects;
+import org.springframework.stereotype.Service;
 
 /**
- *  * 阅读 点赞 事件消费者
+ * * 阅读 点赞 事件消费者
  *
  * @author songyuankun
  */
 @Slf4j
+@Service
 public class NumberEventHandler implements EventHandler<NumberEvent> {
+
+    private final ArticleServiceImpl articleServiceImpl;
+
+    public NumberEventHandler(ArticleServiceImpl articleServiceImpl) {
+        this.articleServiceImpl = articleServiceImpl;
+    }
 
     @Override
     public void onEvent(NumberEvent event, long sequence, boolean endOfBatch) {
         log.info("Event:  " + JSON.toJSONString(event) + "sequence:+" + sequence + "  endOfBatch:" + endOfBatch);
-        WebApplicationContext wac = ContextLoader.getCurrentWebApplicationContext();
-        ArticleServiceImpl articleServiceImpl = Objects.requireNonNull(wac).getBean("articleServiceImpl", ArticleServiceImpl.class);
         switch (event.getType()) {
             case 1:
                 articleServiceImpl.updateReadNum(event.getValue());
