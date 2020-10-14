@@ -6,6 +6,7 @@ import com.songyuankun.wechat.dto.wechat.WeChatArticleDto;
 import com.songyuankun.wechat.entity.Article;
 import com.songyuankun.wechat.enums.WeChatUrlEnum;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -29,6 +30,11 @@ import java.util.regex.Pattern;
 @Component
 @Slf4j
 public class WeChatUtil {
+    @Value("${my.wechat.appid}")
+    private String appId;
+    @Value("${my.wechat.secret}")
+    private String secret;
+
     private final RestTemplate restTemplate;
     private final RedisUtil redisUtil;
 
@@ -37,11 +43,11 @@ public class WeChatUtil {
         this.restTemplate = restTemplate;
     }
 
-    private static String getAccessToken() {
+    private String getAccessToken() {
         HashMap<String, String> parameters = new HashMap<>(4);
         parameters.put("grant_type", "client_credential");
-        parameters.put("appid", "wx831e55a6a77b90b7");
-        parameters.put("secret", "3ac3104e959efe7431115ed7979997cf");
+        parameters.put("appid", appId);
+        parameters.put("secret", secret);
         String s = HttpsUtil.sendGet(WeChatUrlEnum.TOKEN.getUrl(), parameters);
         JSONObject jsonObject = JSON.parseObject(s);
         return jsonObject.getString("access_token");
