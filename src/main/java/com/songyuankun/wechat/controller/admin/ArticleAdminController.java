@@ -56,6 +56,7 @@ public class ArticleAdminController {
         return ResponseUtils.success(articleService.saveOrUpdate(authentication, articleForm));
     }
 
+    @ApiOperation("更新状态")
     @PostMapping("update/status")
     @Transactional(rollbackOn = Exception.class)
     public Response<Object> update(Authentication authentication, @RequestBody ArticleUpdateStatus articleUpdateStatus) {
@@ -74,6 +75,7 @@ public class ArticleAdminController {
         return ResponseUtils.success();
     }
 
+    @ApiOperation("发送到微信")
     @GetMapping("send2WeChat/{id}")
     @Transactional(rollbackOn = Exception.class)
     public Response<Object> send2WeChat(Authentication authentication, @PathVariable Integer id) {
@@ -85,6 +87,7 @@ public class ArticleAdminController {
         return ResponseUtils.success();
     }
 
+    @ApiOperation("批量发送到微信")
     @PostMapping("send2WeChat/ids")
     @Transactional(rollbackOn = Exception.class)
     public Response<Object> send2WeChat(Authentication authentication, @RequestBody Integer[] ids) {
@@ -99,6 +102,7 @@ public class ArticleAdminController {
     }
 
 
+    @ApiOperation("分页查询")
     @PostMapping("page")
     public Response<Page<ArticleInfoResponse>> page(@RequestBody ArticleQuery articleQuery) {
         Page<ArticleInfoResponse> page = articleService.page(articleQuery);
@@ -106,6 +110,7 @@ public class ArticleAdminController {
     }
 
 
+    @ApiOperation("已发布文章分页查询")
     @PostMapping("publicPage")
     public Response<Page<Article>> publicPage(@RequestBody ArticleQuery articleQuery) {
         Page<Article> articles = articleService.publicPage(articleQuery);
@@ -113,6 +118,7 @@ public class ArticleAdminController {
     }
 
 
+    @ApiOperation("我创建的文章，分页")
     @PostMapping("my/create")
     public Response<Page<Article>> page(Authentication authentication, @RequestParam(required = false, defaultValue = "1") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
         Integer userId = Integer.valueOf(authentication.getName());
@@ -123,6 +129,7 @@ public class ArticleAdminController {
     }
 
 
+    @ApiOperation("获取博客详情")
     @GetMapping("info/{id}")
     public Response<ArticleInfoResponse> info(@PathVariable Integer id) {
         Article one = articleRepository.getOne(id);
@@ -132,6 +139,7 @@ public class ArticleAdminController {
         return ResponseUtils.success(articleInfoResponse);
     }
 
+    @ApiOperation("删除博客")
     @GetMapping("delete/{id}")
     public Response<ArticleInfoResponse> delete(@PathVariable Integer id) {
         articleRepository.deleteById(id);
