@@ -1,9 +1,6 @@
 package com.songyuankun.wechat.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Proxy;
@@ -25,6 +22,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @DynamicInsert
 @DynamicUpdate
+@Builder
 public class Course extends BaseEntity implements Serializable {
 
     @Id

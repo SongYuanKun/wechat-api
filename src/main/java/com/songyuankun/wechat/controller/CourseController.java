@@ -36,11 +36,9 @@ public class CourseController {
     @PostMapping("save")
     public Course save(Authentication authentication, @RequestBody CourseForm courseForm) {
         Integer userId = Integer.valueOf(authentication.getName());
-        Course course = new Course();
+        Course course = Course.builder().userId(userId).status(0).build();
         BeanUtils.copyProperties(courseForm, course);
-        course.setUserId(userId);
         DaoCommon.createDao(authentication, course);
-        course.setStatus(0);
         courseRepository.save(course);
         return course;
     }
