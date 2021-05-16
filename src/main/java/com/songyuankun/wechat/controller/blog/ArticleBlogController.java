@@ -3,6 +3,7 @@ package com.songyuankun.wechat.controller.blog;
 import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.common.ResponseUtils;
 import com.songyuankun.wechat.entity.Article;
+import com.songyuankun.wechat.enums.PvEventEnum;
 import com.songyuankun.wechat.event.NumberEventProducer;
 import com.songyuankun.wechat.response.ArticleInfoResponse;
 import com.songyuankun.wechat.service.ArticleServiceImpl;
@@ -11,9 +12,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.apache.rocketmq.common.message.Message;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.*;
 import org.springframework.web.bind.annotation.*;
+
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author songyuankun
@@ -27,7 +32,7 @@ public class ArticleBlogController {
     private final TagServiceImpl tagService;
     private final NumberEventProducer numberEventProducer;
 
-    public ArticleBlogController(ArticleServiceImpl articleService, TagServiceImpl tagService, NumberEventProducer numberEventProducer) {
+    public ArticleBlogController(ArticleServiceImpl articleService, TagServiceImpl tagService, NumberEventProducer numberEventProducer, DefaultMQProducer mqProducer) {
         this.articleService = articleService;
         this.tagService = tagService;
         this.numberEventProducer = numberEventProducer;
@@ -44,7 +49,7 @@ public class ArticleBlogController {
             BeanUtils.copyProperties(one, articleInfoResponse);
             articleInfoResponse.setTagList(tagService.getTagsByArticleId(id));
             return ResponseUtils.success(articleInfoResponse);
-        }else {
+        } else {
             return ResponseUtils.notFound();
         }
     }
@@ -82,7 +87,7 @@ public class ArticleBlogController {
     @PutMapping("like/{id}")
     public Response<Object> likeArticle(@ApiParam("文章id") @PathVariable Integer id) {
         //读写分离处理
-        numberEventProducer.onData(2,id);
+        numberEventProducer.onData(2, id);
         return ResponseUtils.success();
     }
 
