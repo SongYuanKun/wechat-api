@@ -180,7 +180,7 @@ public class WeChatUtil {
         }
         for (String url : urlList) {
             String weChatUrl = addImageFromUrl(url);
-            content = content.replaceAll(url, weChatUrl);
+            content = content.replaceAll(url, weChatUrl).replaceAll("http://", "https://");
         }
         return content;
 
