@@ -11,7 +11,7 @@ public class ProduceMqConfig {
     @Bean
     public DefaultMQProducer mqProducer() throws MQClientException {
         DefaultMQProducer mqProducer = new DefaultMQProducer();
-        mqProducer.setNamesrvAddr("192.168.0.110:9876");
+        mqProducer.setNamesrvAddr("192.168.31.88:9876");
         mqProducer.setProducerGroup("DEFAULT_GROUP");
         mqProducer.start();
         return mqProducer;
