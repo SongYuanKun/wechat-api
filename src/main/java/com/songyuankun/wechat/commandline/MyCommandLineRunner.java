@@ -24,7 +24,7 @@ public class MyCommandLineRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         DefaultMQPushConsumer mqPushConsumer = new DefaultMQPushConsumer("ARTICLE_PV_GROUP");
-        mqPushConsumer.setNamesrvAddr("192.168.31.88:9876");
+        mqPushConsumer.setNamesrvAddr("192.168.31.103:9876");
         mqPushConsumer.subscribe("ARTICLE_INFO", "*");
         mqPushConsumer.registerMessageListener(articleInfoListener);
         mqPushConsumer.start();
