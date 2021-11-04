@@ -3,7 +3,6 @@ package com.songyuankun.wechat.controller.blog;
 import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.common.ResponseUtils;
 import com.songyuankun.wechat.entity.Article;
-import com.songyuankun.wechat.enums.PvEventEnum;
 import com.songyuankun.wechat.event.NumberEventProducer;
 import com.songyuankun.wechat.response.ArticleInfoResponse;
 import com.songyuankun.wechat.service.ArticleServiceImpl;
@@ -13,12 +12,9 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
-import org.apache.rocketmq.common.message.Message;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.*;
 import org.springframework.web.bind.annotation.*;
-
-import java.nio.charset.StandardCharsets;
 
 /**
  * @author songyuankun
@@ -44,7 +40,7 @@ public class ArticleBlogController {
         Article one = articleService.getOne(id);
         if (one != null) {
             //读写分离处理
-            numberEventProducer.onData(1,id);
+            numberEventProducer.onData("READ", id);
             ArticleInfoResponse articleInfoResponse = new ArticleInfoResponse();
             BeanUtils.copyProperties(one, articleInfoResponse);
             articleInfoResponse.setTagList(tagService.getTagsByArticleId(id));
@@ -87,7 +83,7 @@ public class ArticleBlogController {
     @PutMapping("like/{id}")
     public Response<Object> likeArticle(@ApiParam("文章id") @PathVariable Integer id) {
         //读写分离处理
-        numberEventProducer.onData(2, id);
+        numberEventProducer.onData("LIKE", id);
         return ResponseUtils.success();
     }
 

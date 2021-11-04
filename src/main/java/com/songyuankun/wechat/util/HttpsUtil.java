@@ -35,8 +35,8 @@ public class HttpsUtil {
             } else {
                 for (Map.Entry entry : parameters.entrySet()) {
                     sb.append(entry.getKey()).append("=").append(
-                            java.net.URLEncoder.encode(String.valueOf(entry.getValue()),
-                                    DEFAULT_CHARSET))
+                                    java.net.URLEncoder.encode(String.valueOf(entry.getValue()),
+                                            DEFAULT_CHARSET))
                             .append("&");
                 }
                 String tempParams = sb.toString();

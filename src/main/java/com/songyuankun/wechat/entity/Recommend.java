@@ -11,6 +11,7 @@ import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import java.io.Serializable;
+
 /**
  * 房间被预订的时间点
  *

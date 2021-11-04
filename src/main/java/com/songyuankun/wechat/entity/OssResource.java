@@ -13,6 +13,7 @@ import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import java.io.Serializable;
+
 /**
  * 云存储资源表
  *
