@@ -31,7 +31,7 @@ public class ArticlePublicController {
     @GetMapping("getById")
     public Response<Article> getById(@RequestParam Integer id) {
         //读写分离处理
-        numberEventProducer.onData(1, id);
+        numberEventProducer.onData("READ", id);
         return ResponseUtils.success(articleService.getOne(id));
     }
 

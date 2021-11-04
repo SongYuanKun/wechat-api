@@ -1,13 +1,9 @@
 package com.songyuankun.wechat.event;
 
-import org.apache.rocketmq.client.exception.MQBrokerException;
-import org.apache.rocketmq.client.exception.MQClientException;
-import org.apache.rocketmq.client.producer.DefaultMQProducer;
-import org.apache.rocketmq.common.message.Message;
-import org.apache.rocketmq.remoting.exception.RemotingException;
+import org.apache.rocketmq.client.producer.SendCallback;
+import org.apache.rocketmq.client.producer.SendResult;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.stereotype.Component;
-
-import java.nio.charset.StandardCharsets;
 
 /**
  * 阅读 点赞 事件生产者
@@ -16,22 +12,24 @@ import java.nio.charset.StandardCharsets;
  */
 @Component
 public class NumberEventProducer {
-    private final DefaultMQProducer mqProducer;
+    private final RocketMQTemplate rocketMQTemplate;
 
-    public NumberEventProducer(DefaultMQProducer mqProducer) {
-        this.mqProducer = mqProducer;
+    public NumberEventProducer(RocketMQTemplate rocketMQTemplate) {
+        this.rocketMQTemplate = rocketMQTemplate;
     }
 
-    public void onData(Integer type, Integer id) {
-        Message message = new Message();
-        message.setBody(id.toString().getBytes(StandardCharsets.UTF_8));
-        message.setTags(String.valueOf(type));
-        message.setTopic("ARTICLE_INFO");
-        try {
-            mqProducer.send(message);
-        } catch (MQClientException | RemotingException | MQBrokerException | InterruptedException e) {
-            e.printStackTrace();
-        }
+    public void onData(String type, Integer id) {
+        rocketMQTemplate.asyncSend("ARTICLE_INFO:" + type, String.valueOf(id), new SendCallback() {
+            @Override
+            public void onSuccess(SendResult sendResult) {
+
+            }
+
+            @Override
+            public void onException(Throwable throwable) {
+
+            }
+        });
     }
 
 }
