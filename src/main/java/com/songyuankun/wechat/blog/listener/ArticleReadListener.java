@@ -1,6 +1,6 @@
-package com.songyuankun.wechat.listener;
+package com.songyuankun.wechat.blog.listener;
 
-import com.songyuankun.wechat.service.ArticleServiceImpl;
+import com.songyuankun.wechat.blog.service.ArticleServiceImpl;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.springframework.stereotype.Component;

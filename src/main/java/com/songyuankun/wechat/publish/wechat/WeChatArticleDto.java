@@ -1,4 +1,4 @@
-package com.songyuankun.wechat.dto.wechat;
+package com.songyuankun.wechat.publish.wechat;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;

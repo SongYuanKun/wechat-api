@@ -86,7 +86,7 @@ public class TagServiceImpl {
         }));
     }
 
-    void saveTagAndNew(List<Tag> tagList, Integer id) {
+    public void saveTagAndNew(List<Tag> tagList, Integer id) {
         tagLinkRepository.deleteAllByArticleId(id);
         tagList.forEach(tag -> {
             if (tag.getId() == null) {

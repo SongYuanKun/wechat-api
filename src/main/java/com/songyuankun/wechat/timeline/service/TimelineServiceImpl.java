@@ -1,9 +1,9 @@
-package com.songyuankun.wechat.service;
+package com.songyuankun.wechat.timeline.service;
 
 import com.songyuankun.wechat.entity.Timeline;
 import com.songyuankun.wechat.entity.TimelineMonth;
 import com.songyuankun.wechat.entity.TimelinePost;
-import com.songyuankun.wechat.repository.TimeLineRepository;
+import com.songyuankun.wechat.timeline.dao.TimeLineRepository;
 import com.songyuankun.wechat.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
