@@ -14,7 +14,7 @@ spring:
     database-platform: com.songyuankun.wechat.config.MysqlConfig
   redis:
     database: 0
-    host:  192.168.31.106
+    host:  192.168.31.88
     port: 6379
     password: 123456
   cache:
@@ -38,6 +38,6 @@ qiniu:
   bucket: songyuankun
   cdn_host: http://pic-oss.songyuankun.top
 rocketmq:
-  name-server:  192.168.31.106:9876
+  name-server:  192.168.31.88:9876
   producer:
     group: DEFAULT_GROUP

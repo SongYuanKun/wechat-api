@@ -1,14 +1,16 @@
-package com.songyuankun.wechat.service;
+package com.songyuankun.wechat.blog.service;
 
 
 import com.google.common.collect.Lists;
 import com.songyuankun.wechat.common.DaoCommon;
 import com.songyuankun.wechat.entity.Article;
 import com.songyuankun.wechat.entity.Category;
-import com.songyuankun.wechat.repository.ArticleRepository;
+import com.songyuankun.wechat.blog.dao.ArticleRepository;
 import com.songyuankun.wechat.request.ArticleForm;
 import com.songyuankun.wechat.request.query.ArticleQuery;
 import com.songyuankun.wechat.response.ArticleInfoResponse;
+import com.songyuankun.wechat.service.CategoryServiceImpl;
+import com.songyuankun.wechat.service.TagServiceImpl;
 import com.songyuankun.wechat.util.WeChatUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;

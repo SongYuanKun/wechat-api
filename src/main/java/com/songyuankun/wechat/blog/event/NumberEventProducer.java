@@ -1,4 +1,4 @@
-package com.songyuankun.wechat.event;
+package com.songyuankun.wechat.blog.event;
 
 import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;

@@ -1,4 +1,4 @@
-package com.songyuankun.wechat.repository;
+package com.songyuankun.wechat.timeline.dao;
 
 import com.songyuankun.wechat.entity.Article;
 import org.springframework.data.jpa.repository.JpaRepository;
