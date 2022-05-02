@@ -19,7 +19,7 @@ import java.io.Serializable;
  *
  * @author songyuankun
  */
-@ApiModel
+@ApiModel("博客")
 @Proxy(lazy = false)
 @Entity
 @Table(name = "article")
