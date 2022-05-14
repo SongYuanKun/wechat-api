@@ -1,4 +1,4 @@
-package com.songyuankun.wechat.controller.blog;
+package com.songyuankun.wechat.blog.controller;
 
 import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.common.ResponseUtils;
