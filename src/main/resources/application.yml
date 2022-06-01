@@ -2,7 +2,7 @@ server:
   port: 8082
 spring:
   datasource:
-    url: jdbc:mysql:// 192.168.31.88:3306/wechat?useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=CTT
+    url: jdbc:mysql:// 192.168.31.88:3306/wechat?useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true
     username: dev
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver

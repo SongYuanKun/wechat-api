@@ -1,7 +1,7 @@
 package com.songyuankun.wechat.service;
 
 
-import com.google.common.collect.Lists;
+
 import com.songyuankun.wechat.entity.Category;
 import com.songyuankun.wechat.repository.CategoryRepository;
 import com.songyuankun.wechat.request.query.CategoryQuery;
@@ -37,7 +37,7 @@ public class CategoryServiceImpl {
                 -> {
             String name = categoryQuery.getName();
             Integer type = categoryQuery.getType();
-            List<Predicate> list = Lists.newArrayList();
+            List<Predicate> list = new ArrayList<>();
             if (StringUtils.isNotEmpty(name)) {
                 list.add(criteriaBuilder.like(categoryRoot.get("name").as(String.class), "%" + name + "%"));
             }
@@ -57,7 +57,7 @@ public class CategoryServiceImpl {
         }
         List<Category> all = categoryRepository.findAll((categoryRoot, criteriaQuery, criteriaBuilder)
                 -> {
-            List<Predicate> list = Lists.newArrayList();
+            List<Predicate> list = new ArrayList<>();
             CriteriaBuilder.In<Integer> in = criteriaBuilder.in(categoryRoot.get("parentId").as(Integer.class));
             categoryIdList.forEach(in::value);
             list.add(criteriaBuilder.and(in));
