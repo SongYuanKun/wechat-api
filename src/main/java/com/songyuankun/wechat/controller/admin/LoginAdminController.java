@@ -42,7 +42,7 @@ public class LoginAdminController {
     }
 
     @PostMapping("loginByPassword")
-    public Response<String> loginByPassword(@RequestParam String phone, @RequestParam String password, @RequestParam String uuid, @RequestParam String captcha, @RequestParam String env) {
+    public Response<String> loginByPassword(@RequestParam String phone, @RequestParam String password, @RequestParam String uuid, @RequestParam String captcha) {
         boolean validate = sysCaptchaService.validate(uuid, captcha);
         if (!validate) {
             return ResponseUtils.error("验证码错误");
@@ -59,7 +59,7 @@ public class LoginAdminController {
         List<String> roleList = Arrays.asList(user.getUserRole().split(","));
         List<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
         roleList.forEach(role -> simpleGrantedAuthorities.add(new SimpleGrantedAuthority(role)));
-        String token = tokenCommon.getToken(openid, env, simpleGrantedAuthorities);
+        String token = tokenCommon.getToken(openid, simpleGrantedAuthorities);
         return ResponseUtils.success("Bearer " + token);
     }
 
