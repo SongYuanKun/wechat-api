@@ -22,7 +22,6 @@ public class DaoCommon {
         Integer userId = Integer.valueOf(split[0]);
         baseDao.setCreateTime(date);
         baseDao.setCreateUserId(userId);
-        baseDao.setEnv(split[1]);
         updateDao(authentication, baseDao);
     }
 
