@@ -1,7 +1,7 @@
 package com.songyuankun.wechat.service;
 
 
-import com.google.common.collect.Lists;
+
 import com.songyuankun.wechat.entity.Tag;
 import com.songyuankun.wechat.entity.TagLink;
 import com.songyuankun.wechat.repository.TagLinkRepository;
@@ -38,7 +38,7 @@ public class TagServiceImpl {
         return tagRepository.findAll((root, criteriaQuery, criteriaBuilder)
                 -> {
             String name = tagQuery.getName();
-            List<Predicate> list = Lists.newArrayList();
+            List<Predicate> list = new ArrayList<>();
             if (StringUtils.isNotEmpty(name)) {
                 list.add(criteriaBuilder.like(root.get("name").as(String.class), "%" + name + "%"));
             }
@@ -79,7 +79,7 @@ public class TagServiceImpl {
         return tagRepository.findAll(((root, criteriaQuery, criteriaBuilder) -> {
             CriteriaBuilder.In<Integer> in = criteriaBuilder.in(root.get("id").as(Integer.class));
             idList.forEach(in::value);
-            List<Predicate> list = Lists.newArrayList();
+            List<Predicate> list = new ArrayList<>();
             list.add(in);
             Predicate[] p = new Predicate[list.size()];
             return criteriaBuilder.and(list.toArray(p));

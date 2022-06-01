@@ -1,7 +1,6 @@
 package com.songyuankun.wechat.blog.service;
 
 
-import com.google.common.collect.Lists;
 import com.songyuankun.wechat.common.DaoCommon;
 import com.songyuankun.wechat.entity.Article;
 import com.songyuankun.wechat.entity.Category;
@@ -97,7 +96,7 @@ public class ArticleServiceImpl {
     public Page<Article> findAll(ArticleQuery articleQuery, Pageable pageable) {
         return articleRepository.findAll((root, criteriaQuery, criteriaBuilder) -> {
             String title = articleQuery.getTitle();
-            List<Predicate> list = Lists.newArrayList();
+            List<Predicate> list = new ArrayList<>();
             if (StringUtils.isNotEmpty(title)) {
                 list.add(criteriaBuilder.like(root.get("title").as(String.class), "%" + title + "%"));
             }
