@@ -90,7 +90,7 @@ public class LoginController {
 
         List<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
         simpleGrantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-        String token = tokenCommon.getToken(openid, "husky", simpleGrantedAuthorities);
+        String token = tokenCommon.getToken(openid, simpleGrantedAuthorities);
         map.put("token", "Bearer " + token);
         return map;
     }
