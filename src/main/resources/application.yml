@@ -34,7 +34,7 @@ my:
 
 qiniu:
   ak:
-  sk: --99r3_-6PCY
+  sk:
   bucket: songyuankun
   cdn_host: http://pic-oss.songyuankun.top
 rocketmq:
