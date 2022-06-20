@@ -4,12 +4,15 @@ package com.songyuankun.wechat.auto.reply.dto;
 import lombok.Data;
 import lombok.ToString;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Data
 @ToString
 @XmlRootElement(name = "xml")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class MessageDTO {
 
     /**
@@ -26,7 +29,7 @@ public class MessageDTO {
      * 消息创建时间 （整型）
      */
     @XmlElement(name = "CreateTime")
-    private String createTime;
+    private Long createTime;
     /**
      * 消息类型，文本为text
      */
