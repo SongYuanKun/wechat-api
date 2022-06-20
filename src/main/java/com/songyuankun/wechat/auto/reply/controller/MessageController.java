@@ -16,7 +16,7 @@ public class MessageController {
     @Autowired
     private WeChatService weChatService;
 
-    @PostMapping("auto-reply")
+    @PostMapping(value = "auto-reply",consumes = "application/xml", produces = "application/xml")
     public void autoReplay(@RequestBody MessageDTO messageDTO) {
         log.info("messageDTO:{}", messageDTO);
     }
