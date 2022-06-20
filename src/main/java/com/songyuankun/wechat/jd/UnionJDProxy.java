@@ -13,6 +13,8 @@ import java.security.MessageDigest;
 import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class UnionJDProxy {
@@ -28,6 +30,14 @@ public class UnionJDProxy {
     private static final String API_URL = "https://api.jd.com/routerjson";
 
     public String getCommand(String skuUrl) {
+
+        String pattern = "https://item.jd.com/(product/|)\\d*.html";
+        Pattern r = Pattern.compile(pattern);
+        Matcher m = r.matcher(skuUrl);
+        if (m.find()) {
+            skuUrl = m.group();
+        }
+
         String timestamp = DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss");
         String version = "1.0";
         String method = "jd.union.open.promotion.common.get";
@@ -56,6 +66,11 @@ public class UnionJDProxy {
         String body = execute.body();
         JSONObject res = JSON.parseObject(body);
         return res.getJSONObject("jd_union_open_promotion_common_get_responce").getJSONObject("getResult").getJSONObject("data").getString("clickURL");
+    }
+
+    private void checkSkuUrl(String skuUrl) {
+
+
     }
 
     private String buildSign(String timestamp, String version, String method, String paramJson, String appKey, String appSecret) throws Exception {
