@@ -30,8 +30,7 @@ public class UnionJDProxy {
     private static final String API_URL = "https://api.jd.com/routerjson";
 
     public String getCommand(String skuUrl) {
-
-        String pattern = "https://item.jd.com/(product/|)\\d*.html";
+        String pattern = "https://item(.m|).jd.com/(product/|)\\d*.html";
         Pattern r = Pattern.compile(pattern);
         Matcher m = r.matcher(skuUrl);
         if (m.find()) {
@@ -118,8 +117,9 @@ public class UnionJDProxy {
 
     public static boolean areNotEmpty(String[] values) {
         boolean result = true;
-        if ((values == null) || (values.length == 0)) result = false;
-        else {
+        if ((values == null) || (values.length == 0)) {
+            result = false;
+        } else {
             for (String value : values) {
                 result &= !isEmpty(value);
             }
@@ -130,7 +130,9 @@ public class UnionJDProxy {
 
     public static boolean isEmpty(String value) {
         int strLen;
-        if ((value == null) || ((strLen = value.length()) == 0)) return true;
+        if ((value == null) || ((strLen = value.length()) == 0)) {
+            return true;
+        }
         for (int i = 0; i < strLen; i++) {
             if (!Character.isWhitespace(value.charAt(i))) {
                 return false;
