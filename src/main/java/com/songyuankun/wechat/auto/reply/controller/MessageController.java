@@ -2,6 +2,7 @@ package com.songyuankun.wechat.auto.reply.controller;
 
 import com.songyuankun.wechat.auto.reply.dto.MessageDTO;
 import com.songyuankun.wechat.auto.reply.service.WeChatService;
+import com.songyuankun.wechat.jd.UnionJDProxy;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,14 @@ public class MessageController {
 
     @Autowired
     private WeChatService weChatService;
+    @Autowired
+   private UnionJDProxy unionJDProxy;
 
-    @PostMapping(value = "auto-reply",consumes = "application/xml", produces = "application/xml")
-    public void autoReplay(@RequestBody MessageDTO messageDTO) {
+    @PostMapping(value = "auto-reply", consumes = "text/xml", produces = "text/xml")
+    public MessageDTO autoReplay(@RequestBody MessageDTO messageDTO) {
         log.info("messageDTO:{}", messageDTO);
+        String command = unionJDProxy.getCommand(messageDTO.getContent());
+        return messageDTO.replay(command);
     }
 
     @GetMapping("auto-reply")

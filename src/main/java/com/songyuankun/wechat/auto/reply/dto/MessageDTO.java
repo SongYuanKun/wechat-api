@@ -40,4 +40,15 @@ public class MessageDTO {
      */
     @XmlElement(name = "Content")
     private String content;
+
+    public MessageDTO replay(String content) {
+        MessageDTO messageDTO = new MessageDTO();
+        messageDTO.setContent(content);
+        messageDTO.setCreateTime(System.currentTimeMillis() / 1000);
+        messageDTO.setFromUserName(this.getToUserName());
+        messageDTO.setToUserName(this.getFromUserName());
+        messageDTO.setMsgType("text");
+        return messageDTO;
+    }
+
 }
