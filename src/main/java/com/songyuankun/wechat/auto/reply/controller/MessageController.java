@@ -29,9 +29,9 @@ public class MessageController {
             return null;
         }
         String command = "商品名称：" + goodsInfo.getString("goodsName") + "\r\n" +
-                "价格：" + goodsInfo.getString("goodsName") + "\r\n" +
-                "返佣比例：" + goodsInfo.getString("goodsName") + "\r\n" +
-                "预计返佣：" + goodsInfo.getString("commisionRatioWl") + "%\r\n" +
+                "价格：" + goodsInfo.getString("unitPrice") + "\r\n" +
+                "返佣比例：" + goodsInfo.getString("commisionRatioPc") + "%\r\n" +
+                "预计返佣：" + goodsInfo.getInteger("unitPrice") * goodsInfo.getInteger("commisionRatioPc") * 0.01 + "\r\n" +
                 "下单地址：" + url +
                 "";
         return messageDTO.replay(command);
