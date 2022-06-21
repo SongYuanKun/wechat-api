@@ -4,6 +4,7 @@ import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -68,6 +69,53 @@ public class UnionJDProxy {
         String body = execute.body();
         JSONObject res = JSON.parseObject(body);
         return res.getJSONObject("jd_union_open_promotion_common_get_responce").getJSONObject("getResult").getJSONObject("data").getString("clickURL");
+    }
+
+
+    public JSONObject getGoodsInfo(String skuUrl) {
+        String skuId = getSkuId(skuUrl);
+        if (StringUtils.isBlank(skuId)) {
+            return null;
+        }
+
+        String timestamp = DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss");
+        String version = "1.0";
+        String method = "jd.union.open.goods.promotiongoodsinfo.query";
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("skuIds", skuId);
+        String paramJson = jsonObject.toJSONString();
+        String sign;
+        try {
+            sign = buildSign(timestamp, version, method, paramJson, appKey, secretKey);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        String queryUrl = API_URL
+                + "?timestamp=" + timestamp
+                + "&v=" + version
+                + "&sign_method=md5"
+                + "&format=json"
+                + "&method=" + method
+                + "&360buy_param_json=" + paramJson
+                + "&app_key=" + appKey
+                + "&sign=" + sign;
+        HttpResponse execute = HttpUtil.createGet(queryUrl).execute();
+        String body = execute.body();
+        JSONObject res = JSON.parseObject(body);
+        String data = res.getJSONObject("jd_union_open_goods_promotiongoodsinfo_query_responce").getJSONObject("queryResult").getString("data");
+        return JSON.parseArray(data).getJSONObject(0);
+    }
+
+
+    private String getSkuId(String skuUrl) {
+        String pattern = "https://item(.m|).jd.com/(product/|)\\d*.html";
+        Pattern r = Pattern.compile(pattern);
+        Matcher m = r.matcher(skuUrl);
+        if (!m.find()) {
+            return "";
+        }
+        String url = m.group();
+        return url.substring(url.lastIndexOf("/") + 1, url.lastIndexOf(".html"));
     }
 
     private String buildSign(String timestamp, String version, String method, String paramJson, String appKey, String appSecret) throws Exception {

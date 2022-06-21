@@ -1,5 +1,6 @@
 package com.songyuankun.wechat.auto.reply.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.songyuankun.wechat.auto.reply.dto.MessageDTO;
 import com.songyuankun.wechat.auto.reply.service.WeChatService;
 import com.songyuankun.wechat.jd.UnionJDProxy;
@@ -17,12 +18,22 @@ public class MessageController {
     @Autowired
     private WeChatService weChatService;
     @Autowired
-   private UnionJDProxy unionJDProxy;
+    private UnionJDProxy unionJDProxy;
 
     @PostMapping(value = "auto-reply", consumes = "text/xml", produces = "text/xml")
     public MessageDTO autoReplay(@RequestBody MessageDTO messageDTO) {
         log.info("messageDTO:{}", messageDTO);
-        String command = unionJDProxy.getCommand(messageDTO.getContent());
+        String url = unionJDProxy.getCommand(messageDTO.getContent());
+        JSONObject goodsInfo = unionJDProxy.getGoodsInfo(messageDTO.getContent());
+        if (goodsInfo == null || url == null) {
+            return null;
+        }
+        String command = "商品名称：" + goodsInfo.getString("goodsName") + "\r\n" +
+                "价格：" + goodsInfo.getString("goodsName") + "\r\n" +
+                "返佣比例：" + goodsInfo.getString("goodsName") + "\r\n" +
+                "预计返佣：" + goodsInfo.getString("commisionRatioWl") + "%\r\n" +
+                "下单地址：" + url +
+                "";
         return messageDTO.replay(command);
     }
 
