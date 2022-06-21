@@ -16,6 +16,9 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @author songyuankun
+ */
 @Service
 public class UnionJDProxy {
 
@@ -67,11 +70,6 @@ public class UnionJDProxy {
         return res.getJSONObject("jd_union_open_promotion_common_get_responce").getJSONObject("getResult").getJSONObject("data").getString("clickURL");
     }
 
-    private void checkSkuUrl(String skuUrl) {
-
-
-    }
-
     private String buildSign(String timestamp, String version, String method, String paramJson, String appKey, String appSecret) throws Exception {
         Map<String, String> map = new TreeMap<>();
         map.put("timestamp", timestamp);
@@ -104,8 +102,8 @@ public class UnionJDProxy {
 
     private static String byte2hex(byte[] bytes) {
         StringBuilder sign = new StringBuilder();
-        for (int i = 0; i < bytes.length; i++) {
-            String hex = Integer.toHexString(bytes[i] & 0xFF);
+        for (byte aByte : bytes) {
+            String hex = Integer.toHexString(aByte & 0xFF);
             if (hex.length() == 1) {
                 sign.append("0");
             }
