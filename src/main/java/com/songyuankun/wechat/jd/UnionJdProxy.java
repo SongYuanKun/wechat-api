@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
  * @author songyuankun
  */
 @Service
-public class UnionJDProxy {
+public class UnionJdProxy {
 
     @Value("${jd.app_key}")
     private String appKey;

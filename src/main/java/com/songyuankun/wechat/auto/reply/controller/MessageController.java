@@ -3,12 +3,15 @@ package com.songyuankun.wechat.auto.reply.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.songyuankun.wechat.auto.reply.dto.MessageDTO;
 import com.songyuankun.wechat.auto.reply.service.WeChatService;
-import com.songyuankun.wechat.jd.UnionJDProxy;
+import com.songyuankun.wechat.jd.UnionJdProxy;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * @author songyuankun
+ */
 @Api(value = "weixin")
 @RestController
 @Slf4j
@@ -18,13 +21,13 @@ public class MessageController {
     @Autowired
     private WeChatService weChatService;
     @Autowired
-    private UnionJDProxy unionJDProxy;
+    private UnionJdProxy unionJdProxy;
 
     @PostMapping(value = "auto-reply", consumes = "text/xml", produces = "text/xml")
     public MessageDTO autoReplay(@RequestBody MessageDTO messageDTO) {
         log.info("messageDTO:{}", messageDTO);
-        String url = unionJDProxy.getCommand(messageDTO.getContent());
-        JSONObject goodsInfo = unionJDProxy.getGoodsInfo(messageDTO.getContent());
+        String url = unionJdProxy.getCommand(messageDTO.getContent());
+        JSONObject goodsInfo = unionJdProxy.getGoodsInfo(messageDTO.getContent());
         if (goodsInfo == null || url == null) {
             return null;
         }
