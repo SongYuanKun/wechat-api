@@ -1,6 +1,7 @@
 package com.songyuankun.wechat.auto.reply.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
@@ -15,7 +16,8 @@ import java.util.Formatter;
 @Slf4j
 public class WeChatService {
 
-    String token = "songyuankun";
+    @Value("${my.wechat.token}")
+    String token;
 
     /**
      * 验证微信消息合法性
