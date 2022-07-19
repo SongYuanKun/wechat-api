@@ -14,8 +14,8 @@ public class AdminService {
     @Value("${my.wechat.admin.agent_id}")
     String agentId;
 
-    @Value("${my.wechat.admin.secret_view}")
-    String secretView;
+    @Value("${my.wechat.admin.secret}")
+    String secret;
 
 
     public void sendMessageToAdmin(String content) {
