@@ -11,21 +11,18 @@ import org.springframework.stereotype.Service;
 public class AdminService {
 
 
-    @Value("${my.wechat.id}")
-    String id;
+    @Value("${my.wechat.admin.agent_id}")
+    String agentId;
 
-    @Value("${my.wechat.admin}")
-    String admin;
+    @Value("${my.wechat.admin.secret_view}")
+    String secretView;
 
 
-    public MessageDTO sendMessageToAdmin(String content) {
+    public void sendMessageToAdmin(String content) {
         MessageDTO messageDTO = new MessageDTO();
         messageDTO.setContent(content);
         messageDTO.setCreateTime(System.currentTimeMillis() / 1000);
-        messageDTO.setFromUserName(id);
-        messageDTO.setToUserName(admin);
         messageDTO.setMsgType("text");
-        return messageDTO;
     }
 
 }
