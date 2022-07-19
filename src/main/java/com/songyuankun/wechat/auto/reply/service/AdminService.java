@@ -45,6 +45,7 @@ public class AdminService {
         qyWeChatMessageDTO.setContent(content);
         qyWeChatMessageDTO.setSafe(0);
         String post = HttpUtil.post(SEND_MESSAGE_URL + "?access_token=" + getAccessTokenFromRedis(), JSON.toJSONString(qyWeChatMessageDTO));
+        log.info("url:{},body:{},resp:{}", SEND_MESSAGE_URL + "?access_token=" + getAccessTokenFromRedis(), JSON.toJSONString(qyWeChatMessageDTO), post);
     }
 
     private String getAccessTokenFromRedis() {
