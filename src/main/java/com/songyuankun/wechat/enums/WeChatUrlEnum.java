@@ -5,7 +5,6 @@ import lombok.Getter;
 @Getter
 public enum WeChatUrlEnum {
 
-
     /**
      * 添加永久素材
      */
