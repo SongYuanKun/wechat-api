@@ -1,16 +1,25 @@
 package com.songyuankun.wechat.auto.reply.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.alibaba.fastjson.annotation.JSONField;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 public class QyWeChatMessageDTO {
-    @JsonProperty(value = "touser")
+    @JSONField(name = "touser")
     private String toUser;
-    @JsonProperty(value = "msgtype")
+    @JSONField(name = "msgtype")
     private String msgType;
-    @JsonProperty(value = "agentid")
+    @JSONField(name = "agentid")
     private Integer agentId;
-    private String content;
+    private Text text;
     private Integer safe;
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Text {
+        private String content;
+    }
 }

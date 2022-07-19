@@ -42,7 +42,7 @@ public class AdminService {
         qyWeChatMessageDTO.setToUser("@all");
         qyWeChatMessageDTO.setMsgType("text");
         qyWeChatMessageDTO.setAgentId(agentId);
-        qyWeChatMessageDTO.setContent(content);
+        qyWeChatMessageDTO.setText(new QyWeChatMessageDTO.Text(content));
         qyWeChatMessageDTO.setSafe(0);
         String post = HttpUtil.post(SEND_MESSAGE_URL + "?access_token=" + getAccessTokenFromRedis(), JSON.toJSONString(qyWeChatMessageDTO));
         log.info("url:{},body:{},resp:{}", SEND_MESSAGE_URL + "?access_token=" + getAccessTokenFromRedis(), JSON.toJSONString(qyWeChatMessageDTO), post);
