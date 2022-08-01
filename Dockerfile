@@ -2,7 +2,7 @@
 FROM openjdk:8
 #指定作者
 MAINTAINER songyuankun
-#暴漏容器的8080端口
+
 EXPOSE 8082
 
 ENV LANG C.UTF-8
