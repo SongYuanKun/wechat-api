@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,12 +36,18 @@ public class UnionJdProxy {
 
     private static final String API_URL = "https://api.jd.com/routerjson";
 
-    public String getCommand(String skuUrl) {
+    public String getCommand(final String skuUrl) {
+
+        String innerSkuUrl = null;
+
         String pattern = "https://item(.m|).jd.com/(product/|)\\d*.html";
         Pattern r = Pattern.compile(pattern);
         Matcher m = r.matcher(skuUrl);
         if (m.find()) {
-            skuUrl = m.group();
+            innerSkuUrl = m.group();
+        }
+        if (Objects.isNull(innerSkuUrl)) {
+            return null;
         }
 
         String timestamp = DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss");
@@ -59,14 +66,14 @@ public class UnionJdProxy {
             throw new RuntimeException(e);
         }
         String queryUrl = API_URL
-                + "?timestamp=" + timestamp
-                + "&v=" + version
-                + "&sign_method=md5"
-                + "&format=json"
-                + "&method=" + method
-                + "&360buy_param_json=" + paramJson
-                + "&app_key=" + appKey
-                + "&sign=" + sign;
+            + "?timestamp=" + timestamp
+            + "&v=" + version
+            + "&sign_method=md5"
+            + "&format=json"
+            + "&method=" + method
+            + "&360buy_param_json=" + paramJson
+            + "&app_key=" + appKey
+            + "&sign=" + sign;
         HttpResponse execute = HttpUtil.createGet(queryUrl).execute();
         String body = execute.body();
         JSONObject res = JSON.parseObject(body);
@@ -74,7 +81,10 @@ public class UnionJdProxy {
     }
 
 
-    public JSONObject getGoodsInfo(String skuUrl) {
+    public String getGoodsInfo(String skuUrl) {
+
+        String url = getCommand(skuUrl);
+
         String skuId = getSkuId(skuUrl);
         if (StringUtils.isBlank(skuId)) {
             return null;
@@ -93,19 +103,29 @@ public class UnionJdProxy {
             throw new RuntimeException(e);
         }
         String queryUrl = API_URL
-                + "?timestamp=" + timestamp
-                + "&v=" + version
-                + "&sign_method=md5"
-                + "&format=json"
-                + "&method=" + method
-                + "&360buy_param_json=" + paramJson
-                + "&app_key=" + appKey
-                + "&sign=" + sign;
+            + "?timestamp=" + timestamp
+            + "&v=" + version
+            + "&sign_method=md5"
+            + "&format=json"
+            + "&method=" + method
+            + "&360buy_param_json=" + paramJson
+            + "&app_key=" + appKey
+            + "&sign=" + sign;
         HttpResponse execute = HttpUtil.createGet(queryUrl).execute();
         String body = execute.body();
         JSONObject res = JSON.parseObject(body);
         String data = res.getJSONObject("jd_union_open_goods_promotiongoodsinfo_query_responce").getJSONObject("queryResult").getString("data");
-        return JSON.parseArray(data).getJSONObject(0);
+        JSONObject goodsInfo = JSON.parseArray(data).getJSONObject(0);
+        if (goodsInfo == null || url == null) {
+            return null;
+        }
+        return "商品名称：" + goodsInfo.getString("goodsName") + "\r\n" +
+            "价格：" + goodsInfo.getString("unitPrice") + "\r\n" +
+            "返佣比例：" + goodsInfo.getString("commisionRatioPc") + "%\r\n" +
+            "预计返佣：" + goodsInfo.getInteger("unitPrice") * goodsInfo.getInteger("commisionRatioPc") * 0.01 + "\r\n" +
+            "下单地址：" + url +
+            "";
+
     }
 
 

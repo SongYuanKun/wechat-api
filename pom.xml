@@ -191,6 +191,13 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.11</version>
         </dependency>
+        <dependency>
+            <groupId>taobao-sdk-java-auto</groupId>
+            <artifactId>taobao-sdk-java-auto</artifactId>
+            <scope>system</scope>
+            <version>1600678017147-20220828</version>
+            <systemPath>${project.basedir}/lib/taobao-sdk-java-auto_1600689623425-20220814.jar</systemPath>
+        </dependency>
 
     </dependencies>
 
@@ -200,6 +207,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <includeSystemScope>true</includeSystemScope>
                     <mainClass>com.songyuankun.wechat.WeChatApiApplication</mainClass>
                 </configuration>
                 <executions>

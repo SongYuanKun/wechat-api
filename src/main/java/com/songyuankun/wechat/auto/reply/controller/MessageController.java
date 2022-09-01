@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.songyuankun.wechat.auto.reply.dto.MessageDTO;
 import com.songyuankun.wechat.auto.reply.service.WeChatService;
 import com.songyuankun.wechat.jd.UnionJdProxy;
+import com.songyuankun.wechat.taobao.UnionTaoBaoProxy;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,21 +24,16 @@ public class MessageController {
     private WeChatService weChatService;
     @Autowired
     private UnionJdProxy unionJdProxy;
+    @Autowired
+    private UnionTaoBaoProxy unionTaoBaoProxy;
 
     @PostMapping(value = "auto-reply", consumes = "text/xml", produces = "text/xml")
     public MessageDTO autoReplay(@RequestBody MessageDTO messageDTO) {
         log.info("messageDTO:{}", messageDTO);
-        String url = unionJdProxy.getCommand(messageDTO.getContent());
-        JSONObject goodsInfo = unionJdProxy.getGoodsInfo(messageDTO.getContent());
-        if (goodsInfo == null || url == null) {
-            return null;
+        String command = unionJdProxy.getGoodsInfo(messageDTO.getContent());
+        if (StringUtils.isBlank(command)){
+            unionTaoBaoProxy.getCommand(messageDTO.getContent());
         }
-        String command = "商品名称：" + goodsInfo.getString("goodsName") + "\r\n" +
-                "价格：" + goodsInfo.getString("unitPrice") + "\r\n" +
-                "返佣比例：" + goodsInfo.getString("commisionRatioPc") + "%\r\n" +
-                "预计返佣：" + goodsInfo.getInteger("unitPrice") * goodsInfo.getInteger("commisionRatioPc") * 0.01 + "\r\n" +
-                "下单地址：" + url +
-                "";
         return messageDTO.replay(command);
     }
 
