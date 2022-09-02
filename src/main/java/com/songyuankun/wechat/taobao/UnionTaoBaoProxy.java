@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 /**
@@ -42,10 +44,15 @@ public class UnionTaoBaoProxy {
         List<TbkDgMaterialOptionalResponse.MapData> resultList = rsp.getResultList();
         TbkDgMaterialOptionalResponse.MapData mapData = resultList.get(0);
 
-        return "商品名称：" + mapData.getTitle()+ "\r\n" +
+        return "商品名称：" + mapData.getTitle() + "\r\n" +
             "价格：" + mapData.getReservePrice() + "\r\n" +
             "返佣比例：" + mapData.getCommissionRate() + "‰\r\n" +
-            "预计返佣：" + Integer.parseInt(mapData.getReservePrice()) * Integer.parseInt(mapData.getCommissionRate()) * 0.001 + "\r\n" +
+            "预计返佣：" +
+            new BigDecimal(mapData.getReservePrice())
+                .multiply(new BigDecimal(mapData.getCommissionRate()))
+                .multiply(new BigDecimal("0.001"))
+                .setScale(2, RoundingMode.UP)
+            + "\r\n" +
             "下单地址：" + mapData.getCouponShareUrl() +
             "";
     }

@@ -10,6 +10,8 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Date;
@@ -122,7 +124,12 @@ public class UnionJdProxy {
         return "商品名称：" + goodsInfo.getString("goodsName") + "\r\n" +
             "价格：" + goodsInfo.getString("unitPrice") + "\r\n" +
             "返佣比例：" + goodsInfo.getString("commisionRatioPc") + "%\r\n" +
-            "预计返佣：" + goodsInfo.getInteger("unitPrice") * goodsInfo.getInteger("commisionRatioPc") * 0.01 + "\r\n" +
+            "预计返佣：" +
+            new BigDecimal(goodsInfo.getInteger("unitPrice"))
+                .multiply(new BigDecimal(goodsInfo.getInteger("commisionRatioPc")))
+                .multiply(new BigDecimal("0.01"))
+                .setScale(2, RoundingMode.UP) +
+            "\r\n" +
             "下单地址：" + url +
             "";
 
