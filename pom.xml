@@ -196,7 +196,9 @@
             <artifactId>taobao-sdk-java-auto</artifactId>
             <scope>system</scope>
             <version>1600678017147-20220828</version>
-            <systemPath>${project.basedir}/lib/taobao-sdk-java-auto_1600689623425-20220814.jar</systemPath>
+            <systemPath>
+                ${project.basedir}/lib/taobao-sdk-java-auto_1564132205913-20220902.jar
+            </systemPath>
         </dependency>
 
     </dependencies>
