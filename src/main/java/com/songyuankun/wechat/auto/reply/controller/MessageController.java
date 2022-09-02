@@ -31,8 +31,8 @@ public class MessageController {
     public MessageDTO autoReplay(@RequestBody MessageDTO messageDTO) {
         log.info("messageDTO:{}", messageDTO);
         String command = unionJdProxy.getGoodsInfo(messageDTO.getContent());
-        if (StringUtils.isBlank(command)){
-            unionTaoBaoProxy.getCommand(messageDTO.getContent());
+        if (StringUtils.isBlank(command)) {
+            command = unionTaoBaoProxy.getCommand(messageDTO.getContent());
         }
         return messageDTO.replay(command);
     }

@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author songyuankun
  */
@@ -26,7 +28,7 @@ public class UnionTaoBaoProxy {
 
     private static final String API_URL = "https://eco.taobao.com/router/rest";
 
-    public void getCommand(String keyWord) {
+    public String getCommand(String keyWord) {
         TaobaoClient client = new DefaultTaobaoClient(API_URL, appKey, secret);
         TbkDgMaterialOptionalRequest req = new TbkDgMaterialOptionalRequest();
         req.setAdzoneId(adzoneId);
@@ -37,7 +39,15 @@ public class UnionTaoBaoProxy {
         } catch (ApiException e) {
             throw new RuntimeException(e);
         }
-        System.out.println(rsp.getBody());
+        List<TbkDgMaterialOptionalResponse.MapData> resultList = rsp.getResultList();
+        TbkDgMaterialOptionalResponse.MapData mapData = resultList.get(0);
+
+        return "商品名称：" + mapData.getTitle()+ "\r\n" +
+            "价格：" + mapData.getReservePrice() + "\r\n" +
+            "返佣比例：" + mapData.getCommissionRate() + "‰\r\n" +
+            "预计返佣：" + Integer.parseInt(mapData.getReservePrice()) * Integer.parseInt(mapData.getCommissionRate()) * 0.001 + "\r\n" +
+            "下单地址：" + mapData.getCouponShareUrl() +
+            "";
     }
 
 }
