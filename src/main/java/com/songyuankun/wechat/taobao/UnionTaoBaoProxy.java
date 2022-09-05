@@ -6,6 +6,7 @@ import com.taobao.api.TaobaoClient;
 import com.taobao.api.request.TbkDgMaterialOptionalRequest;
 import com.taobao.api.response.TbkDgMaterialOptionalResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -53,7 +54,11 @@ public class UnionTaoBaoProxy {
                 .multiply(new BigDecimal("0.001"))
                 .setScale(2, RoundingMode.UP)
             + "\r\n" +
-            "下单地址：" + mapData.getCouponShareUrl() +
+            "下单地址：" +
+            StringUtils.defaultIfBlank(
+                mapData.getCouponShareUrl(),
+                mapData.getUrl()
+            ) +
             "";
     }
 
