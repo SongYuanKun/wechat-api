@@ -57,7 +57,7 @@ public class UnionJdProxy {
         String method = "jd.union.open.promotion.common.get";
         JSONObject jsonObject = new JSONObject();
         JSONObject promotionCodeReq = new JSONObject();
-        promotionCodeReq.put("materialId", skuUrl);
+        promotionCodeReq.put("materialId", innerSkuUrl);
         promotionCodeReq.put("siteId", siteId);
         jsonObject.put("promotionCodeReq", promotionCodeReq);
         String paramJson = jsonObject.toJSONString();
@@ -68,14 +68,14 @@ public class UnionJdProxy {
             throw new RuntimeException(e);
         }
         String queryUrl = API_URL
-            + "?timestamp=" + timestamp
-            + "&v=" + version
-            + "&sign_method=md5"
-            + "&format=json"
-            + "&method=" + method
-            + "&360buy_param_json=" + paramJson
-            + "&app_key=" + appKey
-            + "&sign=" + sign;
+                + "?timestamp=" + timestamp
+                + "&v=" + version
+                + "&sign_method=md5"
+                + "&format=json"
+                + "&method=" + method
+                + "&360buy_param_json=" + paramJson
+                + "&app_key=" + appKey
+                + "&sign=" + sign;
         HttpResponse execute = HttpUtil.createGet(queryUrl).execute();
         String body = execute.body();
         JSONObject res = JSON.parseObject(body);
@@ -105,14 +105,14 @@ public class UnionJdProxy {
             throw new RuntimeException(e);
         }
         String queryUrl = API_URL
-            + "?timestamp=" + timestamp
-            + "&v=" + version
-            + "&sign_method=md5"
-            + "&format=json"
-            + "&method=" + method
-            + "&360buy_param_json=" + paramJson
-            + "&app_key=" + appKey
-            + "&sign=" + sign;
+                + "?timestamp=" + timestamp
+                + "&v=" + version
+                + "&sign_method=md5"
+                + "&format=json"
+                + "&method=" + method
+                + "&360buy_param_json=" + paramJson
+                + "&app_key=" + appKey
+                + "&sign=" + sign;
         HttpResponse execute = HttpUtil.createGet(queryUrl).execute();
         String body = execute.body();
         JSONObject res = JSON.parseObject(body);
@@ -122,16 +122,16 @@ public class UnionJdProxy {
             return null;
         }
         return "商品名称：" + goodsInfo.getString("goodsName") + "\r\n" +
-            "价格：" + goodsInfo.getString("unitPrice") + "\r\n" +
-            "返佣比例：" + goodsInfo.getString("commisionRatioPc") + "%\r\n" +
-            "预计返佣：" +
-            new BigDecimal(goodsInfo.getInteger("unitPrice"))
-                .multiply(new BigDecimal(goodsInfo.getInteger("commisionRatioPc")))
-                .multiply(new BigDecimal("0.01"))
-                .setScale(2, RoundingMode.UP) +
-            "\r\n" +
-            "下单地址：" + url +
-            "";
+                "价格：" + goodsInfo.getString("unitPrice") + "\r\n" +
+                "返佣比例：" + goodsInfo.getString("commisionRatioPc") + "%\r\n" +
+                "预计返佣：" +
+                new BigDecimal(goodsInfo.getInteger("unitPrice"))
+                        .multiply(new BigDecimal(goodsInfo.getInteger("commisionRatioPc")))
+                        .multiply(new BigDecimal("0.01"))
+                        .setScale(2, RoundingMode.UP) +
+                "\r\n" +
+                "下单地址：" + url +
+                "";
 
     }
 
