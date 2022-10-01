@@ -1,11 +1,9 @@
 package com.songyuankun.wechat.auto.reply.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.songyuankun.wechat.auto.reply.dto.MessageDTO;
 import com.songyuankun.wechat.auto.reply.service.WeChatService;
 import com.songyuankun.wechat.jd.UnionJdProxy;
 import com.songyuankun.wechat.taobao.UnionTaoBaoProxy;
-import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 /**
  * @author songyuankun
  */
-@Api(value = "weixin")
 @RestController
 @Slf4j
 @RequestMapping("weixin")

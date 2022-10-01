@@ -1,7 +1,6 @@
 package com.songyuankun.wechat.response;
 
 import com.songyuankun.wechat.entity.Category;
-import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,7 +11,6 @@ import java.util.List;
 /**
  * @author songyuankun
  */
-@ApiModel
 @Getter
 @Setter
 @ToString

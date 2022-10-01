@@ -7,7 +7,6 @@ import com.songyuankun.wechat.entity.Tag;
 import com.songyuankun.wechat.request.TagForm;
 import com.songyuankun.wechat.request.query.TagQuery;
 import com.songyuankun.wechat.service.TagServiceImpl;
-import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Example;
@@ -22,7 +21,7 @@ import java.util.List;
  *
  * @author songyuankun
  */
-@Api(value = "admin/tag")
+
 @RestController
 @RequestMapping("admin/tag")
 @Slf4j

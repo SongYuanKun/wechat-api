@@ -4,7 +4,6 @@ import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.entity.Room;
 import com.songyuankun.wechat.repository.RoomRepository;
 import com.songyuankun.wechat.request.RoomForm;
-import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -17,7 +16,7 @@ import java.util.List;
 /**
  * @author songyuankun
  */
-@Api
+
 @RestController
 @RequestMapping("room")
 @Slf4j

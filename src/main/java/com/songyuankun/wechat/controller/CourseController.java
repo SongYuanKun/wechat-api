@@ -5,7 +5,6 @@ import com.songyuankun.wechat.entity.Course;
 import com.songyuankun.wechat.repository.CourseRepository;
 import com.songyuankun.wechat.request.CourseForm;
 import com.songyuankun.wechat.request.update.CourseUpdateDetail;
-import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ import javax.transaction.Transactional;
 /**
  * @author songyuankun
  */
-@Api(value = "course")
+
 @RestController
 @RequestMapping("course")
 @Slf4j

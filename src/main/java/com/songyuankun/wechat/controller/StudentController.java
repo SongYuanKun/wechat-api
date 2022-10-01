@@ -4,7 +4,6 @@ import com.songyuankun.wechat.entity.CourseEnroll;
 import com.songyuankun.wechat.entity.User;
 import com.songyuankun.wechat.repository.CourseEnrollRepository;
 import com.songyuankun.wechat.repository.UserRepository;
-import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -19,7 +18,7 @@ import java.util.stream.Collectors;
 /**
  * @author songyuankun
  */
-@Api
+
 @RestController
 @RequestMapping("student")
 @Slf4j

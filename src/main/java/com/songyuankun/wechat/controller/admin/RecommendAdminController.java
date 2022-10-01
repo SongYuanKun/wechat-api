@@ -7,7 +7,6 @@ import com.songyuankun.wechat.entity.Recommend;
 import com.songyuankun.wechat.request.RecommendForm;
 import com.songyuankun.wechat.request.query.RecommendQuery;
 import com.songyuankun.wechat.service.RecommendServiceImpl;
-import io.swagger.annotations.Api;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +17,7 @@ import java.util.Arrays;
 /**
  * @author songyuankun
  */
-@Api(value = "admin/recommend")
+
 @RestController
 @RequestMapping("admin/recommend")
 public class RecommendAdminController {

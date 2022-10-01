@@ -1,6 +1,6 @@
 package com.songyuankun.wechat.entity;
 
-import io.swagger.annotations.ApiModelProperty;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,7 +26,7 @@ import java.io.Serializable;
 @DynamicUpdate
 public class TagLink extends BaseEntity implements Serializable {
 
-    @ApiModelProperty(value = "主键")
+
     @Id
     @GeneratedValue
     private Integer id;

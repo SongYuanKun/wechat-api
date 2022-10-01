@@ -5,7 +5,6 @@ import com.songyuankun.wechat.entity.CourseEnroll;
 import com.songyuankun.wechat.repository.CourseEnrollRepository;
 import com.songyuankun.wechat.repository.CourseRepository;
 import com.songyuankun.wechat.request.CourseEnrollForm;
-import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Example;
@@ -20,7 +19,7 @@ import java.util.List;
 /**
  * @author songyuankun
  */
-@Api
+
 @RestController
 @RequestMapping("course_enroll")
 @Slf4j

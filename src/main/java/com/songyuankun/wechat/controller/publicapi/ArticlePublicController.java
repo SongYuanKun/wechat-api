@@ -1,12 +1,11 @@
 package com.songyuankun.wechat.controller.publicapi;
 
+import com.songyuankun.wechat.blog.event.NumberEventProducer;
+import com.songyuankun.wechat.blog.service.ArticleServiceImpl;
 import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.common.ResponseUtils;
 import com.songyuankun.wechat.entity.Article;
-import com.songyuankun.wechat.blog.event.NumberEventProducer;
 import com.songyuankun.wechat.request.query.ArticleQuery;
-import com.songyuankun.wechat.blog.service.ArticleServiceImpl;
-import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * @author songyuankun
  */
-@Api
+
 @RestController
 @RequestMapping("public/article")
 @Slf4j

@@ -7,7 +7,6 @@ import com.songyuankun.wechat.entity.User;
 import com.songyuankun.wechat.repository.UserRepository;
 import com.songyuankun.wechat.service.SysCaptchaServiceImpl;
 import com.songyuankun.wechat.util.Md5Util;
-import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,7 +24,7 @@ import java.util.List;
 /**
  * @author songyuankun
  */
-@Api(value = "admin")
+
 @RestController
 @Slf4j
 @RequestMapping("admin")

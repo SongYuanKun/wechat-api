@@ -11,7 +11,6 @@ import com.songyuankun.wechat.request.CategoryForm;
 import com.songyuankun.wechat.request.query.CategoryQuery;
 import com.songyuankun.wechat.response.CategoryPageResponse;
 import com.songyuankun.wechat.service.CategoryServiceImpl;
-import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -26,7 +25,7 @@ import java.util.stream.Collectors;
  *
  * @author songyuankun
  */
-@Api(value = "admin/category")
+
 @RestController
 @RequestMapping("admin/category")
 @Slf4j

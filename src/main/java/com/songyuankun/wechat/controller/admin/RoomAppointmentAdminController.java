@@ -9,7 +9,6 @@ import com.songyuankun.wechat.request.RoomAppointmentForm;
 import com.songyuankun.wechat.request.query.RoomAppointmentQuery;
 import com.songyuankun.wechat.response.MyAppointmentTimeResponse;
 import com.songyuankun.wechat.service.RoomAppointmentServiceImpl;
-import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -25,7 +24,7 @@ import java.util.List;
 /**
  * @author songyuankun
  */
-@Api(value = "admin/room_appointment")
+
 @RestController
 @RequestMapping("admin/room_appointment")
 @Slf4j

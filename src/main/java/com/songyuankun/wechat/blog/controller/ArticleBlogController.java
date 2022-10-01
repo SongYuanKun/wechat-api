@@ -1,17 +1,13 @@
 package com.songyuankun.wechat.blog.controller;
 
+import com.songyuankun.wechat.blog.event.NumberEventProducer;
+import com.songyuankun.wechat.blog.service.ArticleServiceImpl;
 import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.common.ResponseUtils;
 import com.songyuankun.wechat.entity.Article;
-import com.songyuankun.wechat.blog.event.NumberEventProducer;
 import com.songyuankun.wechat.response.ArticleInfoResponse;
-import com.songyuankun.wechat.blog.service.ArticleServiceImpl;
 import com.songyuankun.wechat.service.TagServiceImpl;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.*;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * @author songyuankun
  */
-@Api(tags = "文章相关接口")
+
 @RestController
 @RequestMapping("blog/article")
 @Slf4j
@@ -28,15 +24,15 @@ public class ArticleBlogController {
     private final TagServiceImpl tagService;
     private final NumberEventProducer numberEventProducer;
 
-    public ArticleBlogController(ArticleServiceImpl articleService, TagServiceImpl tagService, NumberEventProducer numberEventProducer, DefaultMQProducer mqProducer) {
+    public ArticleBlogController(ArticleServiceImpl articleService, TagServiceImpl tagService, NumberEventProducer numberEventProducer) {
         this.articleService = articleService;
         this.tagService = tagService;
         this.numberEventProducer = numberEventProducer;
     }
 
-    @ApiOperation(value = "获取文章详情", notes = "获取文章详情")
+
     @GetMapping("info/{id}")
-    public Response<ArticleInfoResponse> info(@ApiParam("文章id") @PathVariable Integer id) {
+    public Response<ArticleInfoResponse> info(@PathVariable Integer id) {
         Article one = articleService.getOne(id);
         if (one != null) {
             //读写分离处理
@@ -50,9 +46,15 @@ public class ArticleBlogController {
         }
     }
 
-    @ApiOperation(value = "获取文章列表", notes = "获取文章列表")
+
     @GetMapping("page")
-    public Response<Page<Article>> publicPage(@ApiParam("页码") @RequestParam(required = false, defaultValue = "1") Integer pageNumber, @ApiParam("每页大小") @RequestParam(required = false, defaultValue = "10") Integer pageSize, @ApiParam("推荐") @RequestParam(required = false) Boolean recommend, @ApiParam("最新发布") @RequestParam(required = false) Boolean latest, @ApiParam("最多喜欢") @RequestParam(required = false) Boolean favorite) {
+    public Response<Page<Article>> publicPage(
+            @RequestParam(required = false, defaultValue = "1") Integer pageNumber,
+            @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+            @RequestParam(required = false) Boolean recommend,
+            @RequestParam(required = false) Boolean latest,
+            @RequestParam(required = false) Boolean favorite
+    ) {
         Article article = new Article();
         article.setPublish(true);
         if (recommend != null && recommend) {
@@ -72,16 +74,15 @@ public class ArticleBlogController {
         return ResponseUtils.success(all);
     }
 
-    @ApiOperation(value = "获取最热文章", notes = "获取最热文章")
+
     @GetMapping("hotReads")
     public Response<Page<Article>> hotReads() {
         return ResponseUtils.success(articleService.hotReads());
     }
 
 
-    @ApiOperation(value = "文章点赞", notes = "文章点赞")
     @PutMapping("like/{id}")
-    public Response<Object> likeArticle(@ApiParam("文章id") @PathVariable Integer id) {
+    public Response<Object> likeArticle(@PathVariable Integer id) {
         //读写分离处理
         numberEventProducer.onData("LIKE", id);
         return ResponseUtils.success();

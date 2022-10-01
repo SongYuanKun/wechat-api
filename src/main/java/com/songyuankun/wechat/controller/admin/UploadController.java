@@ -14,9 +14,6 @@ import com.songyuankun.wechat.entity.OssResource;
 import com.songyuankun.wechat.repository.OssResourceRepository;
 import com.songyuankun.wechat.util.FileUtil;
 import com.songyuankun.wechat.util.WeChatUtil;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -35,7 +32,7 @@ import java.util.UUID;
 /**
  * @author songyuankun
  */
-@Api(value = "admin/upload")
+
 @RestController
 @RequestMapping("admin/upload")
 @Slf4j
@@ -58,8 +55,8 @@ public class UploadController {
     }
 
     @PostMapping(value = "file")
-    @ApiOperation(value = "上传文件", notes = "上传文件")
-    public com.songyuankun.wechat.common.Response<Map<String, Object>> upload(Authentication authentication, @ApiParam(name = "文件") @RequestParam("file") MultipartFile file) {
+    
+    public com.songyuankun.wechat.common.Response<Map<String, Object>> upload(Authentication authentication, @RequestParam("file") MultipartFile file) {
         Configuration cfg = new Configuration(Zone.zone0());
 
         UploadManager uploadManager = new UploadManager(cfg);

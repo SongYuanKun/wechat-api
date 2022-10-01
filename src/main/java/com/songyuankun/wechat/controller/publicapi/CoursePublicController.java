@@ -2,7 +2,6 @@ package com.songyuankun.wechat.controller.publicapi;
 
 import com.songyuankun.wechat.entity.Course;
 import com.songyuankun.wechat.repository.CourseRepository;
-import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,7 +14,7 @@ import java.util.List;
 /**
  * @author songyuankun
  */
-@Api
+
 @RestController
 @RequestMapping("public/course")
 @Slf4j
