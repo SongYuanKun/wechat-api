@@ -3,6 +3,7 @@ package com.songyuankun.wechat.jd;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -79,7 +80,12 @@ public class UnionJdProxy {
         HttpResponse execute = HttpUtil.createGet(queryUrl).execute();
         String body = execute.body();
         JSONObject res = JSON.parseObject(body);
-        return res.getJSONObject("jd_union_open_promotion_common_get_responce").getJSONObject("getResult").getJSONObject("data").getString("clickURL");
+        JSONObject result = res.getJSONObject("jd_union_open_promotion_common_get_responce").getJSONObject("getResult");
+        if (result.getJSONObject("data") != null) {
+            return result.getJSONObject("data").getString("clickURL");
+        } else {
+            return result.getString("message");
+        }
     }
 
 
@@ -116,8 +122,8 @@ public class UnionJdProxy {
         HttpResponse execute = HttpUtil.createGet(queryUrl).execute();
         String body = execute.body();
         JSONObject res = JSON.parseObject(body);
-        String data = res.getJSONObject("jd_union_open_goods_promotiongoodsinfo_query_responce").getJSONObject("queryResult").getString("data");
-        JSONObject goodsInfo = JSON.parseArray(data).getJSONObject(0);
+        JSONArray jsonArray = res.getJSONObject("jd_union_open_goods_promotiongoodsinfo_query_responce").getJSONObject("queryResult").getJSONArray("data");
+        JSONObject goodsInfo = jsonArray.size() > 0 ? jsonArray.getJSONObject(0) : null;
         if (goodsInfo == null || url == null) {
             return null;
         }

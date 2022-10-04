@@ -12,6 +12,16 @@ class UnionJdProxyTest {
 
     @Test
     void getCommand() {
-        unionJdProxy.getCommand("https://item.m.jd.com/product/10050064328710.html?&utm_source=iosapp&utm_medium=appshare&utm_campaign=t_335139774&utm_term=CopyURL&ad_od=share&gx=RnFtxGMNbTbcydQQroxwWGyathw3zTQHwfQY");
+        String command = unionJdProxy.getCommand("https://item.m.jd.com/product/10056670674874.html?&utm_source=iosapp&utm_medium=appshare&utm_campaign=t_335139774&utm_term=CopyURL&ad_od=share&utm_user=plusmember&gx=RnFsxDMNOWDazdTCET-j0isflP8");
+        System.out.printf(command);
+    }
+
+    @Test
+    void getGoodsInfo() {
+        String goodsInfo = unionJdProxy.getGoodsInfo("https://item.m.jd.com/product/100018864897.html?&utm_source=iosapp&utm_medium=appshare&utm_campaign=t_335139774&utm_term=CopyURL&ad_od=share&utm_user=plusmember&gx=RnFsxDMNOWDazdTCET-j0isflP8");
+        System.out.printf(goodsInfo);
+
+        goodsInfo = unionJdProxy.getGoodsInfo("https://item.m.jd.com/product/10056670674874.html?&utm_source=iosapp&utm_medium=appshare&utm_campaign=t_335139774&utm_term=CopyURL&ad_od=share&utm_user=plusmember&gx=RnFsxDMNOWDazdTCET-j0isflP8");
+        System.out.printf(goodsInfo);
     }
 }
