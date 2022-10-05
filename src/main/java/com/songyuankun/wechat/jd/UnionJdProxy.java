@@ -123,7 +123,12 @@ public class UnionJdProxy {
         String body = execute.body();
         JSONObject res = JSON.parseObject(body);
         JSONArray jsonArray = res.getJSONObject("jd_union_open_goods_promotiongoodsinfo_query_responce").getJSONObject("queryResult").getJSONArray("data");
-        JSONObject goodsInfo = jsonArray.size() > 0 ? jsonArray.getJSONObject(0) : null;
+        JSONObject goodsInfo;
+        if (jsonArray.size() > 0) {
+            goodsInfo = jsonArray.getJSONObject(0);
+        } else {
+            return "该商品不参与优惠";
+        }
         if (goodsInfo == null || url == null) {
             return null;
         }
