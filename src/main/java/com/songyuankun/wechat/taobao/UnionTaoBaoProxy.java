@@ -6,6 +6,7 @@ import com.taobao.api.TaobaoClient;
 import com.taobao.api.request.TbkDgMaterialOptionalRequest;
 import com.taobao.api.response.TbkDgMaterialOptionalResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -43,23 +44,25 @@ public class UnionTaoBaoProxy {
             throw new RuntimeException(e);
         }
         List<TbkDgMaterialOptionalResponse.MapData> resultList = rsp.getResultList();
+        if (CollectionUtils.isEmpty(resultList)) {
+            return "该商品不参与优惠";
+        }
         TbkDgMaterialOptionalResponse.MapData mapData = resultList.get(0);
-
         return "商品名称：" + mapData.getTitle() + "\r\n" +
-            "价格：" + mapData.getReservePrice() + "\r\n" +
-            "返佣比例：" + mapData.getCommissionRate() + "‰\r\n" +
-            "预计返佣：" +
-            new BigDecimal(mapData.getReservePrice())
-                .multiply(new BigDecimal(mapData.getCommissionRate()))
-                .multiply(new BigDecimal("0.001"))
-                .setScale(2, RoundingMode.UP)
-            + "\r\n" +
-            "下单地址：" +
-            StringUtils.defaultIfBlank(
-                mapData.getCouponShareUrl(),
-                mapData.getUrl()
-            ) +
-            "";
+                "价格：" + mapData.getReservePrice() + "\r\n" +
+                "返佣比例：" + mapData.getCommissionRate() + "‰\r\n" +
+                "预计返佣：" +
+                new BigDecimal(mapData.getReservePrice())
+                        .multiply(new BigDecimal(mapData.getCommissionRate()))
+                        .multiply(new BigDecimal("0.001"))
+                        .setScale(2, RoundingMode.UP)
+                + "\r\n" +
+                "下单地址：" +
+                StringUtils.defaultIfBlank(
+                        mapData.getCouponShareUrl(),
+                        mapData.getUrl()
+                ) +
+                "";
     }
 
 }
