@@ -2,7 +2,7 @@ package com.songyuankun.wechat.util;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.songyuankun.wechat.entity.Article;
+import com.songyuankun.wechat.entity.ArticlePO;
 import com.songyuankun.wechat.enums.WeChatUrlEnum;
 import com.songyuankun.wechat.publish.wechat.WeChatArticleDto;
 import lombok.extern.slf4j.Slf4j;
@@ -86,23 +86,23 @@ public class WeChatUtil {
         return weChatUrlEnum.getUrl() + "?access_token=" + getAccessTokenFromRedis();
     }
 
-    public String addNews(List<Article> articleList) {
+    public String addNews(List<ArticlePO> articlePOList) {
         String weChatUrl = getWeChatUrl(WeChatUrlEnum.ADD_NEWS);
         List<WeChatArticleDto> weChatArticleDtoList = new ArrayList<>();
-        for (Article article : articleList) {
+        for (ArticlePO articlePO : articlePOList) {
             WeChatArticleDto weChatArticleDto = new WeChatArticleDto();
-            weChatArticleDto.setTitle(article.getTitle());
-            weChatArticleDto.setThumbMediaId(article.getThumbMediaId());
-            weChatArticleDto.setAuthor(article.getAuthor());
-            String contentFormat = replaceUrl2WeChatUrl(article.getContentFormat());
+            weChatArticleDto.setTitle(articlePO.getTitle());
+            weChatArticleDto.setThumbMediaId(articlePO.getThumbMediaId());
+            weChatArticleDto.setAuthor(articlePO.getAuthor());
+            String contentFormat = replaceUrl2WeChatUrl(articlePO.getContentFormat());
             weChatArticleDto.setContent(contentFormat);
-            weChatArticleDto.setDigest(article.getDescription());
-            if (!StringUtils.isEmpty(article.getThumbMediaId())) {
+            weChatArticleDto.setDigest(articlePO.getDescription());
+            if (!StringUtils.isEmpty(articlePO.getThumbMediaId())) {
                 weChatArticleDto.setShowCoverPic(1);
             } else {
                 weChatArticleDto.setShowCoverPic(0);
             }
-            weChatArticleDto.setContentSourceUrl("https://blog.songyuankun.top/article/" + article.getId().toString());
+            weChatArticleDto.setContentSourceUrl("https://blog.songyuankun.top/article/" + articlePO.getId().toString());
             weChatArticleDtoList.add(weChatArticleDto);
         }
         Map<String, List<WeChatArticleDto>> map = new HashMap<>(8);

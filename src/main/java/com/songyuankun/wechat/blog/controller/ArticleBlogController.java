@@ -4,8 +4,8 @@ import com.songyuankun.wechat.blog.event.NumberEventProducer;
 import com.songyuankun.wechat.blog.service.ArticleServiceImpl;
 import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.common.ResponseUtils;
-import com.songyuankun.wechat.entity.Article;
-import com.songyuankun.wechat.response.ArticleInfoResponse;
+import com.songyuankun.wechat.entity.ArticlePO;
+import com.songyuankun.wechat.response.ArticlePOInfoResponse;
 import com.songyuankun.wechat.service.TagServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -32,12 +32,12 @@ public class ArticleBlogController {
 
 
     @GetMapping("info/{id}")
-    public Response<ArticleInfoResponse> info(@PathVariable Integer id) {
-        Article one = articleService.getOne(id);
+    public Response<ArticlePOInfoResponse> info(@PathVariable Integer id) {
+        ArticlePO one = articleService.getOne(id);
         if (one != null) {
             //读写分离处理
             numberEventProducer.onData("READ", id);
-            ArticleInfoResponse articleInfoResponse = new ArticleInfoResponse();
+            ArticlePOInfoResponse articleInfoResponse = new ArticlePOInfoResponse();
             BeanUtils.copyProperties(one, articleInfoResponse);
             articleInfoResponse.setTagList(tagService.getTagsByArticleId(id));
             return ResponseUtils.success(articleInfoResponse);
@@ -48,17 +48,17 @@ public class ArticleBlogController {
 
 
     @GetMapping("page")
-    public Response<Page<Article>> publicPage(
+    public Response<Page<ArticlePO>> publicPage(
             @RequestParam(required = false, defaultValue = "1") Integer pageNumber,
             @RequestParam(required = false, defaultValue = "10") Integer pageSize,
             @RequestParam(required = false) Boolean recommend,
             @RequestParam(required = false) Boolean latest,
             @RequestParam(required = false) Boolean favorite
     ) {
-        Article article = new Article();
-        article.setPublish(true);
+        ArticlePO articlePO = new ArticlePO();
+        articlePO.setPublish(true);
         if (recommend != null && recommend) {
-            article.setRecommend(true);
+            articlePO.setRecommend(true);
         }
         Sort sort = Sort.by(Sort.Order.desc("top"));
         if (latest != null && latest) {
@@ -70,13 +70,13 @@ public class ArticleBlogController {
             sort = sort.and(Sort.by(likeNum));
         }
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
-        Page<Article> all = articleService.findAll(Example.of(article), pageable);
+        Page<ArticlePO> all = articleService.findAll(Example.of(articlePO), pageable);
         return ResponseUtils.success(all);
     }
 
 
     @GetMapping("hotReads")
-    public Response<Page<Article>> hotReads() {
+    public Response<Page<ArticlePO>> hotReads() {
         return ResponseUtils.success(articleService.hotReads());
     }
 

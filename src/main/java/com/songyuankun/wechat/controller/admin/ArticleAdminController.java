@@ -5,11 +5,11 @@ import com.songyuankun.wechat.blog.service.ArticleServiceImpl;
 import com.songyuankun.wechat.common.DaoCommon;
 import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.common.ResponseUtils;
-import com.songyuankun.wechat.entity.Article;
-import com.songyuankun.wechat.request.ArticleForm;
+import com.songyuankun.wechat.entity.ArticlePO;
+import com.songyuankun.wechat.request.ArticlePOForm;
 import com.songyuankun.wechat.request.query.ArticleQuery;
 import com.songyuankun.wechat.request.update.ArticleUpdateStatus;
-import com.songyuankun.wechat.response.ArticleInfoResponse;
+import com.songyuankun.wechat.response.ArticlePOInfoResponse;
 import com.songyuankun.wechat.service.TagServiceImpl;
 import com.songyuankun.wechat.util.WeChatUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -50,7 +50,7 @@ public class ArticleAdminController {
 
 
     @PostMapping("saveOrUpdate")
-    public Response<Article> save(Authentication authentication, @RequestBody ArticleForm articleForm) {
+    public Response<ArticlePO> save(Authentication authentication, @RequestBody ArticlePOForm articleForm) {
         return ResponseUtils.success(articleService.saveOrUpdate(authentication, articleForm));
     }
 
@@ -58,18 +58,18 @@ public class ArticleAdminController {
     @PostMapping("update/status")
     @Transactional(rollbackOn = Exception.class)
     public Response<Object> update(Authentication authentication, @RequestBody ArticleUpdateStatus articleUpdateStatus) {
-        Article article = articleRepository.getOne(articleUpdateStatus.getId());
+        ArticlePO articlePO = articleRepository.getOne(articleUpdateStatus.getId());
         if (articleUpdateStatus.getPublish() != null) {
-            article.setPublish(articleUpdateStatus.getPublish());
+            articlePO.setPublish(articleUpdateStatus.getPublish());
         }
         if (articleUpdateStatus.getRecommend() != null) {
-            article.setRecommend(articleUpdateStatus.getRecommend());
+            articlePO.setRecommend(articleUpdateStatus.getRecommend());
         }
         if (articleUpdateStatus.getTop() != null) {
-            article.setTop(articleUpdateStatus.getTop());
+            articlePO.setTop(articleUpdateStatus.getTop());
         }
-        DaoCommon.updateDao(authentication, article);
-        articleRepository.save(article);
+        DaoCommon.updateDao(authentication, articlePO);
+        articleRepository.save(articlePO);
         return ResponseUtils.success();
     }
 
@@ -77,11 +77,11 @@ public class ArticleAdminController {
     @GetMapping("send2WeChat/{id}")
     @Transactional(rollbackOn = Exception.class)
     public Response<Object> send2WeChat(Authentication authentication, @PathVariable Integer id) {
-        Article article = articleRepository.getOne(id);
-        String mediaId = weChatUtil.addNews(Collections.singletonList(article));
-        article.setMediaId(mediaId);
-        DaoCommon.updateDao(authentication, article);
-        articleRepository.save(article);
+        ArticlePO articlePO = articleRepository.getOne(id);
+        String mediaId = weChatUtil.addNews(Collections.singletonList(articlePO));
+        articlePO.setMediaId(mediaId);
+        DaoCommon.updateDao(authentication, articlePO);
+        articleRepository.save(articlePO);
         return ResponseUtils.success();
     }
 
@@ -89,45 +89,45 @@ public class ArticleAdminController {
     @PostMapping("send2WeChat/ids")
     @Transactional(rollbackOn = Exception.class)
     public Response<Object> send2WeChat(Authentication authentication, @RequestBody Integer[] ids) {
-        List<Article> articleList = articleRepository.queryAllByIdIn(Arrays.asList(ids));
-        String mediaId = weChatUtil.addNews(articleList);
-        for (Article article : articleList) {
-            article.setMediaId(mediaId);
-            DaoCommon.updateDao(authentication, article);
-            articleRepository.save(article);
+        List<ArticlePO> articlePOList = articleRepository.queryAllByIdIn(Arrays.asList(ids));
+        String mediaId = weChatUtil.addNews(articlePOList);
+        for (ArticlePO articlePO : articlePOList) {
+            articlePO.setMediaId(mediaId);
+            DaoCommon.updateDao(authentication, articlePO);
+            articleRepository.save(articlePO);
         }
         return ResponseUtils.success();
     }
 
 
     @PostMapping("page")
-    public Response<Page<ArticleInfoResponse>> page(@RequestBody ArticleQuery articleQuery) {
-        Page<ArticleInfoResponse> page = articleService.page(articleQuery);
+    public Response<Page<ArticlePOInfoResponse>> page(@RequestBody ArticleQuery articleQuery) {
+        Page<ArticlePOInfoResponse> page = articleService.page(articleQuery);
         return ResponseUtils.success(page);
     }
 
 
     @PostMapping("publicPage")
-    public Response<Page<Article>> publicPage(@RequestBody ArticleQuery articleQuery) {
-        Page<Article> articles = articleService.publicPage(articleQuery);
+    public Response<Page<ArticlePO>> publicPage(@RequestBody ArticleQuery articleQuery) {
+        Page<ArticlePO> articles = articleService.publicPage(articleQuery);
         return ResponseUtils.success(articles);
     }
 
 
     @PostMapping("my/create")
-    public Response<Page<Article>> page(Authentication authentication, @RequestParam(required = false, defaultValue = "1") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
+    public Response<Page<ArticlePO>> page(Authentication authentication, @RequestParam(required = false, defaultValue = "1") Integer pageNumber, @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
         Integer userId = Integer.valueOf(authentication.getName());
-        Article article = new Article();
-        article.setCreateUserId(userId);
+        ArticlePO articlePO = new ArticlePO();
+        articlePO.setCreateUserId(userId);
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
-        return ResponseUtils.success(articleRepository.findAll(Example.of(article), pageable));
+        return ResponseUtils.success(articleRepository.findAll(Example.of(articlePO), pageable));
     }
 
 
     @GetMapping("info/{id}")
-    public Response<ArticleInfoResponse> info(@PathVariable Integer id) {
-        Article one = articleRepository.getOne(id);
-        ArticleInfoResponse articleInfoResponse = new ArticleInfoResponse();
+    public Response<ArticlePOInfoResponse> info(@PathVariable Integer id) {
+        ArticlePO one = articleRepository.getOne(id);
+        ArticlePOInfoResponse articleInfoResponse = new ArticlePOInfoResponse();
         BeanUtils.copyProperties(one, articleInfoResponse);
         articleInfoResponse.setTagList(tagService.getTagsByArticleId(id));
         return ResponseUtils.success(articleInfoResponse);
@@ -135,7 +135,7 @@ public class ArticleAdminController {
 
 
     @GetMapping("delete/{id}")
-    public Response<ArticleInfoResponse> delete(@PathVariable Integer id) {
+    public Response<ArticlePOInfoResponse> delete(@PathVariable Integer id) {
         articleRepository.deleteById(id);
         return ResponseUtils.success();
     }

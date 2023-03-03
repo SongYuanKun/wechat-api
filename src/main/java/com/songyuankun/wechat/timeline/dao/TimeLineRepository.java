@@ -1,6 +1,6 @@
 package com.songyuankun.wechat.timeline.dao;
 
-import com.songyuankun.wechat.entity.Article;
+import com.songyuankun.wechat.entity.ArticlePO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * @author songyuankun
  */
-public interface TimeLineRepository extends JpaRepository<Article, Integer> {
+public interface TimeLineRepository extends JpaRepository<ArticlePO, Integer> {
 
     @Query(value = " select DATE_FORMAT(create_time,'%Y') as year,count(DATE_FORMAT(create_time,'%Y')) as count from article where publish = 1 group by DATE_FORMAT(create_time,'%Y')", nativeQuery = true)
     List<Object[]> listTimeline();

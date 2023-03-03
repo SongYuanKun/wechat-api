@@ -26,7 +26,7 @@ import java.io.Serializable;
 @Setter
 @DynamicInsert
 @DynamicUpdate
-public class Article extends BaseEntity implements Serializable {
+public class ArticlePO extends BaseEntity implements Serializable {
 
     @Id
     @GeneratedValue

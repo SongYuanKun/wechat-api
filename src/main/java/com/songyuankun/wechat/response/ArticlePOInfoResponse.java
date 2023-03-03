@@ -1,6 +1,6 @@
 package com.songyuankun.wechat.response;
 
-import com.songyuankun.wechat.entity.Article;
+import com.songyuankun.wechat.entity.ArticlePO;
 import com.songyuankun.wechat.entity.Tag;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class ArticleInfoResponse extends Article {
+public class ArticlePOInfoResponse extends ArticlePO {
 
     private String categoryListStr;
 

@@ -3,11 +3,11 @@ package com.songyuankun.wechat.blog.service;
 
 import com.songyuankun.wechat.blog.dao.ArticleRepository;
 import com.songyuankun.wechat.common.DaoCommon;
-import com.songyuankun.wechat.entity.Article;
+import com.songyuankun.wechat.entity.ArticlePO;
 import com.songyuankun.wechat.entity.Category;
-import com.songyuankun.wechat.request.ArticleForm;
+import com.songyuankun.wechat.request.ArticlePOForm;
 import com.songyuankun.wechat.request.query.ArticleQuery;
-import com.songyuankun.wechat.response.ArticleInfoResponse;
+import com.songyuankun.wechat.response.ArticlePOInfoResponse;
 import com.songyuankun.wechat.service.CategoryServiceImpl;
 import com.songyuankun.wechat.service.TagServiceImpl;
 import com.songyuankun.wechat.util.WeChatUtil;
@@ -38,49 +38,49 @@ public class ArticleServiceImpl {
         this.weChatUtil = weChatUtil;
     }
 
-    public Article saveOrUpdate(Authentication authentication, ArticleForm articleForm) {
-        Article article = new Article();
+    public ArticlePO saveOrUpdate(Authentication authentication, ArticlePOForm articleForm) {
+        ArticlePO articlePO = new ArticlePO();
         if (articleForm.getId() == null) {
-            BeanUtils.copyProperties(articleForm, article);
-            String mediaId = weChatUtil.addThumbMedia(article.getCover());
+            BeanUtils.copyProperties(articleForm, articlePO);
+            String mediaId = weChatUtil.addThumbMedia(articlePO.getCover());
             articleForm.setThumbMediaId(mediaId);
-            DaoCommon.createDao(authentication, article);
+            DaoCommon.createDao(authentication, articlePO);
         } else {
-            article = articleRepository.getOne(articleForm.getId());
-            if (StringUtils.isEmpty(article.getThumbMediaId()) || !article.getCover().equals(articleForm.getCover())) {
-                String mediaId = weChatUtil.addThumbMedia(article.getCover());
+            articlePO = articleRepository.getOne(articleForm.getId());
+            if (StringUtils.isEmpty(articlePO.getThumbMediaId()) || !articlePO.getCover().equals(articleForm.getCover())) {
+                String mediaId = weChatUtil.addThumbMedia(articlePO.getCover());
                 articleForm.setThumbMediaId(mediaId);
             }
-            BeanUtils.copyProperties(articleForm, article);
-            DaoCommon.updateDao(authentication, article);
+            BeanUtils.copyProperties(articleForm, articlePO);
+            DaoCommon.updateDao(authentication, articlePO);
         }
 
-        Article save = articleRepository.save(article);
+        ArticlePO save = articleRepository.save(articlePO);
         tagService.saveTagAndNew(articleForm.getTagList(), save.getId());
         return save;
     }
 
 
-    public Page<Article> publicPage(ArticleQuery articleQuery) {
+    public Page<ArticlePO> publicPage(ArticleQuery articleQuery) {
         Pageable pageable = PageRequest.of(articleQuery.getPageNumber() - 1, articleQuery.getPageSize());
         return findAll(articleQuery, pageable);
     }
 
-    public Page<Article> hotReads() {
+    public Page<ArticlePO> hotReads() {
         Sort sort = Sort.by(Sort.Order.desc("readNum"));
         Pageable pageable = PageRequest.of(0, 10, sort);
         return articleRepository.findAll(pageable);
     }
 
-    public Page<ArticleInfoResponse> page(ArticleQuery articleQuery) {
+    public Page<ArticlePOInfoResponse> page(ArticleQuery articleQuery) {
         Pageable pageable = PageRequest.of(articleQuery.getPageNumber() - 1, articleQuery.getPageSize());
-        Article article1 = new Article();
-        article1.setMediaId(articleQuery.getMediaId());
-        Page<Article> all = articleRepository.findAll(Example.of(article1), pageable);
+        ArticlePO articlePO1 = new ArticlePO();
+        articlePO1.setMediaId(articleQuery.getMediaId());
+        Page<ArticlePO> all = articleRepository.findAll(Example.of(articlePO1), pageable);
         List<Category> categoryList = categoryService.select(0);
-        List<ArticleInfoResponse> articleInfoResponseList = new ArrayList<>();
+        List<ArticlePOInfoResponse> articleInfoResponseList = new ArrayList<>();
         all.stream().forEach(article -> {
-            ArticleInfoResponse articleInfoResponse = new ArticleInfoResponse();
+            ArticlePOInfoResponse articleInfoResponse = new ArticlePOInfoResponse();
             BeanUtils.copyProperties(article, articleInfoResponse);
             articleInfoResponse.setCategoryListStr(categoryService.renderCategoryArr(article.getCategoryId(), categoryList));
             articleInfoResponse.setTagList(tagService.getTagsByArticleId(article.getId()));
@@ -89,11 +89,11 @@ public class ArticleServiceImpl {
         return new PageImpl<>(articleInfoResponseList, pageable, all.getTotalElements());
     }
 
-    public Article getOne(Integer id) {
+    public ArticlePO getOne(Integer id) {
         return articleRepository.queryFirstById(id);
     }
 
-    public Page<Article> findAll(ArticleQuery articleQuery, Pageable pageable) {
+    public Page<ArticlePO> findAll(ArticleQuery articleQuery, Pageable pageable) {
         return articleRepository.findAll((root, criteriaQuery, criteriaBuilder) -> {
             String title = articleQuery.getTitle();
             List<Predicate> list = new ArrayList<>();
@@ -107,7 +107,7 @@ public class ArticleServiceImpl {
     }
 
 
-    public Page<Article> findAll(Example<Article> example, Pageable pageable) {
+    public Page<ArticlePO> findAll(Example<ArticlePO> example, Pageable pageable) {
         return articleRepository.findAll(example, pageable);
     }
 
