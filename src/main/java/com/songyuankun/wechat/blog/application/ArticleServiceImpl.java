@@ -1,4 +1,4 @@
-package com.songyuankun.wechat.blog.service;
+package com.songyuankun.wechat.blog.application;
 
 
 import com.songyuankun.wechat.blog.dao.ArticleRepository;
@@ -25,7 +25,7 @@ import java.util.List;
  * @author songyuankun
  */
 @Service
-public class ArticleServiceImpl {
+public class ArticleServiceImpl implements ArticleService {
     private final CategoryServiceImpl categoryService;
     private final TagServiceImpl tagService;
     private final WeChatUtil weChatUtil;

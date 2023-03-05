@@ -1,7 +1,7 @@
 package com.songyuankun.wechat.controller.admin;
 
 import com.songyuankun.wechat.blog.dao.ArticleRepository;
-import com.songyuankun.wechat.blog.service.ArticleServiceImpl;
+import com.songyuankun.wechat.blog.application.ArticleServiceImpl;
 import com.songyuankun.wechat.common.DaoCommon;
 import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.common.ResponseUtils;
