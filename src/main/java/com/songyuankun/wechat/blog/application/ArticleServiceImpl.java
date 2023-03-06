@@ -25,7 +25,7 @@ import java.util.List;
  * @author songyuankun
  */
 @Service
-public class ArticleServiceImpl implements ArticleService {
+public class ArticleServiceImpl {
     private final CategoryServiceImpl categoryService;
     private final TagServiceImpl tagService;
     private final WeChatUtil weChatUtil;
