@@ -5,5 +5,7 @@ import com.songyuankun.wechat.blog.domain.aggregate.Article;
 import org.springframework.stereotype.Service;
 
 public interface ArticleService {
-    Article createArticle(String title, String content);
+    Article createArticle(Article article);
+
+    Article getById(Integer id);
 }
