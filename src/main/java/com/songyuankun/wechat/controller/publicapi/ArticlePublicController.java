@@ -1,7 +1,7 @@
 package com.songyuankun.wechat.controller.publicapi;
 
 import com.songyuankun.wechat.blog.event.NumberEventProducer;
-import com.songyuankun.wechat.blog.application.ArticleServiceImpl;
+import com.songyuankun.wechat.blog.application.ArticleApplicationService;
 import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.common.ResponseUtils;
 import com.songyuankun.wechat.entity.ArticlePO;
@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("public/article")
 @Slf4j
 public class ArticlePublicController {
-    private final ArticleServiceImpl articleService;
+    private final ArticleApplicationService articleService;
     private final NumberEventProducer numberEventProducer;
 
-    public ArticlePublicController(ArticleServiceImpl articleService, NumberEventProducer numberEventProducer) {
+    public ArticlePublicController(ArticleApplicationService articleService, NumberEventProducer numberEventProducer) {
         this.articleService = articleService;
         this.numberEventProducer = numberEventProducer;
     }

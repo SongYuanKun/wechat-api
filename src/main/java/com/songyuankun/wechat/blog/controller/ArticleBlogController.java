@@ -1,7 +1,7 @@
 package com.songyuankun.wechat.blog.controller;
 
 import com.songyuankun.wechat.blog.event.NumberEventProducer;
-import com.songyuankun.wechat.blog.application.ArticleServiceImpl;
+import com.songyuankun.wechat.blog.application.ArticleApplicationService;
 import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.common.ResponseUtils;
 import com.songyuankun.wechat.entity.ArticlePO;
@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("blog/article")
 @Slf4j
 public class ArticleBlogController {
-    private final ArticleServiceImpl articleService;
+    private final ArticleApplicationService articleService;
     private final TagServiceImpl tagService;
     private final NumberEventProducer numberEventProducer;
 
-    public ArticleBlogController(ArticleServiceImpl articleService, TagServiceImpl tagService, NumberEventProducer numberEventProducer) {
+    public ArticleBlogController(ArticleApplicationService articleService, TagServiceImpl tagService, NumberEventProducer numberEventProducer) {
         this.articleService = articleService;
         this.tagService = tagService;
         this.numberEventProducer = numberEventProducer;

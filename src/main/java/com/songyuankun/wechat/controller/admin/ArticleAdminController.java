@@ -1,7 +1,7 @@
 package com.songyuankun.wechat.controller.admin;
 
 import com.songyuankun.wechat.blog.dao.ArticleRepository;
-import com.songyuankun.wechat.blog.application.ArticleServiceImpl;
+import com.songyuankun.wechat.blog.application.ArticleApplicationService;
 import com.songyuankun.wechat.common.DaoCommon;
 import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.common.ResponseUtils;
@@ -35,13 +35,13 @@ import java.util.List;
 @RequestMapping("admin/article")
 @Slf4j
 public class ArticleAdminController {
-    private final ArticleServiceImpl articleService;
+    private final ArticleApplicationService articleService;
     private final ArticleRepository articleRepository;
     private final TagServiceImpl tagService;
     private final WeChatUtil weChatUtil;
 
     @Autowired
-    public ArticleAdminController(ArticleServiceImpl articleService, ArticleRepository articleRepository, TagServiceImpl tagService, WeChatUtil weChatUtil) {
+    public ArticleAdminController(ArticleApplicationService articleService, ArticleRepository articleRepository, TagServiceImpl tagService, WeChatUtil weChatUtil) {
         this.articleService = articleService;
         this.articleRepository = articleRepository;
         this.tagService = tagService;

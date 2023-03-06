@@ -1,9 +1,7 @@
 package com.songyuankun.wechat.config;
 
-import com.songyuankun.wechat.cache.ArticleCache;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -16,12 +14,6 @@ import java.nio.charset.StandardCharsets;
  */
 @Configuration
 public class AppConfig {
-
-    @Bean
-    public ArticleCache articleCache(RedisTemplate<String, Object> redisTemplate) {
-        return new ArticleCache(redisTemplate);
-    }
-
     @Bean
     public RestTemplate restTemplate(ClientHttpRequestFactory simpleClientHttpRequestFactory) {
         RestTemplate restTemplate = new RestTemplate(simpleClientHttpRequestFactory);

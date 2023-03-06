@@ -1,6 +1,6 @@
 package com.songyuankun.wechat.blog.listener;
 
-import com.songyuankun.wechat.blog.application.ArticleServiceImpl;
+import com.songyuankun.wechat.blog.application.ArticleApplicationService;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.springframework.stereotype.Component;
@@ -14,9 +14,9 @@ import org.springframework.stereotype.Component;
 @RocketMQMessageListener(topic = "ARTICLE_INFO", consumerGroup = "article-like", selectorExpression = "LIKE")
 public class ArticleLikeListener implements RocketMQListener<String> {
 
-    private final ArticleServiceImpl articleService;
+    private final ArticleApplicationService articleService;
 
-    public ArticleLikeListener(ArticleServiceImpl articleService) {
+    public ArticleLikeListener(ArticleApplicationService articleService) {
         this.articleService = articleService;
     }
 
