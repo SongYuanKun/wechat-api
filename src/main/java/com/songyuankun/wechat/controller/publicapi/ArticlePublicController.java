@@ -1,6 +1,5 @@
 package com.songyuankun.wechat.controller.publicapi;
 
-import com.songyuankun.wechat.blog.event.NumberEventProducer;
 import com.songyuankun.wechat.blog.application.ArticleApplicationService;
 import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.common.ResponseUtils;
