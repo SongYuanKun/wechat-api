@@ -1,4 +1,4 @@
-package com.songyuankun.wechat.blog.dao;
+package com.songyuankun.wechat.blog.domain.repository;
 
 import com.songyuankun.wechat.entity.ArticlePO;
 import org.springframework.data.jpa.repository.JpaRepository;

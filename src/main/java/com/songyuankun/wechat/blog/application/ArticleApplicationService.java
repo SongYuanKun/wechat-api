@@ -1,7 +1,7 @@
 package com.songyuankun.wechat.blog.application;
 
 
-import com.songyuankun.wechat.blog.dao.ArticleRepository;
+import com.songyuankun.wechat.blog.domain.repository.ArticleRepository;
 import com.songyuankun.wechat.common.DaoCommon;
 import com.songyuankun.wechat.entity.ArticlePO;
 import com.songyuankun.wechat.entity.Category;

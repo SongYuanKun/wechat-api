@@ -16,6 +16,7 @@ com.songyuankun
 │   └── service            // 应用服务实现
 ├── domain                  // 领域层
 │   ├── event              // 事件实现
+│   ├── aggregate          // 领域聚合根
 │   ├── model              // 领域模型实现
 │   ├── repository         // 领域仓储接口和实现
 │   └── service            // 领域服务实现

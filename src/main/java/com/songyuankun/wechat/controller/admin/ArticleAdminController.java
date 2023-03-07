@@ -1,6 +1,6 @@
 package com.songyuankun.wechat.controller.admin;
 
-import com.songyuankun.wechat.blog.dao.ArticleRepository;
+import com.songyuankun.wechat.blog.domain.repository.ArticleRepository;
 import com.songyuankun.wechat.blog.application.ArticleApplicationService;
 import com.songyuankun.wechat.common.DaoCommon;
 import com.songyuankun.wechat.common.Response;
