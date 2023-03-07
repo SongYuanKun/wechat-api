@@ -5,7 +5,7 @@ import com.songyuankun.wechat.blog.application.ArticleApplicationService;
 import com.songyuankun.wechat.common.DaoCommon;
 import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.common.ResponseUtils;
-import com.songyuankun.wechat.entity.ArticlePO;
+import com.songyuankun.wechat.infrastructure.dataaccess.ArticlePO;
 import com.songyuankun.wechat.request.ArticlePOForm;
 import com.songyuankun.wechat.request.query.ArticleQuery;
 import com.songyuankun.wechat.request.update.ArticleUpdateStatus;

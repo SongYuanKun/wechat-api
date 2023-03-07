@@ -1,4 +1,4 @@
-package com.songyuankun.wechat.config;
+package com.songyuankun.wechat.infrastructure;
 
 import org.hibernate.dialect.MySQL8Dialect;
 

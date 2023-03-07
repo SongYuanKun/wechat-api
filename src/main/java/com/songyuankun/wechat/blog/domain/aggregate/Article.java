@@ -1,6 +1,7 @@
 package com.songyuankun.wechat.blog.domain.aggregate;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
  * @author songyuankun
  */
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Article {

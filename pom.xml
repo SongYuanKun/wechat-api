@@ -160,6 +160,16 @@
             <version>3.11</version>
         </dependency>
         <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>1.5.3.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>1.5.3.Final</version>
+        </dependency>
+        <dependency>
             <groupId>taobao-sdk-java-auto</groupId>
             <artifactId>taobao-sdk-java-auto</artifactId>
             <scope>system</scope>

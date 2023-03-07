@@ -1,6 +1,6 @@
 package com.songyuankun.wechat.request;
 
-import com.songyuankun.wechat.entity.ArticlePO;
+import com.songyuankun.wechat.infrastructure.dataaccess.ArticlePO;
 import com.songyuankun.wechat.entity.Tag;
 import lombok.Getter;
 import lombok.Setter;

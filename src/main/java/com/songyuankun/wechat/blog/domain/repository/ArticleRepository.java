@@ -1,6 +1,6 @@
 package com.songyuankun.wechat.blog.domain.repository;
 
-import com.songyuankun.wechat.entity.ArticlePO;
+import com.songyuankun.wechat.infrastructure.dataaccess.ArticlePO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;

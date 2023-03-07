@@ -1,9 +1,8 @@
-package com.songyuankun.wechat.entity;
+package com.songyuankun.wechat.infrastructure.dataaccess;
 
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import com.songyuankun.wechat.entity.BaseEntity;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -26,6 +25,9 @@ import java.io.Serializable;
 @Setter
 @DynamicInsert
 @DynamicUpdate
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ArticlePO extends BaseEntity implements Serializable {
 
     @Id

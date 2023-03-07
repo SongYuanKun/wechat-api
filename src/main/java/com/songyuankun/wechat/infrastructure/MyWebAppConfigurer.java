@@ -1,4 +1,4 @@
-package com.songyuankun.wechat.config;
+package com.songyuankun.wechat.infrastructure;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

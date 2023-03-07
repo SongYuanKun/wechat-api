@@ -1,4 +1,4 @@
-package com.songyuankun.wechat.config;
+package com.songyuankun.wechat.infrastructure;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;

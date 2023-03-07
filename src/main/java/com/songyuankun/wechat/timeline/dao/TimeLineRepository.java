@@ -1,6 +1,6 @@
 package com.songyuankun.wechat.timeline.dao;
 
-import com.songyuankun.wechat.entity.ArticlePO;
+import com.songyuankun.wechat.infrastructure.dataaccess.ArticlePO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -1,4 +1,4 @@
-package com.songyuankun.wechat.config;
+package com.songyuankun.wechat.infrastructure;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cache.annotation.EnableCaching;
