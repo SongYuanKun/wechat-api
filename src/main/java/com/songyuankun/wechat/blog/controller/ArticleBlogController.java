@@ -2,6 +2,7 @@ package com.songyuankun.wechat.blog.controller;
 
 import com.songyuankun.wechat.blog.event.NumberEventProducer;
 import com.songyuankun.wechat.blog.application.ArticleApplicationService;
+import com.songyuankun.wechat.cache.ArticleCache;
 import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.common.ResponseUtils;
 import com.songyuankun.wechat.entity.ArticlePO;
@@ -23,11 +24,13 @@ public class ArticleBlogController {
     private final ArticleApplicationService articleService;
     private final TagServiceImpl tagService;
     private final NumberEventProducer numberEventProducer;
+    private final ArticleCache articleCache;
 
-    public ArticleBlogController(ArticleApplicationService articleService, TagServiceImpl tagService, NumberEventProducer numberEventProducer) {
+    public ArticleBlogController(ArticleApplicationService articleService, TagServiceImpl tagService, NumberEventProducer numberEventProducer, ArticleCache articleCache) {
         this.articleService = articleService;
         this.tagService = tagService;
         this.numberEventProducer = numberEventProducer;
+        this.articleCache = articleCache;
     }
 
 
@@ -40,6 +43,7 @@ public class ArticleBlogController {
             ArticlePOInfoResponse articleInfoResponse = new ArticlePOInfoResponse();
             BeanUtils.copyProperties(one, articleInfoResponse);
             articleInfoResponse.setTagList(tagService.getTagsByArticleId(id));
+            articleCache.incrementReadCount(id);
             return ResponseUtils.success(articleInfoResponse);
         } else {
             return ResponseUtils.notFound();
