@@ -1,13 +1,21 @@
 package com.songyuankun.wechat.controller.publicapi;
 
 import com.songyuankun.wechat.blog.application.ArticleApplicationService;
+import com.songyuankun.wechat.cache.ArticleCache;
 import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.common.ResponseUtils;
 import com.songyuankun.wechat.entity.ArticlePO;
 import com.songyuankun.wechat.request.query.ArticleQuery;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author songyuankun
@@ -18,19 +26,19 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class ArticlePublicController {
     private final ArticleApplicationService articleService;
-    private final NumberEventProducer numberEventProducer;
+    private final ArticleCache articleCache;
 
-    public ArticlePublicController(ArticleApplicationService articleService, NumberEventProducer numberEventProducer) {
+    public ArticlePublicController(ArticleApplicationService articleService, ArticleCache articleCache) {
         this.articleService = articleService;
-        this.numberEventProducer = numberEventProducer;
+        this.articleCache = articleCache;
     }
 
 
     @GetMapping("getById")
     public Response<ArticlePO> getById(@RequestParam Integer id) {
-        //读写分离处理
-        numberEventProducer.onData("READ", id);
-        return ResponseUtils.success(articleService.getOne(id));
+        ArticlePO one = articleService.getOne(id);
+        articleCache.incrementReadCount(id);
+        return ResponseUtils.success(one);
     }
 
     @PostMapping("page")
