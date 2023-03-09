@@ -1,6 +1,7 @@
 package com.songyuankun.wechat.blog.domain.event;
 
 import com.songyuankun.wechat.common.DomainEvent;
+
 import org.apache.rocketmq.common.message.Message;
 
 import java.time.LocalDateTime;
