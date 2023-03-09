@@ -141,7 +141,7 @@ public class HttpsUtil {
                 params = tempParams.substring(0, tempParams.length() - 1);
             }
             // 创建URL对象
-            URL connURL = new java.net.URL(url);
+            URL connURL = new URL(url);
             // 打开URL连接
             HttpURLConnection httpConn = (HttpURLConnection) connURL.openConnection();
             // 设置通用属性
