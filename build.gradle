@@ -38,14 +38,15 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-logging'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.security.oauth:spring-security-oauth2'
-    implementation 'org.springframework.security:spring-security-jwt'
+    implementation 'org.springframework.boot:spring-boot-starter-security:2.7.4'
+    implementation 'org.springframework.security.oauth:spring-security-oauth2:2.5.2.RELEASE'
+    implementation 'org.springframework.security:spring-security-jwt:1.1.1.RELEASE'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.boot:spring-boot-test'
     testImplementation 'junit:junit'
 }
+
 
 dependencies {
     implementation 'mysql:mysql-connector-java'
@@ -62,6 +63,15 @@ dependencies {
     implementation 'cn.hutool:hutool-all:5.8.11'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'org.apache.commons:commons-collections4:4.4'
+    implementation 'org.apache.rocketmq:rocketmq-client:4.9.3'
+    implementation 'org.apache.rocketmq:rocketmq-spring-boot-starter:2.2.2'
+    implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+    implementation 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+    implementation 'com.qiniu:qiniu-java-sdk:7.2.18'
+    implementation 'org.databene:contiperf:2.3.4'
+    implementation 'com.lmax:disruptor:3.4.4'
+    implementation 'com.github.penggle:kaptcha:2.3.2'
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
     implementation files('lib/taobao-sdk-java-auto_1564132205913-20220902.jar')
     implementation files('lib/open-api-sdk-2.0-2022-10-21.jar')
     implementation files('lib/pop-sdk-1.15.8-all.jar')
@@ -77,7 +87,7 @@ test {
 }
 
 docker {
-    url = 'tcp://192.168.31:2375'
+    url = 'tcp://8.130.166.49:22375'
 }
 
 dockerCreateDockerfile {
@@ -127,7 +137,7 @@ task createMyAppContainer(type: DockerCreateContainer) {
     dependsOn buildMyAppImage
     containerName = container()
     targetImageId buildMyAppImage.getImageId()
-    hostConfig.portBindings = ['8084:8084']
+    hostConfig.portBindings = ['8082:8082']
     hostConfig.autoRemove = true
 }
 
