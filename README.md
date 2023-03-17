@@ -12,8 +12,6 @@
 
 ## 包结构改造
 
-目标报结构
-
 ```
 com.songyuankun
 ├── application               // 应用层

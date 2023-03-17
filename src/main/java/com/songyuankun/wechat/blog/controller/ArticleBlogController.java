@@ -1,6 +1,7 @@
 package com.songyuankun.wechat.blog.controller;
 
 import com.songyuankun.wechat.blog.application.ArticleApplicationService;
+import com.songyuankun.wechat.blog.application.query.FindArticleListQuery;
 import com.songyuankun.wechat.cache.ArticleCache;
 import com.songyuankun.wechat.common.Response;
 import com.songyuankun.wechat.common.ResponseUtils;
@@ -8,6 +9,7 @@ import com.songyuankun.wechat.infrastructure.dataaccess.ArticlePO;
 import com.songyuankun.wechat.response.ArticlePOInfoResponse;
 import com.songyuankun.wechat.service.TagServiceImpl;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -18,7 +20,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
@@ -60,27 +61,24 @@ public class ArticleBlogController {
 
     @GetMapping("page")
     public Response<Page<ArticlePO>> publicPage(
-        @RequestParam(required = false, defaultValue = "1") Integer pageNumber,
-        @RequestParam(required = false, defaultValue = "10") Integer pageSize,
-        @RequestParam(required = false) Boolean recommend,
-        @RequestParam(required = false) Boolean latest,
-        @RequestParam(required = false) Boolean favorite
+        FindArticleListQuery findArticleListQuery
     ) {
         ArticlePO articlePO = new ArticlePO();
         articlePO.setPublish(true);
-        if (recommend != null && recommend) {
+        if (BooleanUtils.isTrue(findArticleListQuery.getRecommend())) {
             articlePO.setRecommend(true);
         }
         Sort sort = Sort.by(Sort.Order.desc("top"));
-        if (latest != null && latest) {
+        if (BooleanUtils.isTrue(findArticleListQuery.getLatest())) {
             Sort.Order createTime = Sort.Order.desc("createTime");
             sort = sort.and(Sort.by(createTime));
         }
-        if (favorite != null && favorite) {
+        if (BooleanUtils.isTrue(findArticleListQuery.getFavorite())) {
             Sort.Order likeNum = Sort.Order.desc("likeNum");
             sort = sort.and(Sort.by(likeNum));
         }
-        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
+
+        Pageable pageable = PageRequest.of(findArticleListQuery.getPageNumber() - 1, findArticleListQuery.getPageSize(), sort);
         Page<ArticlePO> all = articleService.findAll(Example.of(articlePO), pageable);
         return ResponseUtils.success(all);
     }

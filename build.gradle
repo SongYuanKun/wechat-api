@@ -1,0 +1,140 @@
+buildscript {
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.7.4")
+        classpath('com.bmuschko:gradle-docker-plugin:6.7.0')
+    }
+    repositories {
+        maven {
+            url 'https://maven.aliyun.com/repository/public/'
+            allowInsecureProtocol = true
+        }
+        mavenLocal()
+    }
+}
+
+plugins {
+    id 'java'
+}
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'com.bmuschko.docker-spring-boot-application'
+apply plugin: 'com.bmuschko.docker-remote-api'
+
+group 'com.songyuankun'
+version '1.0-SNAPSHOT'
+
+
+repositories {
+    maven {
+        url 'https://maven.aliyun.com/repository/public/'
+        allowInsecureProtocol = true
+    }
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-logging'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-test'
+    testImplementation 'junit:junit'
+}
+
+dependencies {
+    implementation 'mysql:mysql-connector-java'
+    implementation 'com.alibaba:druid:1.2.13-SNSAPSHOT'
+}
+
+dependencies {
+    implementation 'com.google.guava:guava:31.1-jre'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+    implementation 'com.alibaba:fastjson:2.0.15'
+    implementation 'cn.hutool:hutool-all:5.8.11'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'org.apache.commons:commons-collections4:4.4'
+    implementation files('lib/taobao-sdk-java-auto_1564132205913-20220902.jar')
+    implementation files('lib/open-api-sdk-2.0-2022-10-21.jar')
+    implementation files('lib/pop-sdk-1.15.8-all.jar')
+}
+
+dependencies {
+    implementation 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
+    implementation 'org.codehaus.jackson:jackson-core-asl:1.9.13'
+}
+
+test {
+    enabled false
+}
+
+docker {
+    url = 'tcp://8.130.166.49:22375'
+}
+
+dockerCreateDockerfile {
+    instruction 'RUN ls -la'
+    environmentVariable 'JAVA_OPTS', '-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap'
+}
+
+def image() {
+    return "${project.group}.${project.name}:${project.version}"
+}
+
+def container() {
+    return "${project.version}.${project.group}.${project.name}"
+}
+
+// use fully qualified class name
+
+import com.bmuschko.gradle.docker.tasks.container.DockerCreateContainer
+import com.bmuschko.gradle.docker.tasks.container.DockerStartContainer
+import com.bmuschko.gradle.docker.tasks.container.DockerStopContainer
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+import com.bmuschko.gradle.docker.tasks.image.Dockerfile
+
+
+task createDockerfile(type: Dockerfile) {
+    group 'docker'
+    description 'Generate docker file for the application'
+    //destFile = project.file('Dockerfile')
+    from('openjdk:8')
+    addFile("libs/${project.name}-${project.version}.jar", "/application.jar")
+    exposePort(8084)
+    environmentVariable 'LANG', 'C.UTF-8'
+    entryPoint("java", "-jar", "-Duser.timezone=GMT+08", "/application.jar")
+}
+
+task buildMyAppImage(type: DockerBuildImage) {
+    group 'docker'
+    dependsOn(build, createDockerfile)
+    dockerFile = project.file("${project.buildDir}/docker/Dockerfile")
+    inputDir = project.buildDir
+    images.add(image())
+}
+
+
+task createMyAppContainer(type: DockerCreateContainer) {
+    group 'docker-'
+    dependsOn buildMyAppImage
+    containerName = container()
+    targetImageId buildMyAppImage.getImageId()
+    hostConfig.portBindings = ['8084:8084']
+    hostConfig.autoRemove = true
+}
+
+task startMyAppContainer(type: DockerStartContainer) {
+    group 'docker-'
+    dependsOn createMyAppContainer
+    targetContainerId createMyAppContainer.getContainerId()
+}
+
+
+task stopContainer(type: DockerStopContainer) {
+    group 'docker-'
+    targetContainerId container()
+}
