@@ -34,7 +34,7 @@ public class WeChatCommon {
     @Value("${my.wechat.secret}")
     private String secret;
 
-    public static JSONObject getUserInfo(String encryptedData, String sessionKey, String iv) {
+    public JSONObject getUserInfo(String encryptedData, String sessionKey, String iv) {
         // 被加密的数据
         byte[] dataByte = Base64.getDecoder().decode(encryptedData);
         // 加密秘钥
@@ -63,7 +63,9 @@ public class WeChatCommon {
                 String result = new String(resultByte, StandardCharsets.UTF_8);
                 return JSON.parseObject(result);
             }
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidParameterSpecException | IllegalBlockSizeException | BadPaddingException | InvalidKeyException | InvalidAlgorithmParameterException | NoSuchProviderException e) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidParameterSpecException |
+                 IllegalBlockSizeException | BadPaddingException | InvalidKeyException |
+                 InvalidAlgorithmParameterException | NoSuchProviderException e) {
             log.error(e.getMessage(), e);
         }
         return null;

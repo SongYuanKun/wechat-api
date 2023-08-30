@@ -81,7 +81,7 @@ public class LoginController {
             user.setUserRole("ROLE_USER");
             userRepository.save(user);
         }
-        JSONObject userInfo = WeChatCommon.getUserInfo(encryptedData, sessionKey, iv);
+        JSONObject userInfo = weChatCommon.getUserInfo(encryptedData, sessionKey, iv);
         if (userInfo != null) {
             log.info("根据解密算法获取的userInfo=" + userInfo);
             userInfo.put("balance", user.getBalance());
